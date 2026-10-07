@@ -1,0 +1,29 @@
+---
+// Sternebewertung im ProductHero, zugleich Auslöser des ReviewsModal
+// (data-open-reviews-modal). Werte aus der Gesamtbewertung des Präparats (src/data/reviews/).
+import { overallRatingFor } from '../data/reviews';
+import { starDisplay } from '../utils/stars';
+import type { PharmacyProduct } from '../data/pharmacies';
+
+interface Props {
+  /** Präparat-Key; ohne Angabe Gesamtbewertung über alle Produkte. */
+  product?: PharmacyProduct;
+  class?: string;
+}
+
+const { product, class: extra = '' } = Astro.props;
+const { score, count, average } = overallRatingFor(product);
+
+const cls = ['group flex items-center gap-2 cursor-pointer', extra].filter(Boolean).join(' ');
+---
+
+{/* Ohne Bewertungen (leere Dateien in src/data/reviews/) wird nichts gerendert. */}
+{count > 0 && (
+  <button type="button" data-open-reviews-modal class={cls}>
+    <span class="sr-only">Bewertungen ansehen: </span>
+    <span class="flex gap-0.5 text-xl leading-none transition-opacity group-hover:opacity-80" aria-hidden="true" set:html={starDisplay(average)} />
+    {/* whitespace-nowrap: die Klammer-Angabe darf mobil nicht mitten in der
+        Zeile umbrechen – Sterne und Text bleiben eine Einheit. */}
+    <span class="text-sm text-neutral-600 whitespace-nowrap group-hover:text-primary group-hover:underline transition-colors">({score} Sterne – {count.toLocaleString('de-DE')} Bewertungen)</span>
+  </button>
+)}

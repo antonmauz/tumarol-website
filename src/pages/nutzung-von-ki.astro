@@ -1,0 +1,39 @@
+---
+import Layout from '../layouts/Layout.astro';
+import BreadcrumbSection from '../components/BreadcrumbSection.astro';
+import Container from '../components/Container.astro';
+
+const breadcrumbItems = [
+  { label: 'Startseite', href: '/' },
+  { label: 'Nutzung von KI' }
+];
+---
+
+<Layout
+  title="Nutzung von KI"
+  description="Informationen zur Nutzung von künstlicher Intelligenz bei der Erstellung von Inhalten auf der KAMILLIN®-Website."
+>
+
+  {/* ─── NAVIGATION BREADCRUMBS ──────────────────────────────────────── */}
+  <BreadcrumbSection items={breadcrumbItems} />
+
+  {/* Oben bewusst knapp: Breadcrumbs und H1 bilden einen zusammenhängenden Seitenkopf. */}
+  {/* ─── NUTZUNG VON KI ──────────────────────────────────────────────── */}
+  <section class="pt-4 pb-12 md:pt-6 md:pb-16 px-6">
+    <Container size="content">
+      <h1 class="mb-8">
+        Informationen zur Nutzung von KI
+      </h1>
+
+      <div class="max-w-3xl text-neutral-700 leading-relaxed space-y-4">
+        <p>
+          Einige der auf dieser Website bereitgestellten Texte und Bilder wurden unter Einsatz von künstlicher Intelligenz (KI) erstellt. Alle KI-generierten Inhalte werden redaktionell geprüft und nachbearbeitet, um sicherzustellen, dass sie unseren Qualitätsstandards entsprechen.
+        </p>
+        <p>
+          Wir legen großen Wert auf die Richtigkeit und Aktualität der Inhalte. Dennoch können wir nicht ausschließen, dass Fehler oder Unstimmigkeiten auftreten, die aus der Nutzung von KI-generierten Inhalten resultieren. Daher übernehmen wir keine Haftung für mögliche Fehler, Ungenauigkeiten oder Missverständnisse, die sich aus der Nutzung dieser Inhalte ergeben könnten.
+        </p>
+      </div>
+    </Container>
+  </section>
+
+</Layout>

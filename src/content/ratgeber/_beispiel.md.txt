@@ -1,0 +1,50 @@
+---
+# ─────────────────────────────────────────────────────────────────────────────
+# VORLAGE für einen neuen Ratgeber-Artikel (Themenwelt, Arbeitsname "ratgeber").
+# Verwendung: Datei kopieren, in <slug>.md umbenennen (der Dateiname wird die
+# URL: /wissenswertes/<cluster>/<slug>) und alle Platzhalter ersetzen.
+# Schema und Felddoku: src/content.config.ts (Collection "ratgeber").
+# ─────────────────────────────────────────────────────────────────────────────
+title: "Beispielthema: was Sie wissen sollten"
+metaDescription: "Beispielthema: Ursachen, typische Anzeichen und was hilft. Wann ärztlicher Rat sinnvoll ist."
+h1: "Beispielthema: Anzeichen, Ursachen, was hilft"
+breadcrumbLabel: "Beispielthema"
+category: heile-haut # Cluster: gutes-bauchgefuehl | gesunder-mund | heile-haut
+publishDate: 2026-09-14
+lastUpdated: 2026-09-14
+# Produkt-CTA nur mit zugelassenem Produktbezug (HWG); ohne ctaProducts greift die Cluster-Vorgabe.
+showProductHighlight: false
+headerImage: ./_images/beispielthema-header.png
+headerImageAlt: "Kurze Bildbeschreibung für Screenreader"
+intro:
+  - "Erster Einleitungsabsatz: Worum geht es, wen betrifft es? Kurze Absätze, keine Fachsprache ohne Erklärung."
+  - "Zweiter Einleitungsabsatz: Was erfährt die Leserin/der Leser auf dieser Seite?"
+
+faq:
+  - question: "Beispielfrage 1?"
+    answer: "Kurze, laienverständliche Antwort in 2 bis 4 Sätzen."
+  - question: "Beispielfrage 2?"
+    answer: "Kurze Antwort. Markdown-Inline ist erlaubt, z. B. **fett**."
+
+review:
+  reviewer: "Vor- und Nachname der prüfenden Person"
+  date: "17. Juni 2026"
+sources:
+  - "Institution/Autor: Titel der Quelle. Fundstelle/Domain"
+---
+
+## Erste Zwischenüberschrift (H2)
+
+Fließtext des Artikels. Kurze Absätze, laienverständlich formuliert. Interne
+Verweise als normale Markdown-Links, z. B. auf
+[einen verwandten Artikel](/wissenswertes/heile-haut/beispiel-artikel).
+
+### Unterpunkt (H3)
+
+- Aufzählungen sind erlaubt
+- **Fett** für zentrale Begriffe
+
+## Wann sollte ich ärztlichen Rat einholen?
+
+Jeder medizinische Ratgeber braucht einen klar abgegrenzten Abschnitt, wann
+Selbstbehandlung nicht mehr ausreicht.

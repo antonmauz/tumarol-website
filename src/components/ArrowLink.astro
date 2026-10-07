@@ -1,0 +1,27 @@
+---
+// Textlink mit Pfeil-Icon (z. B. "Unser Kamillenanbau →" auf der 404-Seite).
+
+interface Props {
+  href: string;
+  /** Zusätzliche Klassen (werden ans Ende angehängt). */
+  class?: string;
+}
+
+const { href, class: extra = '' } = Astro.props;
+
+// Barrierefreiheit: Textlinks in Primärblau immer bold UND unterstrichen (Farbe allein
+// reicht nicht); Unterstrich auf dem inneren <span> (text-decoration propagiert nicht auf Flex-Items).
+const cls = [
+  'inline-flex items-center gap-2 text-primary font-bold hover:text-primary-dark transition-colors',
+  extra,
+]
+  .filter(Boolean)
+  .join(' ');
+---
+
+<a href={href} class={cls}>
+  <span class="underline underline-offset-4"><slot /></span>
+  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+  </svg>
+</a>

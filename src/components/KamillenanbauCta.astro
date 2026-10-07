@@ -1,0 +1,100 @@
+---
+// CTA-Modul „Unser Kamillenanbau" (Startseite; Produktseiten mit eigener Überschrift):
+// Sektionskopf, links die Kamillenblüte, rechts drei Punkte mit Icon-Kachel und der
+// Button zur Kamillenanbau-Seite. Nur Schlagzeilen, der Langtext steht auf /magazin.
+import { Image } from 'astro:assets';
+import Container from './Container.astro';
+import Button from './ui/Button.astro';
+import { iconSvg, type IconName } from '../data/icons';
+// Freigestellte Kamillenblüte (676×676, transparent) als Bildmotiv links (Anton, 07.09.2026).
+import kamilleIcon from '../assets/images/content/kamille-icon.png';
+
+interface Props {
+  id?: string;
+  class?: string;
+  /** Überschrift; Standard „Unsere Kamille“ (Startseite). Produktseiten:
+   *  „Wirkstoff Kamillenblüten-Auszug“. */
+  heading?: string;
+  /** Unterzeile; Standard der Startseiten-Satz. Produktseiten der
+   *  Arzneimittel: Zusammensetzungssatz aus den Pflichtangaben. */
+  intro?: string;
+}
+
+const {
+  id,
+  class: sectionClass = '',
+  heading = 'Unsere Kamille',
+  intro = 'Mit dem Wirkstoff Kamille sind wir tief vertraut, fachlich wie operativ.',
+} = Astro.props;
+const ctaLabel = 'Zu unserem Kamillenanbau';
+const ctaHref = '/magazin';
+
+const points: { icon: IconName; title: string; text: string }[] = [
+  {
+    icon: 'germany',
+    title: 'Eigene Spezialsorten aus Thüringen',
+    text: 'Geschützte Sorten auf mehreren hundert Hektar Anbaufläche.',
+  },
+  {
+    icon: 'plant',
+    title: 'Kontrolliert-integrierter Anbau',
+    text: 'Von der Saatgutselektion bis zur Extraktion in Esslingen in unserer Hand.',
+  },
+  {
+    icon: 'medal',
+    title: 'Extern geprüft',
+    text: 'Jede Extraktionscharge wird auf Pyrrolizidin-Alkaloide untersucht.',
+  },
+];
+---
+
+<section id={id} class={`py-16 md:py-20 px-6 scroll-mt-24 ${sectionClass}`}>
+  <Container size="content">
+    {/* Sektionskopf: Überschrift + Einleitung, linksbündig wie die Slider. */}
+    <div class="mb-10 md:mb-12">
+      <h2 class="hyphens-auto">{heading}</h2>
+      <p class="mt-3 text-neutral-700 leading-relaxed max-w-3xl">{intro}</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+
+      {/* Links: freigestellte Kamillenblüte (object-contain), mittig in der Spalte, ab lg
+          auf Höhe der Punkte. Mobil auf 12 rem begrenzt, sonst füllte das quadratische
+          Motiv fast die ganze Bildschirmbreite; ab sm die größeren Stufen. */}
+      <div class="flex items-center justify-center">
+        <Image
+          src={kamilleIcon}
+          alt="Kamillenblüte"
+          width={676}
+          loading="lazy"
+          class="block w-full max-w-48 sm:max-w-sm lg:max-w-md h-auto object-contain"
+        />
+      </div>
+
+      {/* Rechts: drei Punkte mit gelber Icon-Kachel, darunter der CTA. Bis lg ein
+          scroll-snap-Slider aus Off-White-Karten (85 %, gap-6, slider-bleed; lg:mx-0/px-0
+          hebt das auf), ab lg eine vertikale Liste mit Trennlinien und Icon links. */}
+      <div>
+        <ul class="flex overflow-x-auto snap-x snap-mandatory gap-6 slider-bleed pb-2 -mb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:flex-col lg:overflow-visible lg:gap-0 lg:mx-0 lg:px-0 lg:scroll-px-0 lg:pb-0 lg:mb-0 lg:divide-y lg:divide-divider">
+          {points.map((point) => (
+            <li class="snap-start shrink-0 basis-[85%] sm:basis-[calc((100%_-_1.5rem)/2)] flex flex-col gap-3 rounded-xl bg-off-white p-5 lg:basis-auto lg:shrink lg:flex-row lg:items-start lg:gap-5 lg:rounded-none lg:bg-transparent lg:p-0 lg:py-6 lg:first:pt-0">
+              {/* Gelbe Kachel — Farbregel (global.css): Icon auf Gelb in Blau. Kachel 56/64 px für die 40/48-px-Icons (Anton, 07.09.2026). */}
+              <span
+                class="flex items-center justify-center w-14 h-14 lg:w-16 lg:h-16 shrink-0 rounded-xl rounded-tr-sm rounded-bl-sm bg-brand text-blue"
+                set:html={iconSvg(point.icon, 'w-10 h-10 lg:w-12 lg:h-12')}
+              />
+              <div class="min-w-0">
+                <h3 class="text-blue text-lg lg:text-xl mb-1.5">{point.title}</h3>
+                <p class="text-neutral-700 leading-relaxed text-sm lg:text-base">{point.text}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        {/* Sekundär (Outline), nicht gefüllt — Entscheidung 04.09.2026. */}
+        <Button href={ctaHref} variant="outline" class="mt-8 w-full sm:w-auto">{ctaLabel}</Button>
+      </div>
+
+    </div>
+  </Container>
+</section>

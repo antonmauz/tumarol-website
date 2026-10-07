@@ -1,0 +1,30 @@
+---
+// Pfeil-Paar für die scroll-snap-Slider (Mechanik: src/scripts/snapSlider.ts).
+// Startet unsichtbar (hidden) und wird vom Skript eingeblendet, sobald der
+// Track scrollbar ist; das Skript deaktiviert die Pfeile am Anfang/Ende.
+interface Props {
+  /** aria-label des Zurück-Pfeils, z. B. "Vorherige Artikel". */
+  prevLabel: string;
+  /** aria-label des Weiter-Pfeils, z. B. "Weitere Artikel". */
+  nextLabel: string;
+  class?: string;
+}
+
+const { prevLabel, nextLabel, class: extra = '' } = Astro.props;
+
+const buttonClass =
+  'flex items-center justify-center w-10 h-10 rounded-full border border-neutral-300 text-neutral-700 hover:border-primary hover:text-primary transition-colors disabled:opacity-40 disabled:pointer-events-none cursor-pointer';
+---
+
+<div class:list={['hidden items-center gap-2 shrink-0', extra]} data-slider-controls>
+  <button type="button" data-slider-prev aria-label={prevLabel} class={buttonClass}>
+    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+    </svg>
+  </button>
+  <button type="button" data-slider-next aria-label={nextLabel} class={buttonClass}>
+    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+    </svg>
+  </button>
+</div>

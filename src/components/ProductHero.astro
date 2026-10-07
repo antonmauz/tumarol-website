@@ -1,0 +1,123 @@
+---
+// Kopfbereich der Produktseiten: links Bild-Slider, rechts H1, Sterne, Kernpunkte,
+// Verfügbarkeit, Packungsgrößen und Kauf-CTA. Sektion transparent, damit der
+// gelb-weiße Seitenverlauf (global.css) hinter dem Seitenkopf sichtbar bleibt.
+import Container from './Container.astro';
+import ProductImageSlider from './ProductImageSlider.astro';
+import ReviewStars from './ReviewStars.astro';
+import Button from './ui/Button.astro';
+import { packageSizesFor } from '../data/packageSizes';
+import type { PharmacyProduct } from '../data/pharmacies';
+
+interface Props {
+  /** Präparat-Key (pharmacies.ts) — steuert Packungsgrößen und Drawer-Tab. */
+  product: PharmacyProduct;
+  /** Produktname für die H1. */
+  name: string;
+  /** Kernpunkte; HTML erlaubt (z. B. <sup>-Fußnoten auf produktSources.ts). */
+  bullets: string[];
+}
+
+const { product, name, bullets } = Astro.props;
+
+// Packungsgrößen mit PZN (packageSizes.ts); leere Liste → Block entfällt.
+const sizes = packageSizesFor(product);
+---
+
+<section class="pt-4 pb-16 md:pt-6 md:pb-20 px-6">
+  <Container size="content">
+    {/* auto_1fr: linke Spalte exakt Slider-Breite, sichtbarer Mittelabstand damit genau gap-12. */}
+    <div class="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-12 items-center">
+
+      {/* Slider auf Desktop linksbündig an der Container-Kante, mobil zentriert. */}
+      <div class="flex items-center justify-center lg:justify-start">
+        {/* 1/1 = Leinwand der normalisierten Packshots (kein Letterboxing). */}
+        <ProductImageSlider aspectRatio="1/1" product={product} />
+      </div>
+
+      {/* Rechte Seite: Text und CTAs. */}
+      <div class="space-y-6">
+        <div>
+          <h1 class="mb-4">{name}</h1>
+          {/* Sternebewertung; rendert nichts, solange src/data/reviews/<produkt>.ts leer ist. */}
+          <ReviewStars product={product} class="mb-4" />
+        </div>
+
+        <ul class="space-y-2">
+          {bullets.map((point) => (
+            <li class="flex gap-3 text-neutral-700">
+              {/* Schlichter blauer Haken – gleiches Icon wie im Produkt-Highlight (CTA) */}
+              <svg class="w-6 h-6 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span set:html={point} />
+            </li>
+          ))}
+        </ul>
+
+        {/* Verfügbarkeits-Hinweis (leichte Onlineshop-Optik). */}
+        <div class="flex items-center gap-3 p-4 rounded-lg bg-neutral-50">
+          {/* Grün als Verfügbarkeits-Signal; textfähige Grünvariante (Farbregel). */}
+          <svg class="w-6 h-6 text-accent-dark shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+          <p class="text-neutral-700">
+            <strong class="text-neutral-900">Verfügbar</strong> in der Apotheke vor Ort oder online.
+          </p>
+        </div>
+
+        {/* Packungsgrößen mit PZN, anklickbar (aktive Größe blau umrandet); die Auswahl
+            ist rein visuell, der Kauf läuft über den Drawer. Mobil teilen sich alle
+            Größen eine Zeile (flex-1, kompakter), ab sm normale Größe. */}
+        {sizes.length > 0 && (
+          <div class="pt-2" data-size-select>
+            <p class="font-semibold text-neutral-700 mb-3">
+              {sizes.length === 1 ? 'Packungsgröße:' : 'Packungsgrößen:'}
+            </p>
+            <div role="group" aria-label="Packungsgröße" class="flex gap-2 sm:flex-wrap sm:gap-3">
+              {sizes.map((p, i) => (
+                <button
+                  type="button"
+                  aria-pressed={i === 0 ? 'true' : 'false'}
+                  class:list={[
+                    'flex-1 min-w-0 text-center whitespace-nowrap rounded-lg border-2 bg-white px-1.5 py-2 transition-colors cursor-pointer hover:border-primary sm:flex-none sm:text-left sm:px-4 sm:py-2.5',
+                    i === 0 ? 'border-primary' : 'border-neutral-200',
+                  ]}
+                >
+                  <span class="block text-sm font-semibold text-neutral-900 sm:text-base">{p.size}</span>
+                  <span class="block text-xs text-neutral-500">PZN {p.pzn}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Primärer CTA: öffnet den Apotheken-Drawer. */}
+        <div class="flex flex-col sm:flex-row gap-3 pt-2">
+          <Button openDrawer transition="transition-all">
+            Jetzt kaufen
+          </Button>
+        </div>
+      </div>
+
+    </div>
+  </Container>
+</section>
+
+<script>
+  // Rein visuelles Umschalten der aktiven Packungsgröße (blaue Umrandung).
+  document.querySelectorAll<HTMLElement>('[data-size-select]').forEach((root) => {
+    const btns = Array.from(root.querySelectorAll<HTMLButtonElement>('button'));
+    btns.forEach((btn) =>
+      btn.addEventListener('click', () => {
+        btns.forEach((b) => {
+          const active = b === btn;
+          b.setAttribute('aria-pressed', String(active));
+          b.classList.toggle('border-primary', active);
+          b.classList.toggle('border-neutral-200', !active);
+        });
+      }),
+    );
+  });
+</script>
+

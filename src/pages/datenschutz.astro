@@ -1,0 +1,323 @@
+---
+import Layout from '../layouts/Layout.astro';
+import BreadcrumbSection from '../components/BreadcrumbSection.astro';
+import Container from '../components/Container.astro';
+import { COOKIEBOT_ID } from '../data/cookiebot';
+
+const breadcrumbItems = [
+  { label: 'Startseite', href: '/' },
+  { label: 'Datenschutz' }
+];
+
+// Entwurf vom 07.09.2026, Aufbau analog zur Datenschutzerklärung der korodin-website (gleiche
+// Technik: Cloudflare, Cookiebot mit Consent Mode v2, GA4, Google Ads; ohne Selbsttest und AWIN).
+
+const linkClass = 'text-primary font-bold hover:text-primary-dark break-words';
+---
+
+<Layout
+  title="Datenschutz"
+  description="Datenschutzerklärung zum Informationsangebot rund um die KAMILLIN®-Präparate."
+>
+
+  {/* ─── NAVIGATION BREADCRUMBS ──────────────────────────────────────── */}
+  <BreadcrumbSection items={breadcrumbItems} />
+
+  {/* Oben bewusst knapp: Breadcrumbs und H1 bilden einen zusammenhängenden Seitenkopf. */}
+  {/* ─── DATENSCHUTZ ─────────────────────────────────────────────────── */}
+  <section class="pt-4 pb-12 md:pt-6 md:pb-16 px-6">
+    <Container size="content">
+      {/* &shy; erzwingt den Umbruch nach "Datenschutz-"; hyphens-manual
+          verhindert die automatische Trennung aus global.css. */}
+      <h1 class="mb-8 hyphens-manual">
+        Datenschutz&shy;erklärung
+      </h1>
+
+      <div class="max-w-3xl text-neutral-700 leading-relaxed space-y-10">
+
+        {/* 1. Verantwortlicher */}
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">1. Verantwortlicher</h2>
+          <p class="mb-4">
+            Verantwortlicher im Sinne der Datenschutz-Grundverordnung (DSGVO) und anderer datenschutzrechtlicher Bestimmungen ist:
+          </p>
+          <p class="mb-4">
+            Robugen GmbH &amp; Co. KG<br />
+            Alleenstraße 22 - 24<br />
+            73730 Esslingen<br />
+            Deutschland<br />
+            Telefon: +49 711 13630-0<br />
+            E-Mail: <a href="mailto:info@robugen.de" class={linkClass}>info@robugen.de</a>
+          </p>
+          <p>
+            Weitere Angaben zum Unternehmen finden Sie im <a href="/impressum" class={linkClass}>Impressum</a>.
+          </p>
+        </div>
+
+        {/* 2. Datenschutzbeauftragter */}
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">2. Datenschutzbeauftragter</h2>
+          <p class="mb-4">
+            Unseren Datenschutzbeauftragten erreichen Sie unter:
+          </p>
+          <p>
+            Datenschutzbeauftragter<br />
+            Robugen GmbH &amp; Co. KG<br />
+            Alleenstraße 22 - 24<br />
+            73730 Esslingen<br />
+            E-Mail: <a href="mailto:datenschutz@robugen.de" class={linkClass}>datenschutz@robugen.de</a>
+          </p>
+        </div>
+
+        {/* 3. Allgemeines */}
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">3. Allgemeine Hinweise</h2>
+          <p class="mb-4">
+            Diese Website ist ein reines Informationsangebot rund um die KAMILLIN®-Präparate KAMILLIN® EXTERN ROBUGEN, KAMILLIN® KONZENTRAT ROBUGEN und KAMILLIN® REPAIR CREME. Die Nutzung ist ohne Angabe personenbezogener Daten möglich. Wir betreiben auf dieser Website weder Nutzerkonten noch einen Online-Shop, ein Kontaktformular oder einen Newsletter. Der Kauf der Produkte erfolgt über die verlinkten Apotheken und Online-Apotheken, für die jeweils deren eigene Datenschutzbestimmungen gelten.
+          </p>
+          <p class="mb-4">
+            Personenbezogene Daten werden nur verarbeitet, soweit dies für den Betrieb der Website technisch erforderlich ist, Sie uns Daten von sich aus mitteilen (z. B. per E-Mail) oder Sie in den Einsatz von Analyse- und Marketingdiensten eingewilligt haben. Welche Daten das im Einzelnen sind, zu welchem Zweck und auf welcher Rechtsgrundlage sie verarbeitet werden, erläutern wir in den folgenden Abschnitten.
+          </p>
+          <p>
+            Schriftarten, Bilder und Videos dieser Website werden von unserem eigenen Hosting ausgeliefert. Es werden keine externen Schriftarten- oder Videodienste (z. B. Google Fonts, YouTube) eingebunden.
+          </p>
+        </div>
+
+        {/* 4. Hosting */}
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">4. Hosting und Server-Logfiles (Cloudflare)</h2>
+          <p class="mb-4">
+            Diese Website wird über die Infrastruktur von Cloudflare bereitgestellt. Anbieter ist die Cloudflare Germany GmbH, Rosental 7, 80331 München, Deutschland, als europäische Niederlassung der Cloudflare, Inc., 101 Townsend Street, San Francisco, CA 94107, USA (im Folgenden „Cloudflare“). Cloudflare stellt die Website über ein weltweit verteiltes Netzwerk (Content Delivery Network) bereit, verschlüsselt die Verbindung und schützt die Website vor Angriffen und missbräuchlichen Zugriffen.
+          </p>
+          <p class="mb-4">
+            Bei jedem Aufruf der Website übermittelt Ihr Browser technisch bedingt Daten an die Server von Cloudflare. Dies sind insbesondere Ihre IP-Adresse, Datum und Uhrzeit des Zugriffs, die aufgerufene Seite, die übertragene Datenmenge, die Website, von der Sie zu uns gelangt sind (Referrer), sowie Browsertyp, Betriebssystem und Sprache. Diese Daten werden in Server-Logfiles verarbeitet, um die Website auszuliefern, die Sicherheit und Stabilität des Systems zu gewährleisten und Angriffe abzuwehren. Zu diesem Zweck kann Cloudflare technisch notwendige Cookies setzen (z. B. zur Unterscheidung von Menschen und automatisierten Zugriffen). Eine Zusammenführung dieser Daten mit anderen Datenquellen findet nicht statt.
+          </p>
+          <p class="mb-4">
+            Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO. Unser berechtigtes Interesse liegt in der sicheren, schnellen und zuverlässigen Bereitstellung unserer Website. Technisch notwendige Cookies sind nach § 25 Abs. 2 Nr. 2 TDDDG ohne Einwilligung zulässig.
+          </p>
+          <p class="mb-4">
+            Wir haben mit Cloudflare einen Vertrag über die Auftragsverarbeitung nach Art. 28 DSGVO geschlossen. Die Verarbeitung kann auch auf Servern außerhalb der Europäischen Union, insbesondere in den USA, stattfinden. Cloudflare, Inc. ist nach dem EU-US Data Privacy Framework zertifiziert; ergänzend sind die Standardvertragsklauseln der Europäischen Kommission vereinbart. Damit ist ein angemessenes Datenschutzniveau gewährleistet.
+          </p>
+          <p class="mb-4">
+            Wir selbst speichern keine Server-Logfiles. Cloudflare löscht die Logdaten nach den in seiner Datenschutzerklärung genannten Fristen, in der Regel innerhalb weniger Tage, sofern nicht eine längere Speicherung zur Aufklärung von Sicherheitsvorfällen erforderlich ist.
+          </p>
+          <p>
+            Weitere Informationen: <a href="https://www.cloudflare.com/de-de/privacypolicy/" target="_blank" rel="noopener noreferrer" class={linkClass}>https://www.cloudflare.com/de-de/privacypolicy/</a>
+          </p>
+        </div>
+
+        {/* 5. Verschlüsselung */}
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">5. Verschlüsselung</h2>
+          <p>
+            Diese Website nutzt aus Sicherheitsgründen und zum Schutz der Übertragung von Inhalten eine TLS-Verschlüsselung (HTTPS). Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile Ihres Browsers mit „https://“ beginnt, sowie am Schloss-Symbol in der Browserzeile. Bei aktivierter Verschlüsselung können Daten, die Sie an uns übermitteln, nicht von Dritten mitgelesen werden.
+          </p>
+        </div>
+
+        {/* 6. Kontakt per E-Mail */}
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">6. Kontaktaufnahme per E-Mail</h2>
+          <p class="mb-4">
+            Wenn Sie uns per E-Mail kontaktieren, werden Ihre Angaben inklusive der von Ihnen mitgeteilten Kontaktdaten zur Bearbeitung Ihrer Anfrage und für den Fall von Anschlussfragen bei uns gespeichert. Diese Daten geben wir nicht ohne Ihre Einwilligung an Dritte weiter.
+          </p>
+          <p class="mb-4">
+            Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, sofern Ihre Anfrage mit der Anbahnung oder Durchführung eines Vertrags zusammenhängt, im Übrigen Art. 6 Abs. 1 lit. f DSGVO. Unser berechtigtes Interesse liegt in der effektiven Bearbeitung der an uns gerichteten Anfragen.
+          </p>
+          <p>
+            Wir löschen Ihre Anfrage, sobald sie abschließend bearbeitet ist und keine gesetzlichen Aufbewahrungspflichten (z. B. nach Handels- oder Steuerrecht) entgegenstehen. Meldungen zu Nebenwirkungen oder zur Produktqualität unterliegen den arzneimittelrechtlichen Dokumentationspflichten (Pharmakovigilanz) und werden entsprechend länger aufbewahrt.
+          </p>
+        </div>
+
+        {/* 7. Cookies und Einwilligung */}
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-4">7. Cookies und Einwilligungsverwaltung</h2>
+
+          <h3 class="text-neutral-900 mb-2">Was sind Cookies?</h3>
+          <p class="mb-6">
+            Cookies sind kleine Textdateien, die Ihr Browser auf Ihrem Endgerät speichert. Sie richten keinen Schaden an und enthalten keine Viren. Manche Cookies werden nach Ende Ihres Besuchs automatisch gelöscht (Session-Cookies), andere bleiben gespeichert, bis Sie sie löschen oder ihre Laufzeit abläuft. Neben Cookies können vergleichbare Technologien zum Einsatz kommen, die Informationen auf Ihrem Endgerät speichern oder auslesen.
+          </p>
+
+          <h3 class="text-neutral-900 mb-2">Rechtsgrundlagen</h3>
+          <p class="mb-6">
+            Technisch notwendige Cookies, ohne die die Website nicht funktionieren würde, setzen wir auf Grundlage von § 25 Abs. 2 Nr. 2 TDDDG und Art. 6 Abs. 1 lit. f DSGVO ein. Alle anderen Cookies und Technologien, insbesondere für Statistik und Marketing, setzen wir nur mit Ihrer Einwilligung nach § 25 Abs. 1 TDDDG und Art. 6 Abs. 1 lit. a DSGVO ein. Ohne Ihre Einwilligung werden diese Dienste nicht aktiviert.
+          </p>
+
+          <h3 class="text-neutral-900 mb-2">Einwilligung mit Cookiebot</h3>
+          <p class="mb-4">
+            Zur Einholung, Verwaltung und Dokumentation Ihrer Einwilligung nutzen wir den Dienst Cookiebot. Anbieter ist die Usercentrics A/S (ehemals Cybot A/S), Havnegade 39, 1058 Kopenhagen, Dänemark. Beim Aufruf der Website wird das Cookiebot-Skript geladen, das Ihnen den Einwilligungs-Banner anzeigt und einwilligungspflichtige Dienste erst nach Ihrer Zustimmung freigibt.
+          </p>
+          <p class="mb-4">
+            Cookiebot speichert in Ihrem Browser das Cookie „CookieConsent“ mit Ihrer Auswahl (Laufzeit 12 Monate). Zum Nachweis der Einwilligung werden zudem Ihre anonymisierte IP-Adresse, Datum und Uhrzeit, Browserinformationen, die URL der Website und Ihre Einwilligungsentscheidung an Cookiebot übermittelt und dort in einem Einwilligungsprotokoll gespeichert. Das Protokoll wird nach 12 Monaten gelöscht.
+          </p>
+          <p class="mb-4">
+            Rechtsgrundlage ist Art. 6 Abs. 1 lit. c DSGVO in Verbindung mit Art. 7 Abs. 1 DSGVO, da wir gesetzlich verpflichtet sind, Einwilligungen einzuholen und nachweisen zu können, sowie Art. 6 Abs. 1 lit. f DSGVO. Wir haben mit dem Anbieter einen Vertrag über die Auftragsverarbeitung nach Art. 28 DSGVO geschlossen. Weitere Informationen: <a href="https://www.cookiebot.com/de/privacy-policy/" target="_blank" rel="noopener noreferrer" class={linkClass}>https://www.cookiebot.com/de/privacy-policy/</a>
+          </p>
+
+          <h3 class="text-neutral-900 mb-2">Google Consent Mode</h3>
+          <p class="mb-6">
+            Wir setzen den Google Consent Mode (Version 2) ein. Solange Sie keine Einwilligung erteilt haben, sind alle Google-Dienste in den Modus „abgelehnt“ versetzt: Es werden keine Cookies für Statistik oder Werbung gesetzt und keine personenbezogenen Nutzerdaten an Google übermittelt. Das Google-Tag wird technisch geladen und sendet in diesem Zustand ausschließlich cookielose, nicht personenbezogene Signale (z. B. dass eine Seite aufgerufen wurde und welcher Einwilligungsstatus vorliegt), aus denen Google keine Nutzerprofile bildet. Erst wenn Sie im Banner einwilligen, aktualisiert Cookiebot den Einwilligungsstatus und die in den Abschnitten 8 und 9 beschriebene Verarbeitung beginnt.
+          </p>
+
+          <h3 class="text-neutral-900 mb-2">Widerruf und Änderung Ihrer Einwilligung</h3>
+          <p class="mb-6">
+            Sie können Ihre Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen oder anpassen. Klicken Sie dazu auf <button type="button" data-cookie-settings class={`${linkClass} cursor-pointer`}>Cookie-Einstellungen</button> oder auf das Cookiebot-Symbol, das auf jeder Seite eingeblendet wird. Darüber hinaus können Sie Ihren Browser so einstellen, dass Cookies generell oder im Einzelfall abgelehnt oder beim Schließen des Browsers gelöscht werden. Bei einer Deaktivierung aller Cookies kann die Funktionalität der Website eingeschränkt sein.
+          </p>
+
+          <h3 class="text-neutral-900 mb-2">Übersicht der eingesetzten Cookies</h3>
+          <p class="mb-4">
+            Die folgende, automatisch aktualisierte Übersicht zeigt alle auf dieser Website eingesetzten Cookies mit Anbieter, Zweck und Laufzeit:
+          </p>
+          {/* Cookie-Deklaration von Cookiebot (Inhalt kommt aus dem Scan der Domain-Gruppe). */}
+          <div class="text-sm">
+            <script is:inline id="CookieDeclaration" src={`https://consent.cookiebot.com/${COOKIEBOT_ID}/cd.js`} type="text/javascript" async></script>
+          </div>
+        </div>
+
+        {/* 8. Google Analytics */}
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">8. Google Analytics 4</h2>
+          <p class="mb-4">
+            Sofern Sie eingewilligt haben, nutzt diese Website Google Analytics 4, einen Webanalysedienst der Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland („Google“). Google Analytics ermöglicht es uns, die Nutzung unserer Website statistisch auszuwerten und unser Angebot zu verbessern.
+          </p>
+          <p class="mb-4">
+            Google Analytics verwendet Cookies und vergleichbare Technologien, die eine Wiedererkennung Ihres Browsers ermöglichen. Erfasst werden insbesondere die aufgerufenen Seiten, Verweildauer, Herkunft des Besuchs (Referrer), ungefährer Standort (auf Basis der gekürzten IP-Adresse), Gerätetyp, Browser und Betriebssystem sowie Interaktionen auf der Website. Als Interaktion erfassen wir insbesondere, ob und an welcher Stelle der Website ein Link zu einer Online-Apotheke angeklickt wurde. Dabei werden nur der Name der Apotheke und die Platzierung des Links übermittelt, nicht jedoch, ob und was Sie dort kaufen.
+          </p>
+          <p class="mb-4">
+            Google Analytics 4 kürzt IP-Adressen standardmäßig vor der Speicherung und verwendet keine vollständigen IP-Adressen zur Auswertung. Die erhobenen Daten werden in unserem Auftrag verarbeitet, um die Nutzung der Website auszuwerten und Berichte über die Websiteaktivitäten zu erstellen. Die im Rahmen von Google Analytics übermittelten Daten werden nicht mit anderen Daten von Google zusammengeführt, sofern Sie nicht in Ihrem Google-Konto etwas anderes eingestellt haben.
+          </p>
+          <p class="mb-4">
+            Rechtsgrundlage ist Ihre Einwilligung nach Art. 6 Abs. 1 lit. a DSGVO und § 25 Abs. 1 TDDDG. Sie können Ihre Einwilligung jederzeit über die <button type="button" data-cookie-settings class={`${linkClass} cursor-pointer`}>Cookie-Einstellungen</button> widerrufen.
+          </p>
+          <p class="mb-4">
+            Wir haben mit Google einen Vertrag über die Auftragsverarbeitung nach Art. 28 DSGVO geschlossen. Die Daten können an Server der Google LLC in den USA übertragen werden. Google LLC ist nach dem EU-US Data Privacy Framework zertifiziert; ergänzend gelten die Standardvertragsklauseln der Europäischen Kommission.
+          </p>
+          <p class="mb-4">
+            Die in Google Analytics gespeicherten nutzer- und ereignisbezogenen Daten werden nach 14 Monaten automatisch gelöscht. Aggregierte Statistiken ohne Personenbezug bleiben davon unberührt.
+          </p>
+          <p>
+            Weitere Informationen: <a href="https://policies.google.com/privacy?hl=de" target="_blank" rel="noopener noreferrer" class={linkClass}>https://policies.google.com/privacy</a> sowie <a href="https://support.google.com/analytics/answer/6004245?hl=de" target="_blank" rel="noopener noreferrer" class={linkClass}>https://support.google.com/analytics/answer/6004245</a>
+          </p>
+        </div>
+
+        {/* 9. Google Ads */}
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">9. Google Ads und Conversion-Messung</h2>
+          <p class="mb-4">
+            Wir schalten Werbeanzeigen über Google Ads, einen Dienst der Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland („Google“). Um den Erfolg dieser Anzeigen zu messen, ist unser Google-Ads-Konto mit Google Analytics 4 verknüpft. Sofern Sie in Statistik- und Marketing-Cookies eingewilligt haben, werden die in Abschnitt 8 beschriebenen Daten, insbesondere Klicks auf Apothekenlinks als Zielerreichung (Conversion), an Google Ads übermittelt.
+          </p>
+          <p class="mb-4">
+            Wenn Sie über eine Google-Anzeige auf unsere Website gelangen, fügt Google der Adresse eine Klick-Kennung (gclid) hinzu. Mit Ihrer Einwilligung wird diese Kennung in einem Cookie gespeichert, sodass Google und wir erkennen können, dass Sie über eine Anzeige zu uns gekommen sind und welche Zielaktionen Sie anschließend ausgeführt haben. Wir erfahren dabei nur die Gesamtzahl der Nutzer, die auf eine Anzeige geklickt und eine Zielseite oder Zielaktion erreicht haben. Informationen, mit denen wir Sie persönlich identifizieren könnten, erhalten wir nicht. Ohne Ihre Einwilligung werden Werbedaten im Consent Mode geschwärzt („ads data redaction“), sodass keine Klick-Kennungen gespeichert oder übermittelt werden.
+          </p>
+          <p class="mb-4">
+            Rechtsgrundlage ist Ihre Einwilligung nach Art. 6 Abs. 1 lit. a DSGVO und § 25 Abs. 1 TDDDG. Sie können Ihre Einwilligung jederzeit über die <button type="button" data-cookie-settings class={`${linkClass} cursor-pointer`}>Cookie-Einstellungen</button> widerrufen. Zusätzlich können Sie personalisierte Werbung von Google in Ihren Google-Anzeigeneinstellungen deaktivieren: <a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer" class={linkClass}>https://adssettings.google.com/</a>
+          </p>
+          <p class="mb-4">
+            Für die Conversion-Messung sind Google und wir gemeinsam verantwortlich im Sinne von Art. 26 DSGVO; hierfür gelten die „Google Ads Controller-Controller Data Protection Terms“. Die Daten können an Server der Google LLC in den USA übertragen werden. Google LLC ist nach dem EU-US Data Privacy Framework zertifiziert; ergänzend gelten die Standardvertragsklauseln der Europäischen Kommission. Conversion-Cookies verlieren nach spätestens 90 Tagen ihre Gültigkeit.
+          </p>
+          <p>
+            Weitere Informationen: <a href="https://policies.google.com/technologies/ads?hl=de" target="_blank" rel="noopener noreferrer" class={linkClass}>https://policies.google.com/technologies/ads</a> und <a href="https://business.safety.google/adscontrollerterms/" target="_blank" rel="noopener noreferrer" class={linkClass}>https://business.safety.google/adscontrollerterms/</a>
+          </p>
+        </div>
+
+        {/* 10. Externe Links */}
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">10. Links zu externen Websites</h2>
+          <p>
+            Unsere Website enthält Links zu Websites Dritter, insbesondere zu Online-Apotheken, zur Unternehmenswebsite robugen.de und zu unserem Unternehmensprofil bei LinkedIn. Es handelt sich um einfache Verlinkungen ohne eingebettete Plugins oder Social-Media-Buttons. Beim bloßen Aufruf unserer Website werden keine Daten an diese Anbieter übertragen. Erst wenn Sie einen Link anklicken, gelangen Sie auf die externe Website, für die ausschließlich die Datenschutzbestimmungen des jeweiligen Anbieters gelten. Ein Teil der Links zu Online-Apotheken sind Affiliate-Links, siehe Abschnitt 11.
+          </p>
+        </div>
+
+        {/* 11. AWIN (Affiliate-Links in src/data/pharmacies.ts über awinDeeplinks) */}
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">11. Affiliate-Links (AWIN)</h2>
+          <p class="mb-4">
+            Ein Teil der Links zu Online-Apotheken auf dieser Website sind Partnerlinks des Affiliate-Netzwerks AWIN. Anbieter ist die AWIN AG, Eichhornstraße 3, 10785 Berlin, Deutschland. Wenn Sie einen solchen Link anklicken, werden Sie zunächst über einen Server von AWIN zur Apotheke weitergeleitet. Dabei erhält AWIN Ihre IP-Adresse, den Zeitpunkt des Klicks, die Herkunftsseite sowie eine von uns übermittelte Kennung, die lediglich angibt, an welcher Stelle unserer Website der Link platziert war. AWIN kann anschließend auf seiner Domain und auf der Website der Apotheke Cookies setzen, um einen späteren Kauf unserer Empfehlung zuzuordnen. Wir erhalten von AWIN ausschließlich zusammengefasste Statistiken und keine Angaben, mit denen wir Sie persönlich identifizieren könnten.
+          </p>
+          <p class="mb-4">
+            Rechtsgrundlage für die Weiterleitung ist Art. 6 Abs. 1 lit. f DSGVO. Unser berechtigtes Interesse liegt in der Vermittlung von Apothekenangeboten und der Erfolgsmessung dieser Vermittlung. Für Cookies, die AWIN oder die Apotheke nach der Weiterleitung setzen, ist der jeweilige Anbieter verantwortlich und holt gegebenenfalls Ihre Einwilligung ein.
+          </p>
+          <p>
+            Weitere Informationen: <a href="https://www.awin.com/de/datenschutzerklarung" target="_blank" rel="noopener noreferrer" class={linkClass}>https://www.awin.com/de/datenschutzerklarung</a>
+          </p>
+        </div>
+
+        {/* 12. Betroffenenrechte */}
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-4">12. Ihre Rechte</h2>
+          <p class="mb-4">
+            Sie haben gegenüber uns hinsichtlich der Sie betreffenden personenbezogenen Daten folgende Rechte:
+          </p>
+          <ul class="list-disc pl-6 space-y-2 mb-6">
+            <li><strong>Auskunft</strong> (Art. 15 DSGVO) über die von uns verarbeiteten Daten, die Verarbeitungszwecke, die Empfänger und die geplante Speicherdauer.</li>
+            <li><strong>Berichtigung</strong> (Art. 16 DSGVO) unrichtiger oder unvollständiger Daten.</li>
+            <li><strong>Löschung</strong> (Art. 17 DSGVO), soweit die Verarbeitung nicht zur Erfüllung einer rechtlichen Verpflichtung oder zur Geltendmachung von Rechtsansprüchen erforderlich ist.</li>
+            <li><strong>Einschränkung der Verarbeitung</strong> (Art. 18 DSGVO).</li>
+            <li><strong>Datenübertragbarkeit</strong> (Art. 20 DSGVO): Erhalt der von Ihnen bereitgestellten Daten in einem strukturierten, gängigen und maschinenlesbaren Format.</li>
+            <li><strong>Widerruf einer Einwilligung</strong> (Art. 7 Abs. 3 DSGVO) jederzeit mit Wirkung für die Zukunft. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Verarbeitung bleibt unberührt.</li>
+          </ul>
+
+          <h3 class="text-neutral-900 mb-2">Widerspruchsrecht (Art. 21 DSGVO)</h3>
+          <p class="mb-4">
+            Sie haben das Recht, aus Gründen, die sich aus Ihrer besonderen Situation ergeben, jederzeit gegen die Verarbeitung Sie betreffender personenbezogener Daten, die auf Grundlage von Art. 6 Abs. 1 lit. e oder f DSGVO erfolgt, Widerspruch einzulegen. Wir verarbeiten die Daten dann nicht mehr, es sei denn, wir können zwingende schutzwürdige Gründe für die Verarbeitung nachweisen, die Ihre Interessen, Rechte und Freiheiten überwiegen, oder die Verarbeitung dient der Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen.
+          </p>
+          <p class="mb-6">
+            Werden Ihre Daten verarbeitet, um Direktwerbung zu betreiben, haben Sie das Recht, jederzeit Widerspruch gegen diese Verarbeitung einzulegen. Ihre Daten werden dann nicht mehr für Zwecke der Direktwerbung verwendet.
+          </p>
+
+          <p class="mb-6">
+            Zur Ausübung Ihrer Rechte genügt eine formlose Nachricht an <a href="mailto:datenschutz@robugen.de" class={linkClass}>datenschutz@robugen.de</a>. Die Auskunft erfolgt kostenfrei.
+          </p>
+
+          <h3 class="text-neutral-900 mb-2">Beschwerderecht bei einer Aufsichtsbehörde</h3>
+          <p class="mb-4">
+            Unbeschadet anderer Rechtsbehelfe haben Sie nach Art. 77 DSGVO das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren, insbesondere in dem Mitgliedstaat Ihres gewöhnlichen Aufenthalts, Ihres Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes. Die für uns zuständige Aufsichtsbehörde ist:
+          </p>
+          <p>
+            Der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Baden-Württemberg<br />
+            Lautenschlagerstraße 20<br />
+            70173 Stuttgart<br />
+            <a href="https://www.baden-wuerttemberg.datenschutz.de/" target="_blank" rel="noopener noreferrer" class={linkClass}>https://www.baden-wuerttemberg.datenschutz.de/</a>
+          </p>
+        </div>
+
+        {/* 13. Speicherdauer */}
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">13. Speicherdauer</h2>
+          <p>
+            Soweit in dieser Datenschutzerklärung nicht anders angegeben, speichern wir personenbezogene Daten nur so lange, wie es für den jeweiligen Zweck erforderlich ist. Nach Wegfall des Zwecks werden die Daten gelöscht, sofern keine gesetzlichen Aufbewahrungspflichten (z. B. nach Handels-, Steuer- oder Arzneimittelrecht) entgegenstehen. In diesem Fall wird die Verarbeitung eingeschränkt und die Daten werden nach Ablauf der Frist gelöscht.
+          </p>
+        </div>
+
+        {/* 14. Keine automatisierte Entscheidungsfindung */}
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">14. Automatisierte Entscheidungen</h2>
+          <p>
+            Eine automatisierte Entscheidungsfindung einschließlich Profiling im Sinne von Art. 22 DSGVO findet auf dieser Website nicht statt.
+          </p>
+        </div>
+
+        {/* 15. Änderungen */}
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">15. Änderungen dieser Datenschutzerklärung</h2>
+          <p class="mb-4">
+            Wir passen diese Datenschutzerklärung an, wenn sich die Rechtslage, die eingesetzten Dienste oder unsere Website ändern. Es gilt jeweils die auf dieser Seite veröffentlichte Fassung.
+          </p>
+          <p class="text-sm text-neutral-500">
+            Stand: September 2026
+          </p>
+        </div>
+
+      </div>
+    </Container>
+  </section>
+
+</Layout>
+
+<script>
+  // Cookiebot-Banner erneut öffnen (Einwilligung ändern oder widerrufen); ohne Cookiebot kein Effekt.
+  document.querySelectorAll('[data-cookie-settings]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      (window as { Cookiebot?: { renew: () => void } }).Cookiebot?.renew();
+    });
+  });
+</script>

@@ -1,0 +1,62 @@
+---
+// TrustBanner.astro - Vertrauensanker: links Wort-Bild-Marke, rechts vier Vertrauenspunkte.
+import { Image } from 'astro:assets';
+import Container from './Container.astro';
+// Wort-Bild-Marke „KAMILLIN® von ROBUGEN" (dieselbe Quelle wie das OG-Bild).
+import logo from '../assets/images/logo/kamillin-og-default.png';
+
+// Vertrauenspunkte (Wortlaut Anton, 07.09.2026; erster Punkt 10.09.2026).
+const trustPoints = [
+  { title: 'Entzündungshemmend', text: 'und wundheilend' },
+  { title: 'Eigener Anbau', text: 'In Thüringen' },
+  { title: 'Alles in einer Hand', text: 'Feld bis Flasche' },
+  { title: 'Geprüfte Qualität', text: 'Jede Charge' },
+];
+---
+
+{/* Gelbe Markenfläche — Farbregel (global.css): Text auf Gelb immer Blau #10108f.
+    Als abgesetzter Balken in zentraler Balkenbreite (bar-w/max-w-bar, global.css):
+    nie breiter als die Navbar. */}
+<section>
+  <div class="bar-w max-w-bar mx-auto rounded-xl bg-brand py-14 md:py-16 px-6">
+  {/* Bewusst "wide" (max-w-7xl): breiter als der übrige Inhalt. */}
+  <Container size="wide">
+    {/* Ab lg: Logo/Claim linksbündig, die vier Punkte rechtsbündig — Freiraum dazwischen. */}
+    <div class="flex flex-col lg:flex-row items-center gap-8 lg:justify-between">
+
+      {/* Links: Wort-Bild-Marke ohne separaten Claim; items-center am Eltern-Flex
+          hält sie vertikal auf Höhe der Vertrauenspunkte, linksbündig wie diese. */}
+      <div class="shrink-0 w-full lg:w-auto flex justify-start">
+        <Image
+          src={logo}
+          alt="KAMILLIN® von ROBUGEN"
+          height={192}
+          loading="lazy"
+          class="h-14 sm:h-16 w-auto"
+        />
+      </div>
+
+      {/* Rechts: vier Vertrauenspunkte im 2×2-Raster (auch mobil), ab lg eine Reihe.
+          Mobil kleinere Schrift, engerer Abstand zum Haken und Silbentrennung
+          (hyphens-auto, min-w-0 + break-words), damit lange Wörter in die halbe Kartenbreite passen. */}
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-x-4 sm:gap-x-6 lg:gap-x-10 gap-y-6 sm:gap-y-8 w-full lg:w-auto max-sm:text-sm">
+        {trustPoints.map((point) => (
+          <div class="flex items-start gap-2 sm:gap-3">
+            {/* Doppelter Haken in Blau, ohne Hintergrund */}
+            <svg class="w-6 h-6 sm:w-7 sm:h-7 text-blue shrink-0 mt-0 sm:mt-0.5" fill="none" viewBox="0 0 28 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2 13l5 5L17 8" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11 13l5 5L26 8" />
+            </svg>
+            <div class="min-w-0 hyphens-auto break-words">
+              {/* Hierarchie über Schriftgewicht — auf Gelb sind alle Texte blau. */}
+              <p class="font-semibold text-blue">{point.title}</p>
+              <p class="text-blue">{point.text}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </Container>
+  </div>
+</section>

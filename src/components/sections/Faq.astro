@@ -1,0 +1,103 @@
+---
+// FAQ-Modul: gelber Balken in Content-Breite, links die Überschrift, rechts das
+// Akkordeon (03.09.2026). answer unterstützt **fett** und [Text](url);
+// schema=true gibt FAQPage-JSON-LD aus.
+import Container from '../Container.astro';
+import { jsonLd } from '../../utils/jsonLd';
+
+import type { FaqItem } from '../../data/faqs';
+
+interface Props {
+  items: FaqItem[];
+  heading?: string;
+  id?: string;
+  schema?: boolean;
+  class?: string;
+}
+
+const {
+  items,
+  heading = 'Haben Sie noch Fragen?',
+  id,
+  schema = false,
+  // Standard transparent — der gelb-weiße Seitenverlauf (global.css) soll durchscheinen.
+  class: sectionClass = '',
+} = Astro.props;
+
+// Minimaler Inline-Markdown-Renderer: **fett** und [Text](url).
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+// Nur unbedenkliche URL-Schemata zulassen (verhindert javascript:/data:-Links).
+function safeHref(href: string): string {
+  const v = href.trim();
+  // Protokoll-relative URLs (//host) bewusst ausgeschlossen.
+  return /^(https?:|mailto:|tel:|\/(?!\/)|#)/i.test(v) ? v : '#';
+}
+function mdInline(text: string): string {
+  let html = escapeHtml(text);
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, label, href) =>
+    `<a href="${safeHref(href)}" class="text-primary font-bold hover:text-primary-dark">${label}</a>`,
+  );
+  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  return html;
+}
+// Reiner Text fürs FAQPage-Schema (ausgezeichneter Text = sichtbarer Text).
+function stripMd(text: string): string {
+  return text
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/\*\*([^*]+)\*\*/g, '$1');
+}
+---
+
+{items.length > 0 && (
+  <section id={id} class={`py-16 md:py-20 px-6 scroll-mt-24 ${sectionClass}`}>
+    <Container size="content">
+      {/* Gelber Balken im hellen Markengelb der Produktkarten; Fragen in der Leitfarbe. */}
+      <div class="faq-bar rounded-xl px-6 py-10 md:px-12 md:py-14">
+        <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-8 lg:gap-16">
+          <h2>{heading}</h2>
+
+          <div class="divide-y divide-blue/30">
+            {items.map((item) => (
+              <details class="group">
+                <summary class="flex items-center justify-between gap-6 cursor-pointer list-none py-5 text-lg text-blue [&::-webkit-details-marker]:hidden">
+                  <span>{item.question}</span>
+                  {/* Plus → beim Öffnen um 45° gedreht (×) */}
+                  <svg class="w-6 h-6 text-blue shrink-0 transition-transform group-open:rotate-45" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14" />
+                  </svg>
+                </summary>
+                <p class="pb-5 pr-12 text-neutral-700 leading-relaxed" set:html={mdInline(item.answer)} />
+              </details>
+            ))}
+          </div>
+        </div>
+      </div>
+    </Container>
+
+    {schema && (
+      <script is:inline type="application/ld+json" set:html={jsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: items.map((item) => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: { '@type': 'Answer', text: stripMd(item.answer) },
+        })),
+      })} />
+    )}
+  </section>
+)}
+
+<style>
+  /* Gleiche Fläche wie die Produktkarten (Token in global.css). */
+  .faq-bar {
+    background: var(--color-brand-soft);
+  }
+</style>

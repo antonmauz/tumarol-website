@@ -1,0 +1,52 @@
+---
+import { jsonLd } from '../utils/jsonLd';
+
+export interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+---
+
+{/* Kein eigener Außenabstand: den Abstand zum Seitenkopf setzt die umgebende Sektion
+    (BreadcrumbSection bzw. RatgeberArticle), sonst stapeln sich drei Abstände. */}
+<nav aria-label="Breadcrumb">
+  <ol class="flex flex-wrap items-center gap-2 text-sm text-neutral-600">
+    {items.map((item, index) => (
+      <>
+        {index > 0 && (
+          <li aria-hidden="true" class="text-neutral-400">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </li>
+        )}
+        <li>
+          {item.href ? (
+            <a href={item.href} class="text-neutral-600 hover:text-primary transition-colors font-medium">
+              {item.label}
+            </a>
+          ) : (
+            <span class="text-neutral-800 font-semibold" aria-current="page">{item.label}</span>
+          )}
+        </li>
+      </>
+    ))}
+  </ol>
+</nav>
+
+<script is:inline type="application/ld+json" set:html={jsonLd({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": items.map((item, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "name": item.label,
+    ...(item.href ? { "item": new URL(item.href, Astro.site!).href } : {})
+  }))
+})} />

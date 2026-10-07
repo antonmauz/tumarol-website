@@ -1,0 +1,23 @@
+---
+// Standard-Sektion für die Breadcrumb-Leiste oben auf einer Seite.
+import Container from './Container.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import type { BreadcrumbItem } from './Breadcrumbs.astro';
+
+interface Props {
+  items: BreadcrumbItem[];
+  /** Container-Breite (Standard: content – wie die meisten Seiten). */
+  size?: 'narrow' | 'text' | 'content' | 'wide';
+}
+
+const { items, size = 'content' } = Astro.props;
+---
+
+{/* Transparent, damit der gelb-weiße Seitenverlauf (global.css) oben sichtbar ist.
+    Unten knapp: zusammen mit dem pt-4/md:pt-6 der Folgesektion ergibt das mobil 24 px,
+    ab md 40 px bis zum Seitenkopf (vorher 64/72 px, Anton 29.09.2026). */}
+<section class="pt-8 pb-2 md:pb-4 px-6">
+  <Container size={size}>
+    <Breadcrumbs items={items} />
+  </Container>
+</section>

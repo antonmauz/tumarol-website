@@ -1,0 +1,14 @@
+# Textdateien immer mit LF im Repository UND in der Arbeitskopie (eol=lf) —
+# vorher lieferte core.autocrlf auf Windows gemischte CRLF/LF-Arbeitskopien.
+* text=auto eol=lf
+
+# Binärdateien
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary

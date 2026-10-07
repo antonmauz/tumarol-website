@@ -1,0 +1,7 @@
+# robots.txt — Crawling freigegeben; einzelne Seiten sperrt das Layout per noindex
+# (Prop `noindex`, z. B. 404). Test-Umgebungen: PUBLIC_IS_TEST=true setzt noindex global.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://kamillin.de/sitemap-index.xml

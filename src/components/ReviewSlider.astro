@@ -1,0 +1,60 @@
+---
+// ReviewSlider.astro - Slider mit den Bewertungskarten der Online-Apotheken (Mechanik analog ArticleSlider).
+// ⚠️ HWG-Compliance: Nur belegbare, echte Bewertungen veröffentlichen.
+import Container from './Container.astro';
+import SliderControls from './SliderControls.astro';
+import ReviewCard from './ReviewCard.astro';
+import { reviewsFor } from '../data/reviews';
+import type { PharmacyProduct } from '../data/pharmacies';
+
+interface Props {
+  /** Präparat-Key (Produktseiten); ohne Angabe alle Produkte gemischt —
+   *  die Karten zeigen dann zusätzlich das Produkt-Label. */
+  product?: PharmacyProduct;
+  /** H2-Überschrift des Abschnitts. */
+  heading?: string;
+  /** Hintergrund/zusätzliche Klassen der <section> (Standard: transparent —
+   *  der gelb-weiße Seitenverlauf aus global.css soll durchscheinen). */
+  class?: string;
+}
+
+const { product, heading = 'Produktbewertungen', class: sectionClass = '' } = Astro.props;
+
+const displayReviews = reviewsFor(product);
+
+---
+
+{/* Ohne Bewertungen (leere Dateien in src/data/reviews/) wird die Sektion nicht gerendert. */}
+{displayReviews.length > 0 && (
+<section class={`py-16 md:py-20 px-6 ${sectionClass}`}>
+  <Container size="content">
+    <div class="flex items-end justify-between gap-4 mb-8">
+      {/* min-w-0 + hyphens-auto: lange Ein-Wort-Überschriften brechen mobil um,
+          statt die Pfeil-Buttons über den Seitenrand zu schieben. */}
+      <h2 class="min-w-0 hyphens-auto">{heading}</h2>
+
+      <SliderControls prevLabel="Vorherige Bewertungen" nextLabel="Weitere Bewertungen" />
+    </div>
+
+    <div data-snap-slider>
+      {/* Mobil 1 Karte (85 %) + Peek der nächsten — Maße wie Produkt- und Artikelkarten (gap-6:
+          die vorige Karte endet beim Snap genau am Bildschirmrand), ab md 2, ab lg 3 */}
+      <div
+        data-slider-track
+        class="flex gap-6 slider-bleed overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 -mb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {displayReviews.map((review) => (
+          <div class="snap-start shrink-0 basis-[85%] md:basis-[calc((100%_-_1.5rem)/2)] lg:basis-[calc((100%_-_3rem)/3)] [&>div]:h-full">
+            <ReviewCard review={review} showProduct={!product} placement="reviews-slider" />
+          </div>
+        ))}
+      </div>
+    </div>
+  </Container>
+</section>
+)}
+
+<script>
+  import { initSnapSliders } from '../scripts/snapSlider';
+  initSnapSliders();
+</script>

@@ -1,0 +1,78 @@
+---
+// „Anwendung und Dosierung" der Produktseiten als Slider (Mechanik wie ArticleSlider),
+// auf Desktop vier Karten je Seite; Karte ohne Fläche, Bild mit runden Ecken, Text
+// darunter auf dem Seitengrund. Daten je Präparat in src/data/applications.ts.
+import { Image } from 'astro:assets';
+import Container from './Container.astro';
+import SliderControls from './SliderControls.astro';
+import { applicationsFor } from '../data/applications';
+import type { PharmacyProduct } from '../data/pharmacies';
+
+interface Props {
+  product: PharmacyProduct;
+  id?: string;
+  class?: string;
+}
+
+const { product, id, class: sectionClass = '' } = Astro.props;
+const section = applicationsFor(product);
+const items = section.items;
+
+---
+
+{items.length > 0 && (
+<section id={id} class={`py-16 md:py-20 px-6 scroll-mt-24 ${sectionClass}`}>
+  <Container size="content">
+    <div class="flex items-end justify-between gap-4 mb-8">
+      <div class="min-w-0">
+        <h2 class="hyphens-auto">{section.heading}</h2>
+        {section.intro && <p class="mt-3 text-neutral-700 leading-relaxed max-w-3xl">{section.intro}</p>}
+      </div>
+
+      <SliderControls prevLabel="Vorherige Anwendungen" nextLabel="Weitere Anwendungen" />
+    </div>
+
+    <div data-snap-slider>
+      {/* Mobil ~72 % Kartenbreite (Folgekarte lugt rein), ab md 2, ab lg 4 Karten (gap-6 = 3 × 1.5rem). */}
+      <div
+        data-slider-track
+        class="flex gap-6 slider-bleed overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 -mb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {items.map((item) => (
+          <div class="snap-start shrink-0 basis-[72%] md:basis-[calc((100%_-_1.5rem)/2)] lg:basis-[calc((100%_-_4.5rem)/4)]">
+            <div class="h-full flex flex-col">
+              {/* Bildfläche 4:3; ohne Bild neutrale Fläche mit Hinweis. */}
+              {item.image ? (
+                <Image
+                  src={item.image}
+                  alt={item.imageAlt ?? item.title}
+                  width={640}
+                  loading="lazy"
+                  class="block w-full aspect-[4/3] object-cover rounded-xl"
+                />
+              ) : (
+                <div class="flex items-center justify-center w-full aspect-[4/3] rounded-xl bg-neutral-100 text-sm text-neutral-500" aria-hidden="true">
+                  Bild folgt
+                </div>
+              )}
+              <div class="pt-4 md:pt-5">
+                <h3 class="text-blue text-lg mb-1.5">{item.title}</h3>
+                {/* Mehrere Absätze (z. B. je Altersgruppe) untereinander. */}
+                {(Array.isArray(item.text) ? item.text : [item.text]).map((paragraph) => (
+                  <p class="text-neutral-700 leading-relaxed text-sm [&+&]:mt-2">{paragraph}</p>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </Container>
+</section>
+)}
+
+
+<script>
+  import { initSnapSliders } from '../scripts/snapSlider';
+  initSnapSliders();
+</script>

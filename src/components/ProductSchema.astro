@@ -1,0 +1,61 @@
+---
+// Product-JSON-LD der Produktseiten, gespeist aus den vorhandenen Datenquellen
+// (Pflichtangaben, Packungsgrößen, Produktbilder). Arzneimittel tragen zusätzlich
+// additionalType Drug mit Wirkstoff, Darreichungsform und Anwendungsgebiet im freigegebenen
+// Wortlaut. Bewusst ohne offers/aggregateRating: Preise und Bewertungen externer Shops
+// dürfen laut Google-Richtlinien nicht ins eigene Markup.
+import type { PharmacyProduct } from '../data/productKeys';
+import { COMPANY_NAME, COMPANY_URL } from '../data/company';
+import { packageSizesFor } from '../data/packageSizes';
+import { pflichtangaben } from '../data/pflichtangaben';
+import { productImages } from '../data/productImages';
+import { robugenProductUrls } from '../data/robugenProductUrls';
+import { normalizePathname } from '../utils/urls';
+import { jsonLd } from '../utils/jsonLd';
+
+interface Props {
+  product: PharmacyProduct;
+  name: string;
+  /** Kurzbeschreibung; üblicherweise die Meta-Description der Seite. */
+  description: string;
+  category: string;
+}
+
+const { product, name, description, category } = Astro.props;
+
+const siteUrl = Astro.site!;
+const pageUrl = new URL(normalizePathname(Astro.url.pathname), siteUrl).href;
+const arzneimittel = pflichtangaben.find((p) => p.key === product);
+const sameAs = robugenProductUrls[product];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  '@id': `${pageUrl}#product`,
+  name,
+  url: pageUrl,
+  description,
+  image: new URL(productImages[product].cardFront.src.src, siteUrl).href,
+  category,
+  brand: { '@type': 'Brand', name: 'KAMILLIN' },
+  manufacturer: { '@type': 'Organization', name: COMPANY_NAME, url: COMPANY_URL },
+  ...(sameAs && { sameAs }),
+  ...(arzneimittel && {
+    additionalType: 'https://schema.org/Drug',
+    activeIngredient: arzneimittel.kurz.wirkstoff,
+    dosageForm: 'Flüssigkeit',
+    indication: {
+      '@type': 'MedicalIndication',
+      name: 'Anwendungsgebiete',
+      description: arzneimittel.kurz.anwendungsgebiete,
+    },
+  }),
+  isRelatedTo: packageSizesFor(product).map((p) => ({
+    '@type': 'Product',
+    name: `${name} ${p.size}`,
+    sku: p.pzn,
+  })),
+};
+---
+
+<script is:inline type="application/ld+json" set:html={jsonLd(schema)} />

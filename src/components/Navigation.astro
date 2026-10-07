@@ -1,0 +1,329 @@
+---
+import { Image } from 'astro:assets';
+import Container from './Container.astro';
+// Kamillen-Signet; diese eine Datei überschreiben = Logo überall aktuell.
+import logo from '../assets/images/logo/kamillin-placeholder-logo.png';
+import { categoryClusters } from '../data/categories';
+import { normalizePathname } from '../utils/urls';
+
+interface NavLink {
+  label: string;
+  href: string;
+}
+
+interface NavItem {
+  label: string;
+  href?: string;
+  dropdown?: NavLink[];
+}
+
+// Produkt-Dropdown: die drei Produktseiten (Slugs festgelegt 01.09.2026).
+const productLinks: NavLink[] = [
+  { label: 'KAMILLIN® EXTERN ROBUGEN', href: '/extern-robugen' },
+  { label: 'KAMILLIN® KONZENTRAT ROBUGEN', href: '/konzentrat-robugen' },
+  { label: 'KAMILLIN® REPAIR CREME', href: '/repair-creme' },
+];
+
+// Themen-Cluster als Dropdown; Anker-IDs auf /wissenswertes = Kategorie-Slug.
+const wissenswertesLinks: NavLink[] = categoryClusters.map((c) => ({
+  label: c.heading,
+  href: `/wissenswertes#${c.category}`,
+}));
+
+// Sektionsnamen (01.09.2026): Themenwelt = „Wissenswertes", Magazin =
+// „Unser Kamillenanbau". Slug /wissenswertes festgelegt (02.09.2026);
+// /magazin bleibt Arbeitsname.
+const navLinks: NavItem[] = [
+  { label: 'Produkte', dropdown: productLinks },
+  { label: 'Wissenswertes', href: '/wissenswertes', dropdown: wissenswertesLinks },
+  { label: 'Unser Kamillenanbau', href: '/magazin' },
+];
+
+// Slash-lose Form wie die href-Werte oben — sonst greift die Aktiv-Markierung im Build nie.
+const currentPath = normalizePathname(Astro.url.pathname);
+
+// Aktiv, wenn die Seite der Eintrag selbst ist oder eines seiner Dropdown-Ziele
+// (Produktseiten markieren „Produkte“, Artikel unter /wissenswertes/… markieren
+// „Wissenswertes“). Anker-Teile der Dropdown-Links werden ignoriert.
+const isActive = (link: NavItem): boolean => {
+  if (link.href && (currentPath === link.href || currentPath.startsWith(link.href + '/'))) return true;
+  return (link.dropdown ?? []).some((item) => currentPath === item.href.split('#')[0]);
+};
+
+// Dropdown-IDs für aria-controls (ein Eintrag je Dropdown).
+const dropdownId = (link: NavItem) => `nav-dropdown-${link.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+
+
+// Navbar-Konzept: am Seitenanfang transparent im gelb-weißen Seitenverlauf (Text
+// darauf Blau, Farbregel global.css); beim Scrollen oder offenem Mobile-Menü setzt
+// das Script `data-scrolled`, und die Navbar wird ein schwebender weißer Balken.
+const linkBase = 'text-base font-medium transition-colors text-blue hover:text-primary-dark';
+// Aktiv-Markierung als Unterstreichung — alle Links sind blau, Farbe allein reicht nicht.
+const linkActive = 'underline decoration-2 underline-offset-4';
+---
+
+<header
+  id="site-header"
+  class="group fixed top-0 left-0 right-0 z-50"
+>
+  {/* Der Balken: transparent am Seitenanfang, beim Scrollen weiß mit Schatten in
+      Balkenbreite (Seitenrand + --container-bar aus global.css). Beide Zustände setzen
+      die Breite als Länge, damit sie mit Hintergrund und Schatten animiert. */}
+  <div class="mx-auto w-full mt-0 rounded-none bg-transparent shadow-none transition-all duration-300 group-data-[scrolled]:w-[min(100%_-_var(--spacing-gutter),var(--container-bar))] md:group-data-[scrolled]:w-[min(100%_-_var(--spacing-gutter-md),var(--container-bar))] group-data-[scrolled]:mt-3 group-data-[scrolled]:rounded-xl group-data-[scrolled]:bg-white group-data-[scrolled]:shadow-lg">
+  <Container size="wide" class="px-6 lg:px-8">
+    <nav class="flex items-center justify-between h-16" aria-label="Hauptnavigation">
+
+      {/* Logo */}
+      <a href="/" class="flex items-center">
+        <Image
+          src={logo}
+          alt="KAMILLIN®"
+          height={96}
+          loading="eager"
+          class="h-12 w-auto"
+        />
+      </a>
+
+      {/* Desktop Nav */}
+      <ul class="hidden md:flex items-center gap-6 lg:gap-8">
+        {navLinks.map((link) => (
+          <li class="relative group/item" data-nav-dropdown>
+            {link.dropdown ? (
+              <>
+                {link.href ? (
+                  /* Label ist ein echter Link, zeigt das Dropdown bei Hover/Fokus. */
+                  <a
+                    href={link.href}
+                    class={`flex items-center gap-1 py-2 ${linkBase} ${isActive(link) ? linkActive : ''}`}
+                  >
+                    {link.label}
+                    <svg class="w-4 h-4 transition-transform group-hover/item:rotate-180 group-focus-within/item:rotate-180 group-data-[open]/item:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </a>
+                ) : (
+                  /* Ohne eigene Seite: Button öffnet das Dropdown per Klick/Tap (Touch-
+                     Geräte ab md haben kein Hover) — Zustand über aria-expanded + data-open. */
+                  <button
+                    type="button"
+                    class={`flex items-center gap-1 py-2 cursor-pointer ${linkBase} ${isActive(link) ? linkActive : ''}`}
+                    aria-expanded="false"
+                    aria-controls={dropdownId(link)}
+                    data-nav-dropdown-toggle
+                  >
+                    {link.label}
+                    <svg class="w-4 h-4 transition-transform group-hover/item:rotate-180 group-focus-within/item:rotate-180 group-data-[open]/item:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                )}
+                <div
+                  id={dropdownId(link)}
+                  class="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-64 bg-white rounded-xl shadow-xl border border-neutral-100 opacity-0 invisible group-hover/item:opacity-100 group-hover/item:visible group-focus-within/item:opacity-100 group-focus-within/item:visible group-data-[open]/item:opacity-100 group-data-[open]/item:visible transition-all duration-200 origin-top scale-95 group-hover/item:scale-100 group-focus-within/item:scale-100 group-data-[open]/item:scale-100"
+                >
+                  <div class="py-2">
+                    {link.dropdown.map((item) => (
+                      <a
+                        href={item.href}
+                        class="block py-2.5 px-4 text-base font-medium text-neutral-700 hover:text-primary hover:bg-neutral-50 transition-colors"
+                      >
+                        {item.label}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <a
+                href={link.href}
+                class={`${linkBase} ${isActive(link) ? linkActive : ''}`}
+              >
+                {link.label}
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
+
+      {/* Rechts: Kauf-CTA */}
+      <div class="hidden md:flex items-center gap-4">
+        <button
+          type="button"
+          data-open-pharmacy-drawer
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-white text-base font-semibold hover:bg-primary-dark transition-colors shadow-sm cursor-pointer"
+        >
+          Jetzt kaufen
+        </button>
+      </div>
+
+      {/* Mobile: Kauf-Button (Warenkorb) + Menü-Button */}
+      <div class="flex md:hidden items-center gap-2">
+        <button
+          type="button"
+          data-open-pharmacy-drawer
+          class="p-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors cursor-pointer"
+          aria-label="Jetzt kaufen"
+        >
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+        </button>
+        <button
+          id="mobile-menu-btn"
+          type="button"
+          class="p-2 rounded-lg text-blue hover:bg-blue/10 transition-colors cursor-pointer"
+          aria-label="Menü öffnen"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+        >
+          {/* Zwei Icons, per JS umgeschaltet: Hamburger (zu) / Kreuz (offen) */}
+          <svg data-icon-menu class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg data-icon-close class="w-6 h-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+    </nav>
+  </Container>
+
+  {/* Mobile Menu: flache Liste mit zwei Akkordeons (Teil des weißen Balkens) */}
+  <div id="mobile-menu" class="hidden md:hidden border-t border-neutral-100 bg-white rounded-b-xl max-h-[calc(100vh-5rem)] overflow-y-auto">
+    <Container size="wide" class="px-6 py-2">
+      <nav class="divide-y divide-neutral-100" aria-label="Mobile Navigation">
+
+        {/* Produkte (Akkordeon) */}
+        <details class="group/acc">
+          <summary class="flex items-center justify-between gap-4 py-3.5 font-semibold text-neutral-900 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+            Produkte
+            <svg class="w-5 h-5 text-neutral-400 shrink-0 transition-transform group-open/acc:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </summary>
+          <div class="pb-3">
+            {productLinks.map((item) => (
+              <a
+                href={item.href}
+                class="block py-2 text-base font-medium text-neutral-700 hover:text-primary"
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
+        </details>
+
+        {/* Wissenswertes (Akkordeon) */}
+        <details class="group/acc">
+          <summary class="flex items-center justify-between gap-4 py-3.5 font-semibold text-neutral-900 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+            Wissenswertes
+            <svg class="w-5 h-5 text-neutral-400 shrink-0 transition-transform group-open/acc:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </summary>
+          <div class="pb-3">
+            <a href="/wissenswertes" class="block py-2 text-base font-medium text-neutral-700 hover:text-primary">
+              Alle Themen ansehen
+            </a>
+            {wissenswertesLinks.map((item) => (
+              <a href={item.href} class="block py-2 pl-4 text-base text-neutral-600 hover:text-primary">
+                {item.label}
+              </a>
+            ))}
+          </div>
+        </details>
+
+        {/* Unser Kamillenanbau (Magazin) */}
+        <a href="/magazin" class="block py-3.5 font-semibold text-neutral-900 hover:text-primary">
+          Unser Kamillenanbau
+        </a>
+
+
+        {/* CTA Button */}
+        <div class="py-4">
+          <button type="button" data-open-pharmacy-drawer class="w-full text-center py-3 rounded-lg bg-primary text-white text-base font-semibold hover:bg-primary-dark transition-colors cursor-pointer">
+            Jetzt kaufen
+          </button>
+        </div>
+
+      </nav>
+    </Container>
+  </div>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById('site-header');
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+
+  // Navbar liegt am Seitenanfang transparent im Seitenverlauf; beim Scrollen
+  // (oder bei offenem Mobile-Menü) hebt sie sich als weißer Balken ab.
+  const updateHeader = () => {
+    const menuOpen = menu ? !menu.classList.contains('hidden') : false;
+    const solid = menuOpen || window.scrollY > 16;
+    header?.toggleAttribute('data-scrolled', solid);
+  };
+
+  const iconMenu = btn?.querySelector('[data-icon-menu]');
+  const iconClose = btn?.querySelector('[data-icon-close]');
+
+  const setMenuOpen = (isOpen: boolean) => {
+    menu?.classList.toggle('hidden', !isOpen);
+    btn?.setAttribute('aria-expanded', String(isOpen));
+    btn?.setAttribute('aria-label', isOpen ? 'Menü schließen' : 'Menü öffnen');
+    // Hamburger ↔ Kreuz: signalisiert, dass derselbe Button wieder schließt
+    iconMenu?.classList.toggle('hidden', isOpen);
+    iconClose?.classList.toggle('hidden', !isOpen);
+    updateHeader();
+  };
+
+  btn?.addEventListener('click', () => {
+    setMenuOpen(menu?.classList.contains('hidden') ?? false);
+  });
+
+  // Menü bei jedem Klick auf Link oder Kauf-Button schließen (Same-Page-Anker navigieren
+  // nicht neu). Capture-Phase, damit der Fokus schon auf dem Menü-Button liegt, bevor der
+  // Drawer sich das aktive Element merkt: so kommt der Fokus beim Schließen dorthin zurück.
+  menu?.querySelectorAll('a[href], [data-open-pharmacy-drawer]').forEach((link) => {
+    link.addEventListener(
+      'click',
+      () => {
+        if (link.hasAttribute('data-open-pharmacy-drawer')) btn?.focus();
+        setMenuOpen(false);
+      },
+      { capture: true },
+    );
+  });
+
+  // Desktop-Dropdown ohne eigene Seite („Produkte“): Klick/Tap toggelt, Escape
+  // und Klick außerhalb schließen; Hover/Fokus bleiben rein per CSS.
+  const dropdownItems = Array.from(document.querySelectorAll<HTMLElement>('[data-nav-dropdown]'));
+  const setDropdownOpen = (item: HTMLElement, open: boolean) => {
+    item.toggleAttribute('data-open', open);
+    item.querySelector('[data-nav-dropdown-toggle]')?.setAttribute('aria-expanded', String(open));
+  };
+  const closeAllDropdowns = () => dropdownItems.forEach((item) => setDropdownOpen(item, false));
+  dropdownItems.forEach((item) => {
+    const toggle = item.querySelector<HTMLButtonElement>('[data-nav-dropdown-toggle]');
+    toggle?.addEventListener('click', () => {
+      const open = !item.hasAttribute('data-open');
+      closeAllDropdowns();
+      setDropdownOpen(item, open);
+    });
+  });
+  document.addEventListener('click', (e) => {
+    if (!dropdownItems.some((item) => item.contains(e.target as Node))) closeAllDropdowns();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const openItem = dropdownItems.find((item) => item.hasAttribute('data-open'));
+    if (!openItem) return;
+    closeAllDropdowns();
+    openItem.querySelector<HTMLElement>('[data-nav-dropdown-toggle]')?.focus();
+  });
+
+  window.addEventListener('scroll', updateHeader, { passive: true });
+  updateHeader();
+</script>

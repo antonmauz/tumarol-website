@@ -1,0 +1,431 @@
+---
+// Bild-Karussell der Produktseite. Bilder je Präparat: gallery in
+// src/data/productImages.ts, leere Galerie zeigt die Platzhalter-Slides. Text ist
+// fest ins Bild gesetzt, deshalb tragen die Alt-Texte den Bildinhalt.
+import { Image } from 'astro:assets';
+import type { PharmacyProduct } from '../data/pharmacies';
+import { productImages, galleryFallback } from '../data/productImages';
+
+interface Props {
+  aspectRatio?: string;
+  /** Präparat-Key (pharmacies.ts) — wählt die Bilder aus productImages. */
+  product?: PharmacyProduct;
+}
+
+const { aspectRatio = '4/3', product } = Astro.props;
+
+const gallery = product ? productImages[product].gallery : [];
+const images = gallery.length > 0 ? gallery : galleryFallback;
+---
+
+<div class="product-slider-container" role="region" aria-label="Produktbilder-Galerie">
+  {/* Weißer Grund: die Packshots kommen auf weißem Hintergrund. */}
+  <div class="relative overflow-hidden rounded-2xl bg-white">
+    <div class="slider-viewport" style={`aspect-ratio: ${aspectRatio}`}>
+      {/* Kein role="img" an den Slide-Wrappern: der Alt-Text am <img> reicht,
+          sonst lesen Screenreader jedes Bild doppelt vor. */}
+      <div class="slider-track">
+        {images.map((image, index) => (
+          <div class="slider-slide" data-slide-index={index}>
+            <Image
+              src={image.src}
+              alt={image.alt}
+              loading={index === 0 ? 'eager' : 'lazy'}
+              fetchpriority={index === 0 ? 'high' : undefined}
+              width={900}
+              class="h-full w-full object-contain"
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Vor/Zurück nur bei mehreren Bildern (Einzelbild braucht keine Navigation) */}
+      {images.length > 1 && (
+        <button
+          class="slider-nav slider-prev"
+          aria-label="Vorheriges Bild"
+          title="Zurück (Pfeiltaste links)"
+        >
+          <svg
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+      )}
+      {images.length > 1 && (
+        <button
+          class="slider-nav slider-next"
+          aria-label="Nächstes Bild"
+          title="Weiter (Pfeiltaste rechts)"
+        >
+          <svg
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </button>
+      )}
+    </div>
+
+  </div>
+
+  {/* Punkt-Indikatoren: schlichte Buttons statt Tab-Pattern — es gibt keine
+      zugehörigen tabpanels, aria-current markiert das aktive Bild.
+      Nur bei mehreren Bildern (Einzelbild braucht keine Auswahl). */}
+  {images.length > 1 && (
+    <div class="flex justify-center gap-2 mt-3" role="group" aria-label="Bildauswahl">
+      {images.map((_, index) => (
+        <button
+          class={`slider-dot w-2.5 h-2.5 rounded-full cursor-pointer transition-colors ${
+            index === 0 ? 'bg-primary' : 'bg-neutral-300 hover:bg-neutral-400'
+          }`}
+          data-slide-index={index}
+          aria-current={index === 0 ? 'true' : undefined}
+          aria-label={`Bild ${index + 1} anzeigen`}
+        ></button>
+      ))}
+    </div>
+  )}
+</div>
+
+<style>
+  .product-slider-container {
+    width: 100%;
+    max-width: 34rem;
+  }
+
+  .slider-viewport {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background-color: var(--color-white);
+    border-radius: var(--radius-2xl);
+    /* Vertikales Scrollen bleibt beim Browser, horizontale Gesten gehören dem
+       Slider (JS ruft bei erkannter Horizontal-Geste preventDefault auf). */
+    touch-action: pan-y;
+  }
+
+  .slider-track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    /* Dauer setzt das Skript je Geste (kurzer Restweg oder Schwung → kürzer);
+       Ease-out statt Standardkurve, damit das Bild weich ausläuft statt hart
+       zu stoppen. Pfeile/Punkte nutzen den Standardwert. */
+    --slide-duration: 0.45s;
+    transition: transform var(--slide-duration) cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+  }
+  .slider-slide {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Navigation Buttons */
+  /* Immer im DOM und fokussierbar; auf Desktop nur bei Hover/Fokus sichtbar
+     (opacity statt display:none — sonst wären die Pfeile nicht per Tab erreichbar). */
+  .slider-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    display: flex;
+    opacity: 0;
+    pointer-events: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-xl);
+    background-color: rgba(255, 255, 255, 0.9);
+    color: var(--color-ink);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0.5rem;
+  }
+
+  .slider-nav:hover {
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .slider-nav:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .slider-prev {
+    left: 1rem;
+  }
+
+  .slider-next {
+    right: 1rem;
+  }
+
+  /* Pfeile bei Hover über dem Bild einblenden (Desktop) */
+  @media (hover: hover) {
+    .slider-viewport:hover .slider-nav {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  /* Mobil immer sichtbar */
+  @media (max-width: 768px) {
+    .slider-nav {
+      opacity: 1;
+      pointer-events: auto;
+      width: 2rem;
+      height: 2rem;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+    }
+
+    .slider-nav:hover {
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+  }
+
+  /* Nur der Fokus-Ring für Tastaturnutzer; Layout/Zustände laufen über Tailwind-Klassen im Markup. */
+  .slider-dot:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  class ProductImageSlider {
+    container: HTMLElement;
+    viewport: HTMLElement;
+    track: HTMLElement;
+    slides: NodeListOf<HTMLElement>;
+    dots: NodeListOf<HTMLElement>;
+    prevBtn: HTMLButtonElement | null;
+    nextBtn: HTMLButtonElement | null;
+    currentIndex = 0;
+    slideCount: number;
+
+    // Drag-Zustand für Touch-Gesten
+    dragStartX = 0;
+    dragStartY = 0;
+    dragDeltaX = 0;
+    dragAxis: 'x' | 'y' | null = null; // null = noch nicht entschieden
+    viewportWidth = 0;
+    suppressClick = false;
+    // Schwung: letzte Position/Zeit → geglättete Geschwindigkeit in px/ms
+    lastX = 0;
+    lastT = 0;
+    velocityX = 0;
+    // Aktuelle Track-Position in % (für die Restweg-Berechnung am Gestenende)
+    currentOffsetPct = 0;
+
+    constructor(container: HTMLElement, viewport: HTMLElement, track: HTMLElement) {
+      this.container = container;
+      this.viewport = viewport;
+      this.track = track;
+      this.slides = container.querySelectorAll<HTMLElement>('.slider-slide');
+      this.dots = container.querySelectorAll<HTMLElement>('.slider-dot');
+      this.prevBtn = container.querySelector<HTMLButtonElement>('.slider-prev');
+      this.nextBtn = container.querySelector<HTMLButtonElement>('.slider-next');
+      this.slideCount = this.slides.length;
+
+      this.init();
+    }
+
+    init() {
+      this.prevBtn?.addEventListener('click', () => this.prevSlide());
+      this.nextBtn?.addEventListener('click', () => this.nextSlide());
+
+      this.dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => this.goToSlide(index));
+      });
+
+      // Keyboard-Navigation bewusst auf den Slider begrenzt, nicht document-weit.
+      this.container.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') this.prevSlide();
+        if (e.key === 'ArrowRight') this.nextSlide();
+      });
+
+      // Listener auf dem Viewport, damit auch Gesten auf den Pfeil-Buttons zählen. touchmove
+      // braucht passive:false, damit preventDefault horizontale Gesten beanspruchen kann.
+      this.viewport.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: true });
+      this.viewport.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
+      this.viewport.addEventListener('touchend', () => this.handleTouchEnd());
+      this.viewport.addEventListener('touchcancel', () => this.handleTouchEnd());
+      // Nach echtem Swipe keinen Button-Klick durchlassen (Capture-Phase, vor deren Click-Handlern).
+      this.viewport.addEventListener(
+        'click',
+        (e) => {
+          if (this.suppressClick) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.suppressClick = false;
+          }
+        },
+        true
+      );
+
+      this.updateSlider();
+    }
+
+    handleTouchStart(e: TouchEvent) {
+      // Multi-Touch (Zoom): Geste dem Browser überlassen, keine alten Drag-Werte weiterverwenden.
+      if (e.touches.length > 1) { this.dragAxis = 'y'; return; }
+      this.dragStartX = e.touches[0].clientX;
+      this.dragStartY = e.touches[0].clientY;
+      this.dragDeltaX = 0;
+      this.dragAxis = null;
+      this.suppressClick = false;
+      this.viewportWidth = this.viewport.clientWidth || 1;
+      this.lastX = this.dragStartX;
+      this.lastT = e.timeStamp;
+      this.velocityX = 0;
+      this.currentOffsetPct = -this.currentIndex * 100;
+    }
+
+    handleTouchMove(e: TouchEvent) {
+      const dx = e.touches[0].clientX - this.dragStartX;
+      const dy = e.touches[0].clientY - this.dragStartY;
+
+      // Achse einmalig festlegen, sobald die Bewegung eindeutig ist. Vertikale
+      // Gesten gehen unangetastet an den Browser (Seiten-Scroll).
+      if (this.dragAxis === null) {
+        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+        this.dragAxis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+        if (this.dragAxis === 'x') {
+          // Track folgt dem Finger direkt, ohne Übergangsanimation
+          this.track.style.transition = 'none';
+        }
+      }
+      if (this.dragAxis !== 'x') return;
+
+      e.preventDefault();
+      this.dragDeltaX = dx;
+
+      // Geschwindigkeit exponentiell glätten (einzelne Ausreißer fallen nicht ins Gewicht)
+      const x = e.touches[0].clientX;
+      const dt = Math.max(1, e.timeStamp - this.lastT);
+      this.velocityX = 0.7 * ((x - this.lastX) / dt) + 0.3 * this.velocityX;
+      this.lastX = x;
+      this.lastT = e.timeStamp;
+
+      // An den Enden nur gedämpft mitziehen (Gummiband-Effekt)
+      let delta = dx;
+      if ((this.currentIndex === 0 && dx > 0) || (this.currentIndex === this.slideCount - 1 && dx < 0)) {
+        delta = dx / 3;
+      }
+      const offsetPct = -this.currentIndex * 100 + (delta / this.viewportWidth) * 100;
+      this.currentOffsetPct = offsetPct;
+      this.track.style.transform = `translateX(${offsetPct}%)`;
+    }
+
+    handleTouchEnd() {
+      if (this.dragAxis === 'x') {
+        this.track.style.transition = '';
+        // Umblättern ab einem Viertel der Breite oder bei Schwung (kurzer, schneller
+        // Wisch); am Rand schnappt das Gummiband zurück statt umzubrechen.
+        const distanceThreshold = this.viewportWidth / 4;
+        const flick = Math.abs(this.velocityX) > 0.35 && Math.abs(this.dragDeltaX) > 12;
+        const dir = Math.sign(flick ? this.velocityX : this.dragDeltaX);
+        const wantsNext = dir < 0 && (flick || this.dragDeltaX <= -distanceThreshold);
+        const wantsPrev = dir > 0 && (flick || this.dragDeltaX >= distanceThreshold);
+        if (wantsNext && this.currentIndex < this.slideCount - 1) {
+          this.currentIndex++;
+        } else if (wantsPrev && this.currentIndex > 0) {
+          this.currentIndex--;
+        }
+        // Nach echter Wischbewegung keinen versehentlichen Button-Klick durchlassen;
+        // folgt kein Klick, das Flag kurz darauf wieder freigeben (sonst würde der
+        // nächste Tastatur- oder Mausklick verschluckt).
+        if (Math.abs(this.dragDeltaX) > 10) {
+          this.suppressClick = true;
+          window.setTimeout(() => { this.suppressClick = false; }, 100);
+        }
+        // Dauer an den Restweg koppeln: Bild fast am Ziel → kurzer Auslauf,
+        // voller Weg → volle Dauer; Schwung verkürzt zusätzlich. Die Ease-out-
+        // Kurve kommt aus dem CSS.
+        const remaining = Math.min(1, Math.abs(this.currentOffsetPct + this.currentIndex * 100) / 100);
+        const speedFactor = Math.max(0.55, 1 - Math.abs(this.velocityX) * 0.4);
+        const duration = Math.max(0.16, (0.2 + 0.3 * remaining) * speedFactor);
+        this.track.style.setProperty('--slide-duration', `${duration.toFixed(3)}s`);
+        this.updateSlider();
+      }
+      this.dragAxis = null;
+      this.dragDeltaX = 0;
+    }
+
+    // Pfeile, Punkte und Tastatur nutzen die Standarddauer (die Geste setzt eine eigene)
+    resetDuration() {
+      this.track.style.removeProperty('--slide-duration');
+    }
+
+    goToSlide(index: number) {
+      if (index === this.currentIndex) return;
+      this.currentIndex = index;
+      this.resetDuration();
+      this.updateSlider();
+    }
+
+    prevSlide() {
+      this.currentIndex = (this.currentIndex - 1 + this.slideCount) % this.slideCount;
+      this.resetDuration();
+      this.updateSlider();
+    }
+
+    nextSlide() {
+      this.currentIndex = (this.currentIndex + 1) % this.slideCount;
+      this.resetDuration();
+      this.updateSlider();
+    }
+
+    updateSlider() {
+      const offset = -this.currentIndex * 100;
+      this.track.style.transform = `translateX(${offset}%)`;
+
+      // Punkte aktualisieren (blau = aktiv, sonst grau)
+      this.dots.forEach((dot, index) => {
+        const isActive = index === this.currentIndex;
+        if (isActive) dot.setAttribute('aria-current', 'true');
+        else dot.removeAttribute('aria-current');
+        dot.classList.toggle('bg-primary', isActive);
+        dot.classList.toggle('bg-neutral-300', !isActive);
+        dot.classList.toggle('hover:bg-neutral-400', !isActive);
+      });
+    }
+  }
+
+  // Astro-Skripte sind Module und laufen nach dem DOM-Parsing – alle Instanzen initialisieren.
+  document.querySelectorAll<HTMLElement>('.product-slider-container').forEach((container) => {
+    const viewport = container.querySelector<HTMLElement>('.slider-viewport');
+    const track = container.querySelector<HTMLElement>('.slider-track');
+    if (viewport && track) new ProductImageSlider(container, viewport, track);
+  });
+</script>

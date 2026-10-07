@@ -1,0 +1,56 @@
+---
+// CTA-Button: rendert <a> (mit href) oder <button>; zusätzliche Utilities via `class`,
+// alle übrigen Attribute werden durchgereicht. Varianten: solid (gefüllt, Kauf-CTA)
+// und outline (Umriss, sekundär).
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends Omit<HTMLAttributes<'a'>, 'class'>, Omit<HTMLAttributes<'button'>, 'class' | 'type'> {
+  href?: string;
+  variant?: 'solid' | 'outline';
+  transition?: string;
+  /** Öffnet den Apotheken-Drawer (rendert das data-open-pharmacy-drawer-Attribut). */
+  openDrawer?: boolean;
+  class?: string;
+}
+
+const {
+  href,
+  variant = 'solid',
+  transition = 'transition-colors',
+  openDrawer = false,
+  class: extra = '',
+  ...rest
+} = Astro.props;
+
+const color = {
+  solid: 'bg-primary text-white font-bold hover:bg-primary-dark',
+  outline: 'border-2 border-primary text-primary font-bold hover:bg-primary/10',
+}[variant];
+
+const cls = [
+  'inline-flex items-center justify-center gap-2 px-6 py-3',
+  // Einheitlicher Radius (zentral über --radius-lg in global.css steuerbar).
+  'rounded-lg',
+  color,
+  transition,
+  // Tailwind v4 rendert <button> mit cursor: default — explizit als klickbar kennzeichnen.
+  href ? '' : 'cursor-pointer',
+  extra,
+]
+  .filter(Boolean)
+  .join(' ');
+
+const Tag = href ? 'a' : 'button';
+
+// Sicherheit: bei target="_blank" automatisch rel="noopener noreferrer", sofern nicht gesetzt.
+const relAttr = rest.target === '_blank' ? (rest.rel ?? 'noopener noreferrer') : rest.rel;
+---
+
+<Tag
+  href={href}
+  {...rest}
+  type={href ? undefined : 'button'}
+  rel={relAttr}
+  data-open-pharmacy-drawer={openDrawer ? true : undefined}
+  class={cls}
+><slot /></Tag>

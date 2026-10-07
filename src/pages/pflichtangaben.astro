@@ -1,0 +1,54 @@
+---
+import Layout from '../layouts/Layout.astro';
+import BreadcrumbSection from '../components/BreadcrumbSection.astro';
+import Container from '../components/Container.astro';
+import { pflichtangaben, pflichtangabenSchluss } from '../data/pflichtangaben';
+
+const breadcrumbItems = [
+  { label: 'Startseite', href: '/' },
+  { label: 'Pflichtangaben' }
+];
+
+// Vollständige Pflichtangaben nach § 4 HWG je Arzneimittel; Wortlaut zentral in
+// src/data/pflichtangaben.ts (dieselbe Quelle wie die Footer-Kurzform). Nur die zwei
+// Arzneimittel, die REPAIR CREME ist ein Kosmetikum ohne Pflichttext.
+---
+
+<Layout
+  title="Pflichtangaben"
+  description="Pflichtangaben nach § 4 HWG zu KAMILLIN® KONZENTRAT ROBUGEN und KAMILLIN® EXTERN ROBUGEN: Wirkstoff, Zusammensetzung, Anwendungsgebiete, Gegenanzeigen, Nebenwirkungen und Dosierung."
+>
+
+  {/* ─── NAVIGATION BREADCRUMBS ──────────────────────────────────────── */}
+  <BreadcrumbSection items={breadcrumbItems} />
+
+  {/* Oben bewusst knapp: Breadcrumbs und H1 bilden einen zusammenhängenden Seitenkopf. */}
+  {/* ─── PFLICHTANGABEN ──────────────────────────────────────────────── */}
+  <section class="pt-4 pb-12 md:pt-6 md:pb-16 px-6">
+    <Container size="content">
+      <h1 class="mb-4">
+        KAMILLIN® – Pflichtangaben
+      </h1>
+      <p class="text-neutral-700 leading-relaxed max-w-3xl mb-10">{pflichtangabenSchluss}</p>
+
+      <div class="space-y-14 max-w-3xl">
+        {pflichtangaben.map((product) => (
+          <article id={product.key} class="scroll-mt-24">
+            <h2 class="mb-6">{product.name}</h2>
+            <div class="space-y-6">
+              {product.sections.map((section) => (
+                <div>
+                  <h3 class="text-neutral-900 mb-1.5">{section.heading}</h3>
+                  {(Array.isArray(section.text) ? section.text : [section.text]).map((para) => (
+                    <p class="text-neutral-700 leading-relaxed [&+&]:mt-2">{para}</p>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
+    </Container>
+  </section>
+
+</Layout>

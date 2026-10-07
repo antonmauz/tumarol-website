@@ -1,0 +1,78 @@
+---
+import Layout from '../layouts/Layout.astro';
+import BreadcrumbSection from '../components/BreadcrumbSection.astro';
+import ProductHero from '../components/ProductHero.astro';
+import ReviewSlider from '../components/ReviewSlider.astro';
+import ApplicationSlider from '../components/ApplicationSlider.astro';
+import KamillenanbauCta from '../components/KamillenanbauCta.astro';
+import Faq from '../components/sections/Faq.astro';
+import DownloadsSection from '../components/DownloadsSection.astro';
+import TrustBanner from '../components/TrustBanner.astro';
+import ArticleSlider from '../components/ArticleSlider.astro';
+import RobugenBanner from '../components/RobugenBanner.astro';
+import ProductSchema from '../components/ProductSchema.astro';
+import { faqsFor } from '../data/faqs';
+
+// Produktseite KAMILLIN® REPAIR CREME: Kosmetikum, kein Arzneimittel (Kosmetik-VO 1223/2009,
+// Claims-VO 655/2013): nur Pflegeaussagen, kein HWG-Pflichttext, kein Drug-Schema. Slug festgelegt
+// 01.09.2026. Aufbau: Kopf → Bewertungen → Anwendung → Kamille → FAQ → Downloads → Vertrauen → Artikel → Hersteller.
+
+const breadcrumbItems = [
+  { label: 'Startseite', href: '/' },
+  { label: 'KAMILLIN® REPAIR CREME' },
+];
+
+// Kernpunkte des Seitenkopfs (Wortlaut Anton, 07.09.2026).
+const heroBullets = [
+  'Für beanspruchte Haut',
+  'Mit Vitamin E und Kamillenblütenextrakt',
+  'Täglich und über Nacht',
+  'Kamille aus Thüringen',
+];
+
+// Eine Quelle für Meta-Description und Product-JSON-LD.
+const description =
+  'KAMILLIN® REPAIR CREME: Pflegecreme mit Vitamin E und Kamillenblütenextrakt für beanspruchte Haut, täglich und als Handpackung über Nacht. Anwendung und FAQ.';
+---
+
+<Layout
+  title="KAMILLIN® REPAIR CREME: Pflege für beanspruchte Haut"
+  titleSuffix={false}
+  description={description}
+  pharmacyProduct="repair"
+>
+
+  <ProductSchema product="repair" name="KAMILLIN® REPAIR CREME" description={description} category="Hautpflege" />
+
+  {/* ─── NAVIGATION BREADCRUMBS ──────────────────────────────────────── */}
+  <BreadcrumbSection items={breadcrumbItems} />
+
+  {/* Oben bewusst knapp: Breadcrumbs und Seitenkopf bilden eine Einheit. */}
+  {/* ─── HERO / PRODUCT INTRO ────────────────────────────────────────── */}
+  <ProductHero product="repair" name="KAMILLIN® REPAIR CREME" bullets={heroBullets} />
+
+  {/* ─── PRODUKTBEWERTUNGEN (rendert nichts, solange reviews/repair.ts leer ist) ─ */}
+  <ReviewSlider product="repair" />
+
+  {/* ─── ANWENDUNG (Kacheln, src/data/applications.ts — Pflegeebene) ──── */}
+  <ApplicationSlider id="anwendung" product="repair" />
+
+  {/* ─── UNSERE KAMILLE: Kamillen-CTA wie auf der Startseite (Kosmetikum, keine Pflichtangaben) ─── */}
+  <KamillenanbauCta id="unsere-kamille" />
+
+  {/* ─── FAQ (src/data/faqs.ts) ─────────────────────────────────────── */}
+  <Faq id="faqs" items={faqsFor('repair')} schema />
+
+  {/* ─── DOWNLOADS (src/data/downloads.ts, Dateien in public/downloads/) ─ */}
+  <DownloadsSection id="downloads" product="repair" />
+
+  {/* ─── VERTRAUEN ───────────────────────────────────────────────────── */}
+  <TrustBanner />
+
+  {/* ─── ARTIKEL: Wissenswertes-Kacheln (wie Startseite) ─────────────── */}
+  <ArticleSlider heading="Mehr Informationen" />
+
+  {/* ─── HERSTELLER ───────────────────────────────────────────────────── */}
+  <RobugenBanner />
+
+</Layout>

@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import Layout from '../../../layouts/Layout.astro';
+import RatgeberArticle from '../../../components/RatgeberArticle.astro';
+import { categorySlug } from '../../../data/categories';
+
+// Dynamische Route für alle Ratgeber-Artikel; der <cluster>-Slug kommt aus der
+// Artikel-Kategorie (categorySlug), nur existierende Kombinationen werden erzeugt.
+export const getStaticPaths = (async () => {
+  const artikel = await getCollection('ratgeber');
+  return artikel.map((entry) => ({
+    params: { cluster: categorySlug(entry.data.category), slug: entry.id },
+    props: { entry },
+  }));
+}) satisfies GetStaticPaths;
+
+const { entry } = Astro.props;
+---
+
+{/* ogImage: Artikel-Headerbild fürs Social-Sharing; ohne Bild greift der
+    Marken-Default aus dem Layout. */}
+<Layout
+  title={entry.data.title}
+  description={entry.data.metaDescription}
+  ogType="article"
+  ogImage={entry.data.headerImage}
+>
+  <RatgeberArticle entry={entry} />
+</Layout>

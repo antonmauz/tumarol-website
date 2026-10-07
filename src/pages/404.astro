@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Container from '../components/Container.astro';
+import Button from '../components/ui/Button.astro';
+import ArrowLink from '../components/ArrowLink.astro';
+
+// 404-Seite: Astro/Cloudflare liefern sie automatisch bei unbekannten Pfaden
+// aus. noindex, da Fehlerseiten nicht in den Suchindex gehören.
+---
+
+<Layout
+  title="Seite nicht gefunden (404)"
+  description="Die aufgerufene Seite existiert nicht. Zurück zur Startseite oder zu den Ratgebern."
+  noindex
+>
+  <section class="py-20 md:py-28 px-6">
+    <Container size="content" class="text-center">
+      <p class="text-6xl md:text-7xl font-bold text-primary mb-4">404</p>
+      <h1 class="text-neutral-900 mb-4">Diese Seite haben wir nicht gefunden</h1>
+      <p class="text-neutral-700 leading-relaxed max-w-xl mx-auto mb-8">
+        Der Link ist womöglich veraltet oder enthält einen Tippfehler. Über die folgenden Wege finden Sie schnell wieder zurück.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-3 justify-center mb-10">
+        <Button href="/" transition="transition-all">Zur Startseite</Button>
+        <Button href="/#produkte" variant="outline" transition="transition-all">Zu den Produkten</Button>
+      </div>
+
+      <div class="flex flex-col items-center gap-3">
+        <ArrowLink href="/wissenswertes">Wissenswertes</ArrowLink>
+        <ArrowLink href="/magazin">Unser Kamillenanbau</ArrowLink>
+      </div>
+    </Container>
+  </section>
+</Layout>

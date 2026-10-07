@@ -1,0 +1,19 @@
+---
+// Zentrale Container-Breiten: narrow (Text-/Headline-Blöcke) · text (Prose) ·
+// content (Inhaltssektionen mit Karten/Grids) · wide (Nav, Footer, Banner).
+// Breitenlimits auf einzelnen Elementen (z. B. max-w-3xl auf H1) sind bewusst nicht Teil davon.
+interface Props {
+  size?: 'narrow' | 'text' | 'content' | 'wide';
+  class?: string;
+}
+const { size = 'content', class: className = '' } = Astro.props;
+const widths = {
+  narrow: 'max-w-3xl',
+  text: 'max-w-4xl',
+  content: 'max-w-6xl',
+  wide: 'max-w-7xl',
+};
+---
+<div class={`${widths[size]} mx-auto ${className}`}>
+  <slot />
+</div>

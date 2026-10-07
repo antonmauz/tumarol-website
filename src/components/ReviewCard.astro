@@ -1,0 +1,72 @@
+---
+// Wiederverwendbare Bewertungskarte für ReviewSlider und ReviewsModal;
+// Sterne im gleichen Stil wie ReviewStars.
+import { Image } from 'astro:assets';
+import type { Review } from '../data/reviews';
+import { pharmacyLinkRel, pharmacyLinkUrl, pharmacySlug } from '../utils/tracking';
+import { starDisplay } from '../utils/stars';
+
+interface Props {
+  review: Review;
+  /** Stand-Datum in der Karte zeigen (Modal: aus — dort steht der Stand im Hinweis). */
+  showDate?: boolean;
+  /** Produktname zeigen (Produktseiten: aus — dort ist das Produkt klar). */
+  showProduct?: boolean;
+  /** GA4-data-placement, um Slider und Modal auseinanderzuhalten. */
+  placement?: string;
+}
+
+const { review, showDate = true, showProduct = true, placement = 'reviews' } = Astro.props;
+
+// Barrierefreiheit: Textlinks immer bold UND unterstrichen (siehe ArrowLink.astro);
+// py-2 erhält eine ausreichende Touch-Fläche.
+const ctaClasses =
+  'inline-flex items-center justify-center gap-2 py-2 text-primary font-bold hover:text-primary-dark transition-colors text-sm';
+---
+
+{/* Off-White ohne Rahmen wie die Karten der Kamillenanbau-CTA; im Slider und im Modal gleich. */}
+<div class="bg-off-white rounded-lg p-4 md:p-6 space-y-3 text-center">
+  {/* Apotheken-Logo aus pharmacies.ts (ohne Logo: Name als Text) */}
+  {review.logoImage ? (
+    <div class="flex items-center justify-center h-12">
+      {/* max-h/max-w statt fester Höhe: breite Wortmarken werden proportional verkleinert. */}
+      <Image
+        src={review.logoImage}
+        alt={`${review.pharmacy} Logo`}
+        height={96}
+        loading="lazy"
+        class="max-h-10 max-w-[70%] w-auto h-auto object-contain"
+      />
+    </div>
+  ) : (
+    <div class="flex items-center justify-center h-12 font-semibold text-neutral-900">{review.pharmacy}</div>
+  )}
+
+  {/* Voller Produktname in der Leitfarbe (nur in gemischten Ansichten) */}
+  {showProduct && <p class="text-blue">{review.productName}</p>}
+
+  {/* flex-wrap: auf schmalen Karten rutscht die Zahl unter die Sterne statt überzulaufen */}
+  <div class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+    <div class="flex gap-0.5 text-xl leading-none" aria-hidden="true" set:html={starDisplay(review.rating)} />
+    <span class="font-bold text-neutral-900">{review.rating.toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}</span>
+  </div>
+  <p class="text-sm text-neutral-600">
+    {review.reviewCount.toLocaleString('de-DE')} Bewertungen{showDate && ` – ${review.dateMonth} ${review.dateYear}`}
+  </p>
+
+  {/* CTA: Unterstrich auf dem inneren <span>, da text-decoration nicht auf Flex-Items propagiert */}
+  <a
+    href={pharmacyLinkUrl(review.shopUrl, placement)}
+    target="_blank"
+    rel={pharmacyLinkRel(review.shopUrl)}
+    data-pharmacy={pharmacySlug(review.pharmacy)}
+    data-placement={placement}
+    aria-label={`${review.ctaLabel} – ${review.productName} bei ${review.pharmacy} (öffnet in neuem Tab)`}
+    class={ctaClasses}
+  >
+    <span class="underline underline-offset-4">{review.ctaLabel}</span>
+    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+    </svg>
+  </a>
+</div>

@@ -1,0 +1,326 @@
+---
+// Slide-in-Drawer mit lokaler Kaufoption und Online-Apotheken, ein Tab je Produkt;
+// öffnet über [data-open-pharmacy-drawer], Vorwahl des Tabs per Prop initialProduct.
+import { Image } from 'astro:assets';
+import { productImages } from '../data/productImages';
+import { pharmacies, pharmacyProducts, type PharmacyProduct } from '../data/pharmacies';
+import { pharmacyLinkRel, pharmacyLinkUrl, pharmacySlug } from '../utils/tracking';
+
+interface Props {
+  /** Vorgewählter Produkt-Tab (z. B. auf Produktseiten via Layout-Prop
+   * `pharmacyProduct`); ohne Angabe ist der erste Tab aktiv. */
+  initialProduct?: PharmacyProduct;
+}
+
+const { initialProduct } = Astro.props;
+// Serverseitig vorgewählter Tab (Produktseiten), sonst der erste.
+const activeKey: PharmacyProduct = initialProduct ?? pharmacyProducts[0].key;
+---
+
+{/* Overlay: außerhalb des Drawers wegen z-index-Schichtung; deckt auch die Navbar ab */}
+<div
+  id="pharmacy-drawer-overlay"
+  class="fixed inset-0 bg-black/50 z-50 hidden cursor-pointer"
+></div>
+
+{/* Drawer: z-60, liegt über der Navbar (z-50) */}
+<div
+  id="pharmacy-drawer"
+  class="fixed inset-y-0 right-0 z-60 w-full max-h-screen md:w-1/2 lg:max-w-lg bg-white transform translate-x-full transition-transform duration-300 ease-in-out shadow-lg overflow-y-auto hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="pharmacy-drawer-title"
+>
+  {/* Drawer Content */}
+  <div class="relative flex flex-col h-full">
+    {/* Header with Close Button */}
+    <div class="sticky top-0 bg-white border-b border-neutral-200 px-6 py-3 flex items-center justify-between z-10">
+      <h2 id="pharmacy-drawer-title" class="text-xl text-neutral-900">
+        KAMILLIN® kaufen
+      </h2>
+      <button
+        id="pharmacy-drawer-close"
+        type="button"
+        class="p-2 rounded-lg text-neutral-600 hover:bg-neutral-100 transition-colors cursor-pointer"
+        aria-label="Schließen"
+      >
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    {/* Body */}
+    <div class="flex-1 px-6 py-6 space-y-6 overflow-y-auto">
+      {/* Produkt-Tabs als Textlinks im Navbar-Stil (aktiv = blau + unterstrichen);
+          Tastatur: Pfeiltasten, Pos1/Ende wechseln den Tab, nur der aktive ist im Tab-Fokus. */}
+      <div class="flex items-center gap-x-5 gap-y-1 flex-wrap border-b border-neutral-200 pb-2" role="tablist" aria-label="Produkt wählen">
+        {pharmacyProducts.map((product) => (
+          <button
+            type="button"
+            role="tab"
+            id={`pharmacy-tab-${product.key}`}
+            data-drawer-tab={product.key}
+            aria-selected={product.key === activeKey ? 'true' : 'false'}
+            aria-controls={`pharmacy-panel-${product.key}`}
+            tabindex={product.key === activeKey ? 0 : -1}
+            class:list={[
+              'py-1 text-sm font-medium transition-colors cursor-pointer',
+              product.key === activeKey
+                ? 'text-primary underline decoration-2 underline-offset-4'
+                : 'text-neutral-600 hover:text-primary-dark',
+            ]}
+          >
+            {product.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Ein Panel je Produkt; Sichtbarkeit schaltet das Tab-Skript über hidden um. */}
+      {pharmacyProducts.map((product) => (
+        <div
+          id={`pharmacy-panel-${product.key}`}
+          data-product-panel={product.key}
+          role="tabpanel"
+          aria-labelledby={`pharmacy-tab-${product.key}`}
+          class:list={['space-y-6', product.key !== activeKey && 'hidden']}
+        >
+          {/* Product Image Section */}
+          <div class="flex justify-center pt-2">
+            <Image
+              src={productImages[product.key].cardFront.src}
+              alt={productImages[product.key].cardFront.alt}
+              width={150}
+              class="h-auto max-w-xs"
+            />
+          </div>
+
+          {/* Local Pharmacy Section */}
+          <div class="space-y-3">
+            <h3 class="text-neutral-900">
+              In einer Apotheke vor Ort kaufen
+            </h3>
+            <a
+              href="https://ihreapotheken.de/suche?search=Kamillin"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-pharmacy="ihreapotheken"
+              data-placement="local-search"
+              class="block w-full py-3 px-4 rounded-lg bg-primary text-white font-bold text-center hover:bg-primary-dark transition-colors"
+            >
+              Jetzt lokal kaufen
+            </a>
+          </div>
+
+          {/* Divider */}
+          <div class="relative">
+            <div class="absolute inset-0 flex items-center">
+              <div class="w-full border-t border-neutral-200"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+              <span class="px-3 bg-white text-neutral-600 font-medium">oder</span>
+            </div>
+          </div>
+
+          {/* Online Pharmacy Section */}
+          <div class="space-y-4">
+            <h3 class="text-neutral-900">
+              In einer Online-Apotheke kaufen
+            </h3>
+
+            {/* Nur Shops, die dieses Produkt listen (kein stiller Rückfall auf den Extern-Link). */}
+            <div class="space-y-3">
+            {pharmacies.flatMap((pharmacy) => {
+              const url = pharmacy.urls[product.key];
+              return url ? [{ pharmacy, url }] : [];
+            }).map(({ pharmacy, url }) => (
+              <a
+                href={pharmacyLinkUrl(url, `drawer-${product.key}`)}
+                target="_blank"
+                rel={pharmacyLinkRel(url)}
+                data-pharmacy={pharmacySlug(pharmacy.name)}
+                data-placement={`drawer-${product.key}`}
+                aria-label={`KAMILLIN® ${product.label} bei ${pharmacy.name} kaufen`}
+                class="block w-full p-4 rounded-lg bg-neutral-50 border border-transparent hover:border-primary transition-colors group"
+              >
+                <div class="flex items-center justify-between">
+                  {/* Nur das Logo (Name als Alt-/Aria-Text); Fallback: Name als Text */}
+                  {pharmacy.logoImage ? (
+                    <Image
+                      src={pharmacy.logoImage}
+                      alt={`${pharmacy.name} Logo`}
+                      height={96}
+                      loading="lazy"
+                      class="max-h-8 max-w-[70%] w-auto h-auto object-contain"
+                    />
+                  ) : (
+                    <span class="font-semibold text-neutral-900 group-hover:text-primary transition-colors">{pharmacy.name}</span>
+                  )}
+                  <svg class="w-5 h-5 text-neutral-400 group-hover:text-primary transition-colors shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
+              </a>
+            ))}
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {/* Affiliate-Kennzeichnung (Provisions-Links, z. B. AWIN); einmal unter allen Produkt-Panels */}
+      <p class="text-sm text-neutral-500">
+        Bei Käufen über die verlinkten Online-Apotheken erhalten wir ggf. eine Provision. Auf den Kaufpreis hat das keinen Einfluss.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { trapFocus, setBackgroundInert, lockScroll, unlockScroll } from '../utils/dialog';
+
+  // Produkt-Tabs: schalten Panel-Sichtbarkeit + Tab-Optik um.
+  const drawerTabs = document.querySelectorAll<HTMLElement>('[data-drawer-tab]');
+  const productPanels = document.querySelectorAll('[data-product-panel]');
+
+  function setDrawerProduct(key: string | null) {
+    if (!key) return;
+    let found = false;
+    productPanels.forEach((panel) => {
+      if (panel.getAttribute('data-product-panel') === key) found = true;
+    });
+    if (!found) return; // unbekannter Produkt-Key → nichts umschalten
+
+    productPanels.forEach((panel) => {
+      panel.classList.toggle('hidden', panel.getAttribute('data-product-panel') !== key);
+    });
+    // Klassen synchron zum Markup oben halten (Navbar-Stil: aktiv = blau + unterstrichen).
+    drawerTabs.forEach((tab) => {
+      const active = tab.getAttribute('data-drawer-tab') === key;
+      tab.setAttribute('aria-selected', active ? 'true' : 'false');
+      tab.setAttribute('tabindex', active ? '0' : '-1');
+      tab.classList.toggle('text-primary', active);
+      tab.classList.toggle('underline', active);
+      tab.classList.toggle('decoration-2', active);
+      tab.classList.toggle('underline-offset-4', active);
+      tab.classList.toggle('text-neutral-600', !active);
+      tab.classList.toggle('hover:text-primary-dark', !active);
+    });
+  }
+
+  drawerTabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => setDrawerProduct(tab.getAttribute('data-drawer-tab')));
+    // ARIA-Tab-Muster: Pfeiltasten, Pos1 und Ende wechseln Tab und Fokus.
+    tab.addEventListener('keydown', (e) => {
+      const keys: Record<string, number> = { ArrowRight: index + 1, ArrowLeft: index - 1, Home: 0, End: drawerTabs.length - 1 };
+      if (!(e.key in keys)) return;
+      e.preventDefault();
+      const target = drawerTabs[(keys[e.key] + drawerTabs.length) % drawerTabs.length];
+      setDrawerProduct(target.getAttribute('data-drawer-tab'));
+      target.focus();
+    });
+  });
+
+  // Pharmacy Drawer Management
+  class PharmacyDrawer {
+    drawer: HTMLElement;
+    overlay: HTMLElement;
+    closeBtn: HTMLElement;
+    isOpen = false;
+    previousFocus: Element | null = null;
+    /** Timer der Ausblend-Transition; wird bei erneutem Öffnen verworfen. */
+    closeTimer: ReturnType<typeof setTimeout> | null = null;
+
+    constructor(drawer: HTMLElement, overlay: HTMLElement, closeBtn: HTMLElement) {
+      this.drawer = drawer;
+      this.overlay = overlay;
+      this.closeBtn = closeBtn;
+      this.setupEventListeners();
+    }
+
+    setupEventListeners() {
+      this.closeBtn.addEventListener('click', () => this.close());
+      this.overlay.addEventListener('click', () => this.close());
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && this.isOpen) {
+          this.close();
+        }
+      });
+
+      // Öffnen-Buttons (Navbar, Mobile-Menü, Produktseiten-CTA).
+      document.querySelectorAll('[data-open-pharmacy-drawer]').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.open();
+        });
+      });
+
+      // Fokusfalle (utils/dialog.ts): nur sichtbare Elemente — die inaktiven
+      // Produkt-Panels sind per display:none ausgeblendet, bleiben aber im DOM.
+      this.drawer.addEventListener('keydown', (e) => {
+        if (this.isOpen) trapFocus(this.drawer, e);
+      });
+    }
+
+    open() {
+      if (this.isOpen) return;
+
+      this.isOpen = true;
+      this.previousFocus = document.activeElement;
+      // Laufende Schließ-Transition abbrechen, sonst versteckt ihr Timer den
+      // gerade geöffneten Drawer wieder.
+      if (this.closeTimer) {
+        clearTimeout(this.closeTimer);
+        this.closeTimer = null;
+      }
+      // Das Mobile-Menü schließt Navigation.astro selbst (Klick auf den Kauf-Button).
+
+      this.overlay.classList.remove('hidden');
+      this.drawer.classList.remove('hidden');
+
+      // rAF, damit die Slide-in-Transition nach dem Einblenden greift
+      requestAnimationFrame(() => {
+        this.drawer.classList.remove('translate-x-full');
+      });
+
+      lockScroll();
+      setBackgroundInert([this.drawer, this.overlay], true);
+
+      this.closeBtn.focus();
+    }
+
+    close() {
+      if (!this.isOpen) return;
+
+      this.isOpen = false;
+
+      this.drawer.classList.add('translate-x-full');
+      setBackgroundInert([this.drawer, this.overlay], false);
+
+      // Ausblenden nach der Slide-out-Transition; Dauer aus dem CSS (bei reduzierter
+      // Bewegung praktisch sofort), damit Overlay und Fokus nicht nachhängen.
+      const duration = parseFloat(getComputedStyle(this.drawer).transitionDuration) * 1000 || 0;
+      this.closeTimer = setTimeout(() => {
+        this.closeTimer = null;
+        this.overlay.classList.add('hidden');
+        this.drawer.classList.add('hidden');
+
+        unlockScroll();
+
+        if (this.previousFocus instanceof HTMLElement) {
+          this.previousFocus.focus();
+        }
+      }, duration);
+    }
+  }
+
+  // Astro-Skripte sind Module und laufen nach dem DOM-Parsing – direkt initialisieren.
+  const drawerEl = document.getElementById('pharmacy-drawer');
+  const overlayEl = document.getElementById('pharmacy-drawer-overlay');
+  const closeBtnEl = document.getElementById('pharmacy-drawer-close');
+  if (drawerEl && overlayEl && closeBtnEl) {
+    new PharmacyDrawer(drawerEl, overlayEl, closeBtnEl);
+  } else {
+    console.error('PharmacyDrawer: Required elements not found');
+  }
+</script>

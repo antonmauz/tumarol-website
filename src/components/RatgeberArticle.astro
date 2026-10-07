@@ -1,0 +1,163 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Breadcrumbs from './Breadcrumbs.astro';
+import TrustBanner from './TrustBanner.astro';
+import ArticleProse from './ArticleProse.astro';
+import ArticleSlider from './ArticleSlider.astro';
+import Container from './Container.astro';
+import SourcesSection from './SourcesSection.astro';
+import ProductHighlight from './ProductHighlight.astro';
+import Faq from './sections/Faq.astro';
+import { categoryLabel, ratgeberArticleUrl, ctaProductsFor } from '../data/categories';
+import { readingTimeLabel } from '../data/readingTime';
+import { produktSources } from '../data/produktSources';
+import { normalizePathname } from '../utils/urls';
+import { jsonLd } from '../utils/jsonLd';
+import { COMPANY_NAME, EDITORIAL_NAME, REVIEW_NAME } from '../data/company';
+
+// Geteilter Renderer aller Wissenswertes-Artikel: Headerbild in Balkenbreite,
+// Kategorie-Badge + Lesezeit (lastUpdated), einspaltiger Text; kein Inhaltsverzeichnis,
+// keine Byline, kein sichtbarer Prüfvermerk.
+
+interface Props {
+  entry: CollectionEntry<'ratgeber'>;
+}
+
+const { entry } = Astro.props;
+const data = entry.data;
+const { Content } = await render(entry);
+
+// Datum der letzten inhaltlichen Bearbeitung; Fallback ist das
+// Veröffentlichungsdatum. Wird neben der Lesezeit und im Article-Schema genutzt.
+const updatedAt = data.lastUpdated ?? data.publishDate;
+const updatedLabel = updatedAt
+  ? new Intl.DateTimeFormat('de-DE', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    }).format(updatedAt)
+  : null;
+
+// Produkt-CTA am Artikelende: Frontmatter schlägt die Cluster-Vorgabe.
+const ctaProducts = data.ctaProducts ?? ctaProductsFor(data.category);
+
+// Sektionsname „Wissenswertes"; Slug /wissenswertes festgelegt (02.09.2026).
+const breadcrumbItems = [
+  { label: 'Startseite', href: '/' },
+  { label: 'Wissenswertes', href: '/wissenswertes' },
+  { label: categoryLabel(data.category), href: `/wissenswertes#${data.category}` },
+  { label: data.breadcrumbLabel },
+];
+
+const currentHref = ratgeberArticleUrl(data.category, entry.id);
+
+// ── Structured Data: Article ──────────────────────────────────────────────
+// `site` ist in astro.config.mjs gesetzt.
+const siteUrl = Astro.site!;
+const canonical = new URL(normalizePathname(Astro.url.pathname), siteUrl).href;
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: data.h1,
+  description: data.metaDescription,
+  inLanguage: 'de-DE',
+  mainEntityOfPage: canonical,
+  url: canonical,
+  ...(data.headerImage ? { image: new URL(data.headerImage.src, siteUrl).href } : {}),
+  ...(data.publishDate ? { datePublished: data.publishDate.toISOString().slice(0, 10) } : {}),
+  ...(updatedAt ? { dateModified: updatedAt.toISOString().slice(0, 10) } : {}),
+  author: { '@type': 'Organization', name: EDITORIAL_NAME },
+  reviewedBy: { '@type': 'Organization', name: REVIEW_NAME },
+  publisher: {
+    '@type': 'Organization',
+    name: COMPANY_NAME,
+    logo: { '@type': 'ImageObject', url: new URL('/kamillin-logo.png', siteUrl).href },
+  },
+};
+---
+
+<script is:inline type="application/ld+json" set:html={jsonLd(articleSchema)} />
+
+{/* ─── HEADER-BILD (in zentraler Balkenbreite — nie breiter als die Navbar) ── */}
+{data.headerImage && (
+  <section class="pt-2">
+    <div class="bar-w max-w-bar mx-auto overflow-hidden rounded-xl">
+      <Image
+        src={data.headerImage}
+        alt={data.headerImageAlt ?? data.title}
+        widths={[640, 1024, 1344]}
+        sizes="(min-width: 87rem) 1344px, (min-width: 48rem) calc(100vw - 3rem), calc(100vw - 1.5rem)"
+        loading="eager"
+        fetchpriority="high"
+        class="w-full h-hero-sm md:h-hero object-cover"
+      />
+    </div>
+  </section>
+)}
+
+{/* ─── BREADCRUMBS + BADGE + H1 + LESEZEIT + INTRO ──────────────────── */}
+{/* Transparent, damit der gelb-weiße Seitenverlauf (global.css) sichtbar ist. */}
+<section class="pt-8 pb-0 px-6">
+  <Container size="text">
+    {/* Abstand zum Badge hier, nicht in Breadcrumbs.astro (mobil knapper als vorher). */}
+    <div class="mb-6 md:mb-8">
+      <Breadcrumbs items={breadcrumbItems} />
+    </div>
+    {/* Kategorie-Badge in der Leitfarbe (Blau), nicht in Akzent-/Flächenfarben. */}
+    <span class="inline-flex items-center rounded-full bg-blue/10 px-3 py-1 mb-4 text-sm font-semibold text-blue">
+      {categoryLabel(data.category)}
+    </span>
+    <h1 class="mb-4">
+      {data.h1}
+    </h1>
+    <p class="inline-flex items-center gap-1.5 mb-6 text-sm font-medium text-neutral-500">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      {readingTimeLabel(entry.body ?? '')}
+      {updatedLabel && (
+        <>
+          <span aria-hidden="true" class="mx-1.5 text-neutral-300">&middot;</span>
+          <span>{updatedLabel}</span>
+        </>
+      )}
+    </p>
+    {data.intro.map((para) => (
+      <p class="text-xl text-neutral-600 leading-relaxed mb-4 last:mb-0 max-w-3xl">{para}</p>
+    ))}
+  </Container>
+</section>
+
+{/* ─── ARTIKELINHALT (einspaltig) ──────────────────────────────────── */}
+{/* Abstand zum Intro = ein Absatzabstand (1 rem): Intro ohne Unterrand, hier pt-4 (08.09.2026). */}
+<section class="pt-4 pb-16 md:pb-20 px-6">
+  <Container size="text">
+    <ArticleProse>
+      <Content />
+    </ArticleProse>
+  </Container>
+</section>
+
+{/* ─── PRODUKT-HIGHLIGHT (nur bei freigegebenem Produktbezug, HWG) ──── */}
+{data.showProductHighlight && <ProductHighlight only={ctaProducts} />}
+
+{/* ─── FAQ ─────────────────────────────────────────────────────────── */}
+{data.faq.length > 0 && <Faq items={data.faq} schema />}
+
+{/* ─── VERTRAUEN-BANNER (zwischen FAQ und weiteren Artikeln, 14.09.2026) ── */}
+<TrustBanner />
+
+{/* ─── WEITERE ARTIKEL (Wissenswertes, ohne den aktuellen) ──────────── */}
+<ArticleSlider heading="Weitere Artikel" excludeHref={currentHref} />
+
+{/* ─── QUELLEN ─────────────────────────────────────────────────────── */}
+{/* Studienquellen des CTA nur, wenn der CTA auf dieser Seite gezeigt wird. */}
+<SourcesSection
+  heading="Quellen & Hinweise"
+  items={[
+    ...data.sources,
+    ...(data.showProductHighlight ? produktSources : []),
+  ]}
+/>

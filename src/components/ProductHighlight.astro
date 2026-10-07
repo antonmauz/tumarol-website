@@ -1,0 +1,289 @@
+---
+// Produktkarten-Slider im scroll-snap-Container (Mechanik wie ArticleSlider/ReviewSlider).
+// Weitere Karten: Objekt in `products` ergänzen; Namen kommen aus pharmacies.ts.
+import { Image } from 'astro:assets';
+import { pharmacyProducts, type PharmacyProduct } from '../data/pharmacies';
+import Container from './Container.astro';
+import SliderControls from './SliderControls.astro';
+import { productImages } from '../data/productImages';
+import { iconSvg, type IconName } from '../data/icons';
+
+interface Props {
+  /** Hintergrund/zusätzliche Klassen der <section> (Standard: transparent —
+   *  der gelb-weiße Seitenverlauf aus global.css soll durchscheinen). */
+  class?: string;
+  /** Optionale Anker-ID der Sektion (z. B. "produkte" auf der Startseite). */
+  id?: string;
+  /** Auswahl der gezeigten Präparate (Reihenfolge dieser Liste zählt).
+   *  Ohne Angabe werden alle Karten gezeigt (Startseite, Produktseiten). */
+  only?: PharmacyProduct[];
+}
+
+const { class: sectionClass = '', id, only } = Astro.props;
+
+// Produktnamen aus der zentralen Liste (pharmacies.ts).
+const productName = Object.fromEntries(pharmacyProducts.map((p) => [p.key, p.name])) as Record<PharmacyProduct, string>;
+
+interface ProductCard {
+  /** Interner Produkt-Key (identisch zu src/data/pharmacies.ts). */
+  key: PharmacyProduct;
+  name: string;
+  /** Optionaler manueller Umbruch der Überschrift (HTML, z. B. mit <br>);
+   *  `name` bleibt der reine Text für aria-label. */
+  nameHtml?: string;
+  /** Icon über dem Packshot (erscheint beim Hover): Tropfen (Flüssigkeit) oder Tube. */
+  icon: IconName;
+  /** Kurzbeschreibung unter dem Produktnamen (Schriftbild wie der Einleitungstext). */
+  description: string;
+  href: string;
+}
+
+const products: ProductCard[] = [
+  {
+    key: 'extern',
+    name: productName.extern,
+    icon: 'drops',
+    description: 'Zur Anwendung auf der Haut in Umschlägen, Spülungen oder im Sitzbad.',
+    href: '/extern-robugen',
+  },
+  {
+    key: 'konzentrat',
+    name: productName.konzentrat,
+    icon: 'drops',
+    description: 'Stark konzentriert zur äußerlichen und innerlichen Anwendung.',
+    href: '/konzentrat-robugen',
+  },
+  {
+    // Kosmetikum — Texte ausschließlich auf Pflege-/Kosmetikebene.
+    key: 'repair',
+    name: productName.repair,
+    // Zweizeilig wie die beiden anderen Titel (gleiche Texthöhe in der Reihe).
+    nameHtml: 'KAMILLIN® REPAIR<br>CREME',
+    icon: 'tube',
+    description: 'Zur Pflege der Haut mit hohem Vitamin-E-Gehalt und Kamillenblütenextrakt.',
+    href: '/repair-creme',
+  },
+];
+
+// Auswahl in der Reihenfolge der `only`-Liste; ohne Prop alle Karten.
+const visibleProducts = only
+  ? only.map((k) => products.find((p) => p.key === k)).filter((p): p is ProductCard => Boolean(p))
+  : products;
+---
+
+{visibleProducts.length > 0 && (
+<section id={id} class={`py-16 md:py-20 px-6 scroll-mt-24 ${sectionClass}`}>
+  <Container size="content">
+    {/* Überschrift nur für Screenreader: die Karten tragen h3, ohne h2 gäbe es
+        einen Ebenensprung h1 → h3. */}
+    <h2 class="sr-only">Unsere Produkte</h2>
+    <div data-snap-slider>
+      <SliderControls prevLabel="Vorherige Produkte" nextLabel="Weitere Produkte" class="justify-end mb-4" />
+
+      {/* Track: scroll-snap; mobil ~85 % Kartenbreite, ab md 2, ab lg 3 Spalten. */}
+      <div
+        data-slider-track
+        class="flex gap-6 slider-bleed overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 -mb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {visibleProducts.map((product) => (
+          <div class="snap-start shrink-0 basis-[85%] md:basis-[calc((100%_-_1.5rem)/2)] lg:basis-[calc((100%_-_3rem)/3)]">
+            {/* Ganze Karte = EIN Link; der CTA ist ein <span>, kein zweites Tab-Ziel. */}
+            <a
+              href={product.href}
+              class="product-card"
+              aria-label={`${product.name} – zum Produkt`}
+            >
+              {/* Produkt-Icon (Tropfen = Flüssigkeit, Tube = Creme); Platz ist
+                  dauerhaft reserviert, sichtbar erst beim Hover. */}
+              <span class="product-card__icon" aria-hidden="true">
+                <Fragment set:html={iconSvg(product.icon, 'w-8 h-8')} />
+              </span>
+
+              <span class="product-card__media">
+                <Image
+                  src={productImages[product.key].cardFront.src}
+                  alt={productImages[product.key].cardFront.alt}
+                  width={640}
+                  loading="lazy"
+                  class="product-card__img product-card__img--front"
+                />
+                <Image
+                  src={productImages[product.key].cardHover.src}
+                  alt={productImages[product.key].cardHover.alt}
+                  width={640}
+                  loading="lazy"
+                  class="product-card__img product-card__img--hover"
+                />
+              </span>
+
+              <span class="product-card__body">
+                <h3 class="text-blue mb-3" set:html={product.nameHtml ?? product.name} />
+                <p class="text-neutral-700 leading-relaxed">{product.description}</p>
+              </span>
+
+              {/* CTA-Zone reserviert die Höhe dauerhaft → kein Layout-Sprung beim Einfließen des Buttons. */}
+              <span class="product-card__cta-zone">
+                <span class="product-card__cta">Zum Produkt</span>
+              </span>
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </Container>
+</section>
+)}
+
+{/* Bewusst is:global mit product-card-Präfix: die Media Queries müssen
+    Astro-Image-Ausgaben treffen, die Astros Scoping nicht erreicht. */}
+<style is:global>
+  .product-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1.25rem;
+    text-align: left;
+    text-decoration: none;
+    /* Kartenfläche im abgeschwächten Markengelb (Token in global.css), bewusst
+       ohne Rahmen: die Fläche selbst trennt die Karte vom weißen Grund. */
+    background: var(--color-brand-soft);
+    border-radius: var(--radius-2xl);
+  }
+
+  /* Die Karte selbst reagiert nicht auf Hover (kein Rahmen, kein Anheben,
+     kein Schatten) — nur der Inhalt: Bildwechsel, Text-Slide, CTA-Einblendung. */
+
+  /* Sichtbarer Fokus-Ring in der Leitfarbe (Tastatur). */
+  .product-card:focus-visible {
+    outline: 2px solid var(--color-blue);
+    outline-offset: 3px;
+  }
+
+  /* Icon oben rechts in einem Kreis im kräftigeren Markengelb; liegt über dem
+     Packshot (kein eigener Platz nötig) und blendet erst beim Hover ein.
+     Auf Touch dauerhaft sichtbar (siehe unten). */
+  .product-card__icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 9999px;
+    background: var(--color-brand);
+    color: var(--color-blue);
+    opacity: 0;
+    transition: opacity 200ms ease;
+  }
+  @media (hover: hover) {
+    .product-card:hover .product-card__icon,
+    .product-card:focus-within .product-card__icon { opacity: 1; }
+  }
+  @media (hover: none) {
+    .product-card__icon { opacity: 1; }
+  }
+
+  /* Packshot-Crossfade: alle PNGs auf 1200×1200-Leinwänden, Motive unten bündig
+     (scripts/normalize-product-images.cjs) → gleiche Standhöhe; das Hover-Motiv
+     fährt beim Einblenden leicht nach oben (--product-card-lift). */
+  .product-card__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 1 / 1;
+    margin-bottom: 1rem;
+  }
+  .product-card__media .product-card__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: opacity 200ms ease, transform 250ms ease-out;
+  }
+  .product-card { --product-card-lift: -4%; }
+  .product-card__img--hover { opacity: 0; }
+  @media (hover: hover) {
+    .product-card:hover .product-card__img--hover,
+    .product-card:focus-within .product-card__img--hover {
+      opacity: 1;
+      transform: translateY(var(--product-card-lift));
+    }
+    .product-card:hover .product-card__img--front,
+    .product-card:focus-within .product-card__img--front { opacity: 0; }
+  }
+
+  /* Touch: Zielzustand dauerhaft (kein Hover-Zwischenschritt), Tippen führt direkt zur Produktseite. */
+  @media (hover: none) {
+    .product-card__img--front { opacity: 0; }
+    .product-card__img--hover { opacity: 1; transform: translateY(var(--product-card-lift)); }
+  }
+
+  /* Kartentext sitzt im Default tiefer und fährt beim Hover hoch — Platz für den Button ohne Größenänderung. */
+  /* margin-top:auto: Text sitzt am Kartenboden (Prospan-Prinzip: Packshot oben,
+     Titel + Kurztext unten bündig), unabhängig von der Textlänge. */
+  .product-card__body {
+    display: block;
+    margin-top: auto;
+    transition: transform 250ms ease-out;
+  }
+
+  /* Zonenhöhe = Buttonhöhe + padding-top; der Body-Slide unten (translateY)
+     muss dazu passen, sonst ragt der Text in den Button. */
+  .product-card__cta-zone {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start; /* linksbündig wie der Kartentext */
+    height: 3rem;
+    padding-top: 0.5rem;
+  }
+  /* Umriss-Button wie der Hero-CTA; der gefüllte rote Button bleibt der Kauf-Funktion vorbehalten.
+     Padding um die 2px Rahmenbreite reduziert, damit die Buttonhöhe in die CTA-Zone passt. */
+  .product-card__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.375rem 1.125rem;
+    font-size: 0.9rem;
+    border: 2px solid var(--color-primary);
+    border-radius: var(--radius-lg);
+    background: transparent;
+    color: var(--color-primary);
+    font-weight: 700;
+    transition: opacity 250ms ease-out, transform 250ms ease-out, background-color 150ms ease;
+  }
+  .product-card__cta:hover {
+    background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  }
+
+  /* Hover-Choreografie NUR auf Geräten mit echtem Hover — auf Touch ist
+     der CTA dauerhaft sichtbar (kein Inhalt nur per Hover erreichbar). */
+  @media (hover: hover) {
+    .product-card .product-card__cta {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    .product-card:hover .product-card__cta,
+    .product-card:focus-within .product-card__cta {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Default: Text schließt unten mit der Karte ab (füllt die leere CTA-Zone
+       komplett), Hover: um die Zonenhöhe hochfahren, Button erscheint. */
+    .product-card .product-card__body {
+      transform: translateY(3rem);
+    }
+    .product-card:hover .product-card__body,
+    .product-card:focus-within .product-card__body {
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<script>
+  import { initSnapSliders } from '../scripts/snapSlider';
+  initSnapSliders();
+</script>

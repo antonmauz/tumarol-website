@@ -1,0 +1,190 @@
+---
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import BackToTop from '../components/BackToTop.astro';
+import PharmacyDrawer from '../components/PharmacyDrawer.astro';
+import ReviewsModal from '../components/ReviewsModal.astro';
+import { normalizePathname } from '../utils/urls';
+import type { PharmacyProduct } from '../data/pharmacies';
+import type { ImageMetadata } from 'astro';
+import { jsonLd } from '../utils/jsonLd';
+import { COMPANY_NAME, COMPANY_URL, COMPANY_LINKEDIN_URL } from '../data/company';
+import { COOKIEBOT_ID } from '../data/cookiebot';
+import { GA4_MEASUREMENT_ID } from '../data/analytics';
+import { robugenProductUrls } from '../data/robugenProductUrls';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Vorgewählter Produkt-Tab im Apotheken-Drawer (für Produktseiten). */
+  pharmacyProduct?: PharmacyProduct;
+  /** Seite von der Indexierung ausschließen (z. B. interne Komponenten-Testseiten). */
+  noindex?: boolean;
+  /** Vorschaubild für Social-Sharing (Open Graph): absoluter Pfad ab Site-Root
+   *  (1200 × 630) oder importiertes Bild — dann werden die echten Maße ausgegeben. */
+  ogImage?: string | ImageMetadata;
+  /** og:type – "website" (Standard) oder "article" für Ratgeber-/Magazinseiten. */
+  ogType?: 'website' | 'article';
+  /** Marken-Suffix " | KAMILLIN®" anhängen (Standard: an). Für Seiten aus,
+   *  deren Titel bereits mit dem Markennamen beginnt (verhindert Doppelnennung). */
+  titleSuffix?: boolean;
+}
+
+const {
+  title,
+  description = `KAMILLIN® von ROBUGEN: Kamillenpräparate der ${COMPANY_NAME}.`,
+  noindex = false,
+  // og-default.png erzeugt scripts/make-og-image.cjs; liefert Marketing ein
+  // eigenes Motiv, Datei ersetzen und Skript löschen.
+  ogImage = '/og-default.png',
+  ogType = 'website',
+  titleSuffix = true,
+  pharmacyProduct,
+} = Astro.props;
+
+// noindex nur für Test-Umgebungen (PUBLIC_IS_TEST=true) und Seiten mit Prop `noindex`.
+const isTestEnvironment = import.meta.env.PUBLIC_IS_TEST === 'true';
+const blockIndexing = isTestEnvironment || noindex;
+
+// `site` ist in astro.config.mjs gesetzt.
+const siteUrl = Astro.site!;
+// Slash-lose Pfadform, konsistent mit allen internen Links (siehe utils/urls).
+const pathname = normalizePathname(Astro.url.pathname);
+const canonicalURL = new URL(pathname, siteUrl).href;
+// og:image: Pfad-String (Standardbild 1200 × 630) oder ImageMetadata mit echten Maßen.
+const ogImageURL = new URL(typeof ogImage === 'string' ? ogImage : ogImage.src, siteUrl).href;
+const ogImageWidth = typeof ogImage === 'string' ? 1200 : ogImage.width;
+const ogImageHeight = typeof ogImage === 'string' ? 630 : ogImage.height;
+const fullTitle = titleSuffix ? `${title} | KAMILLIN®` : title;
+const isHome = pathname === '/';
+
+// Organization + WebSite nur auf der Startseite (Google-Empfehlung für Site-weite Angaben).
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': `${siteUrl.origin}/#organization`,
+  name: COMPANY_NAME,
+  url: COMPANY_URL,
+  // Kamillen-Signet (Kopie von src/assets/images/logo/kamillin-placeholder-logo.png).
+  logo: new URL('/kamillin-logo.png', siteUrl).href,
+  sameAs: [COMPANY_LINKEDIN_URL],
+};
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${siteUrl.origin}/#website`,
+  url: siteUrl.origin,
+  name: 'KAMILLIN®',
+  inLanguage: 'de-DE',
+  publisher: { '@id': `${siteUrl.origin}/#organization` },
+  // Entitäts-Signal auf die Produktseiten der Hersteller-Domain (kein Canonical; die
+  // robugen.de-Seiten setzen ihrerseits den Canonical auf kamillin.de).
+  sameAs: Object.values(robugenProductUrls),
+};
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {/* Google Consent Mode v2 (Standard: alles denied, security_storage granted). Muss
+        VOR Cookiebot stehen, damit die Standardwerte gesetzt sind, bevor Cookiebot sie
+        nach der Einwilligung aktualisiert; data-cookieconsent="ignore" nimmt das Script
+        vom Auto-Blocking aus. wait_for_update gibt Cookiebot 500 ms, gespeicherte
+        Einwilligungen einzuspielen, bevor Google-Tags Signale senden. */}
+    <script is:inline data-cookieconsent="ignore">
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("consent", "default", {
+        ad_personalization: "denied",
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        analytics_storage: "denied",
+        functionality_storage: "denied",
+        personalization_storage: "denied",
+        security_storage: "granted",
+        wait_for_update: 500,
+      });
+      gtag("set", "ads_data_redaction", true);
+      gtag("set", "url_passthrough", false);
+    </script>
+    {/* Cookiebot direkt nach dem Consent-Mode-Script und vor allen anderen Scripts: im
+        Auto-Blocking-Modus hält es nachfolgende einwilligungspflichtige Scripts zurück.
+        Scripts, die nicht blockiert werden dürfen, erhalten data-cookieconsent="ignore". */}
+    <script
+      is:inline
+      id="Cookiebot"
+      src="https://consent.cookiebot.com/uc.js"
+      data-cbid={COOKIEBOT_ID}
+      data-blockingmode="auto"
+      type="text/javascript"
+    ></script>
+    {/* GA4 (gtag.js): per data-cookieconsent="ignore" vom Cookiebot-Auto-Blocking
+        ausgenommen, denn die Cookie-Kontrolle übernimmt der Consent Mode (Standard denied,
+        Update durch Cookiebot). dataLayer und gtag() sind oben bereits definiert. */}
+    <script is:inline data-cookieconsent="ignore" async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`}></script>
+    <script is:inline data-cookieconsent="ignore" define:vars={{ GA4_MEASUREMENT_ID }}>
+      gtag('js', new Date());
+      gtag('config', GA4_MEASUREMENT_ID);
+    </script>
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    {blockIndexing && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={canonicalURL} />
+    {/* Favicons aus dem Kamillen-Signet (Quellen: src/assets/images/logo/). */}
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <title>{fullTitle}</title>
+
+    {/* Open Graph (Facebook, LinkedIn, WhatsApp …) */}
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="KAMILLIN®" />
+    <meta property="og:locale" content="de_DE" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:width" content={String(ogImageWidth)} />
+    <meta property="og:image:height" content={String(ogImageHeight)} />
+
+    {/* Twitter Card */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    {/* Site-weite Structured Data nur auf der Startseite */}
+    {isHome && (
+      <>
+        <script is:inline type="application/ld+json" set:html={jsonLd(orgSchema)} />
+        <script is:inline type="application/ld+json" set:html={jsonLd(websiteSchema)} />
+      </>
+    )}
+  </head>
+  <body>
+    {/* Skip-Link: erster Tab-Stopp, sichtbar nur bei Tastaturfokus (springt über die fixierte Navbar). */}
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-white focus:font-semibold focus:outline-none focus:ring-2 focus:ring-white"
+    >
+      Zum Inhalt springen
+    </a>
+    <Navigation />
+    <main id="main" tabindex="-1" class="pt-16 outline-none">
+      <slot />
+    </main>
+    <BackToTop />
+    <Footer product={pharmacyProduct} />
+    <PharmacyDrawer initialProduct={pharmacyProduct} />
+    <ReviewsModal product={pharmacyProduct} />
+    {/* Delegierter Click-Listener für GA4-Apotheken-Events (data-pharmacy). */}
+    <script>
+      import { initPharmacyClickTracking } from '../utils/tracking';
+      initPharmacyClickTracking();
+    </script>
+  </body>
+</html>

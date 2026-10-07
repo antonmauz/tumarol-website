@@ -1,0 +1,122 @@
+---
+import Layout from '../layouts/Layout.astro';
+import BreadcrumbSection from '../components/BreadcrumbSection.astro';
+import Container from '../components/Container.astro';
+
+const breadcrumbItems = [
+  { label: 'Startseite', href: '/' },
+  { label: 'Impressum' }
+];
+
+// Fließtext aus der Vorlage übernommen; Firmierung hier „Robugen GmbH & Co. KG“ (siehe company.ts).
+---
+
+<Layout
+  title="Impressum"
+  description="Impressum und Anbieterkennzeichnung der Robugen GmbH & Co. KG."
+>
+
+  {/* ─── NAVIGATION BREADCRUMBS ──────────────────────────────────────── */}
+  <BreadcrumbSection items={breadcrumbItems} />
+
+  {/* Oben bewusst knapp: Breadcrumbs und H1 bilden einen zusammenhängenden Seitenkopf. */}
+  {/* ─── IMPRESSUM ───────────────────────────────────────────────────── */}
+  <section class="pt-4 pb-12 md:pt-6 md:pb-16 px-6">
+    <Container size="content">
+      <h1 class="mb-8">
+        Impressum
+      </h1>
+
+      <div class="max-w-3xl text-neutral-700 leading-relaxed space-y-8">
+
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">Verantwortlich für den Inhalt</h2>
+          <p class="mb-4">
+            Robugen GmbH &amp; Co. KG<br />
+            Alleenstraße 22 - 24<br />
+            Postfach 10 03 36<br />
+            73730 Esslingen
+          </p>
+          <p class="mb-4">
+            Telefon +49 711 13630-0<br />
+            E-Mail: info[at]robugen.de
+          </p>
+          <p>
+            Handelsregister: Amtsgericht Stuttgart HRA 738208<br />
+            USt-IdNr.: DE 345890208
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">Komplementärin</h2>
+          <p>
+            März Verwaltungs GmbH, Amtsgericht Stuttgart, HRB 740610, Geschäftsführer Dr. rer. nat. Matthias Mauz
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">Zuständige Aufsichtsbehörde</h2>
+          <p>
+            Regierungspräsidium Tübingen, Leitstelle Arzneimittelüberwachung<br />
+            72072 Tübingen
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">Journalistisch-redaktionelle Inhalte</h2>
+          <p>
+            Verantwortlich für journalistisch-redaktionelle Inhalte i. S. d. § 18 Absatz 2 Medienstaatsvertrag (MStV): Dr. rer. nat. Matthias Mauz
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">Urheberrecht</h2>
+          <p class="mb-4">
+            Alle Rechte der Vervielfältigung oder der Veröffentlichung des Inhalts sind vorbehalten. Ohne schriftliche Genehmigung, außerhalb der Grenzen des Urheberrechtes darf der Inhalt sowie Bilder und Grafiken dieser Seite in keiner Form reproduziert, vervielfältigt oder verbreitet werden. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.
+          </p>
+          <p>
+            Soweit Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden die Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um eine entsprechende Nachricht. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">Haftungsausschluss</h2>
+          <p class="mb-4">
+            Inhalt des Online-Angebotes: Robugen GmbH &amp; Co. KG ist stets bemüht, qualitativ hochwertige Informationen zur Verfügung zu stellen. Dennoch übernehmen wir keinerlei Gewähr für die Aktualität, Korrektheit, Vollständigkeit oder Verfügbarkeit der bereitgestellten Informationen. Als Anbieter sind wir gemäß § 7 Abs.1 DDG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach Art. 4 DDG / Art. 4 DSA, sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
+          </p>
+          <p>
+            Haftungsansprüche gegen die Betreiber der Website, die sich auf Schäden materieller oder ideeller Art beziehen, welche durch die Nutzung oder Nichtnutzung der dargebotenen Informationen bzw. durch die Nutzung fehlerhafter und unvollständiger Informationen verursacht wurden, sind grundsätzlich ausgeschlossen. Sofern seitens der Betreiber kein nachweislich vorsätzliches oder grob fahrlässiges Verschulden vorliegt. Alle Angebote sind freibleibend und unverbindlich.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">Haftung für Links</h2>
+          <p class="mb-4">
+            Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.
+          </p>
+          <p class="mb-4">
+            Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.
+          </p>
+          <p>
+            Ein Teil der Links zu Online-Apotheken sind Partnerlinks (Affiliate-Links) des Netzwerks AWIN. Kaufen Sie über einen solchen Link ein, erhalten wir eine Provision. Für Sie entstehen dadurch keine Mehrkosten. Einzelheiten zur Datenverarbeitung finden Sie in der <a href="/datenschutz" class="text-primary font-bold hover:text-primary-dark">Datenschutzerklärung</a>.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-xl text-neutral-900 mb-2">Bildmaterial</h2>
+          <p class="mb-4">
+            Fotos bzw. Video der Webseite und des Social-Media-Auftritts dürfen weder weiter verbreitet noch für eigene Werbung, Veröffentlichung, als Avatar u. ä. benutzt werden. Soweit die Fotos, Bilder, Videos nicht von Robugen GmbH &amp; Co. KG selbst sind, handelt es sich um Agentur-Fotos oder KI-erstelltes Bildmaterial.
+          </p>
+          <p class="mb-4">
+            ADOBE Stock (<a href="https://stock.adobe.com/de/" target="_blank" rel="noopener noreferrer" class="text-primary font-bold hover:text-primary-dark">https://stock.adobe.com/de/</a>)
+          </p>
+          <p>
+            bzw. durch Hinweise auf den Rechteinhaber gekennzeichnet. Ein Haftungsanspruch wird, wie oben aufgeführt, ausgeschlossen.
+          </p>
+        </div>
+
+      </div>
+    </Container>
+  </section>
+
+</Layout>

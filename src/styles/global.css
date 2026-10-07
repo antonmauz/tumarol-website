@@ -1,0 +1,164 @@
+@import "@fontsource-variable/instrument-sans";
+@import "tailwindcss";
+
+@theme {
+  /* Farbwelt KAMILLIN® (01.09.2026): Gelb #fae209 und Grün #35bb35 sind Flächenfarben, Text darauf
+     immer Blau #10108f (10,7:1 bzw. 5,6:1; Weiß auf Grün ist mit 2,5:1 unzulässig). Blau ist
+     Schrift-, Link- und CTA-Farbe; Weiß auf Blau zulässig; Grün als Text nur über --color-accent-dark. */
+
+  /* Blau: Links, CTA, aktive Zustände. */
+  --color-primary: #10108f;
+  /* Hover, dunklere Textvariante. */
+  --color-primary-dark: #0A0A5E;
+
+  /* Grün: nur Flächen, nie Text auf Weiß. */
+  --color-accent: #35bb35;
+  --color-accent-dark: #1E7A1E; /* textfähige Grünvariante (5,4:1) */
+  --color-accent-tint: #EAF7EA; /* helle grüne Fläche */
+  --color-accent-tint-dark: #DCEEDC; /* Hover auf accent-tint (Nach-oben-Band) */
+
+  /* Markengelb: nur Flächen, niemals als Textfarbe. */
+  --color-brand: #fae209; /* Hero-Fläche, Banner, Signal */
+  --color-brand-tint: #FFFBE0; /* helle gelbe Fläche */
+  /* Kartenfläche (Produktkarten, FAQ-Balken, Header-Fläche): 30 % Markengelb auf Weiß. */
+  --color-brand-soft: #FEF6B5;
+
+  /* Hinweis: Die *-tint-Token sind vorläufig — Anton will helle Flächen
+     sparsam einsetzen und entfernt sie ggf. wieder. */
+
+  /* Leitfarbe Blau für h1/h2 und dunkle Sektionen; bewusst dieselbe Farbe wie --color-primary. */
+  --color-blue: var(--color-primary);
+
+  /* Neutrale Basis */
+  --color-white: #FFFFFF;
+  --color-off-white: #F7F7F4; /* alternierende Sektionen */
+  --color-ink: #22223C; /* Kleingedrucktes (Pflichttext im Footer), blaustichiges Dunkel */
+  --color-divider: #E4E4EC;
+
+  /* Typografie: Instrument Sans für Headlines und Body */
+  --font-sans: 'Instrument Sans Variable', system-ui, -apple-system, sans-serif;
+
+  /* Abgesetzte Balken (Navbar, TrustBanner, Nach-oben-Band …): zentrale Maximalbreite, kein
+     Balken ist breiter als die Navbar. Ergibt max-w-bar; zusammen mit bar-w (unten) und
+     mx-auto entsteht überall dieselbe zentrierte Balkenbreite. */
+  --container-bar: 84rem;
+  /* Seitenrand der Balken (bar-w unten, Navbar): 12px mobil, 24px ab md. */
+  --spacing-gutter: 1.5rem;
+  --spacing-gutter-md: 3rem;
+
+  /* Headerbilder (Startseiten-Hero, Artikelheader): eine feste Höhe für alle
+     Seiten statt viewport-abhängiger vh-Werte (Entscheidung 08.09.2026).
+     Ergibt h-hero / min-h-hero (ab md) und h-hero-sm (mobil). */
+  --spacing-hero: 32rem;
+  --spacing-hero-sm: 15rem;
+
+  /* Eckenradien zentral, bewusst eckiger als die Tailwind-Defaults; überschrieben sind
+     rounded-lg bis rounded-3xl (sm/md behalten ihre Defaults, rounded-full bleibt rund). */
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.375rem;
+  --radius-2xl: 0.5rem;
+  --radius-3xl: 0.625rem;
+}
+
+/* Responsive Balkenbreite: voller Platz minus Seitenrand (Gutter-Token), immer zusammen mit
+   max-w-bar + mx-auto. Bewusst nicht w-bar genannt: Tailwind v4 leitet aus --container-bar
+   selbst eine w-bar-Utility (width: 84rem) ab, die sonst kollidiert. */
+@utility bar-w {
+  width: calc(100% - var(--spacing-gutter));
+  @media (width >= 48rem) {
+    width: calc(100% - var(--spacing-gutter-md));
+  }
+}
+
+/* Randloser Peek-Slider-Track: mobil um den Sektionsrand (px-6) nach außen gezogen und mit
+   gleichem Innenabstand zurück, so reicht die Scrollfläche bis zum Bildschirmrand; ab md nur
+   0.25rem Luft für den Fokusring. Nur an Slidern in Sektionen mit px-6 verwenden. */
+@utility slider-bleed {
+  margin-inline: -1.5rem;
+  padding-inline: 1.5rem;
+  scroll-padding-inline: 1.5rem;
+  @media (width >= 48rem) {
+    margin-inline: -0.25rem;
+    padding-inline: 0.25rem;
+    scroll-padding-inline: 0.25rem;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-white text-neutral-800 antialiased;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  /* Viewport-fixierter Seitenverlauf: oben Markengelb, über ~360px auf Weiß auslaufend, bleibt
+     beim Scrollen stehen (fixiertes Pseudo-Element statt background-attachment, das iOS ignoriert).
+     Sektionen mit eigenem Hintergrund decken ihn ab; wo er sichtbar sein soll, transparent lassen. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(to bottom, var(--color-brand) 0%, var(--color-white) 360px);
+    pointer-events: none;
+  }
+  /* Überschriften standardmäßig in der Leitfarbe (--color-blue); Ausnahmen
+     setzen explizit eine eigene Textfarbe. */
+  h1, h2 {
+    color: var(--color-blue);
+  }
+
+  /* Zentrale Typografie: Größen per clamp(), Gewichte unten. Abweichungen im Markup nutzen
+     die Tailwind-Skala (text-xs bis text-xl; die 404-Ziffer text-6xl/7xl). */
+  h1 {
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  h2 {
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+  h3 {
+    font-size: clamp(1.2rem, 2vw, 1.4rem);
+    line-height: 1.3;
+  }
+
+  /* Lange deutsche Komposita: break-word als Notbremse gegen Überlauf; auf
+     Handy-Breiten zusätzlich Silbentrennung (Trennregeln via html lang="de"). */
+  h1, h2, h3 {
+    overflow-wrap: break-word;
+  }
+  @media (width < 40rem) {
+    h1, h2, h3 {
+      /* -webkit- nötig: Safari kann es erst ab v17 ohne Präfix. */
+      -webkit-hyphens: auto;
+      hyphens: auto;
+    }
+  }
+
+  /* Überschriften-Gewichte. Alternative (Kontrast-Prinzip): h1/h2: 700, h3: 600. */
+  h1 { font-weight: 500; }
+  h2 { font-weight: 600; }
+  h3 { font-weight: 600; }
+
+  /* Reduzierte Bewegung (Systemeinstellung): sanftes Scrollen, Transitions und
+     Animationen site-weit abschalten — gilt für alle Slider, die Navbar-
+     Transition, Hover-Effekte und Akkordeons, ohne Sonderfälle je Komponente. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

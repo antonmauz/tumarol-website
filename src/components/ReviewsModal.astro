@@ -1,0 +1,172 @@
+---
+// Zentriertes Modal mit Bewertungs-Slider; öffnet über data-open-reviews-modal (ReviewStars
+// im ProductHero). Global im Layout eingebunden, gerendert nur auf Produktseiten.
+import ReviewCard from './ReviewCard.astro';
+import { reviewsFor, latestReviewDate } from '../data/reviews';
+import type { PharmacyProduct } from '../data/pharmacies';
+
+interface Props {
+  /** Präparat-Key der aktuellen Seite (aus Layout); ohne Angabe alle Produkte. */
+  product?: PharmacyProduct;
+}
+
+const { product } = Astro.props;
+const displayReviews = reviewsFor(product);
+const stand = latestReviewDate(product);
+---
+
+{/* Nur auf Produktseiten (dort sitzt der Auslöser) und nur mit Bewertungen;
+    das Init-Skript unten prüft auf Existenz. Overlay-Farbe wie der Apotheken-Drawer. */}
+{product && displayReviews.length > 0 && (
+<div
+  id="reviews-modal"
+  class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="reviews-modal-title"
+>
+  <div class="relative flex w-full max-w-4xl max-h-[90vh] flex-col overflow-hidden rounded-xl bg-white shadow-xl">
+
+    {/* Header */}
+    <div class="flex items-center justify-between px-6 py-4">
+      <h2 id="reviews-modal-title" class="text-xl text-neutral-900">
+        Bewertungen aus Online-Apotheken
+      </h2>
+      <button
+        id="reviews-modal-close"
+        type="button"
+        class="p-2 rounded-lg text-neutral-600 hover:bg-neutral-100 transition-colors cursor-pointer"
+        aria-label="Schließen"
+      >
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    {/* Body: horizontaler Slider auf weißem Grund (Off-White-Karten ohne Rahmen wie im ReviewSlider) */}
+    <div class="relative px-6 pb-6">
+      {/* Track: nativer Scroll-/Swipe-Container mit Snap; 3 Karten sichtbar */}
+      <div class="reviews-slider flex gap-4 -mx-1 px-1 scroll-px-1 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2">
+        {displayReviews.map((review) => (
+          <div class="snap-start shrink-0 w-[80%] sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-2rem)/3)]">
+            <ReviewCard review={review} showDate={false} showProduct={!product} placement="reviews-modal" />
+          </div>
+        ))}
+      </div>
+
+      {/* Pfeil-Navigation (vor allem für Desktop) */}
+      <button
+        type="button"
+        class="reviews-prev cursor-pointer absolute left-2 top-1/2 -translate-y-1/2 hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md border border-neutral-200 text-neutral-700 hover:text-primary transition-colors"
+        aria-label="Vorherige Bewertungen"
+      >
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      <button
+        type="button"
+        class="reviews-next cursor-pointer absolute right-2 top-1/2 -translate-y-1/2 hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md border border-neutral-200 text-neutral-700 hover:text-primary transition-colors"
+        aria-label="Weitere Bewertungen"
+      >
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+
+      {/* Herkunfts-Hinweis zum Durchschnittswert */}
+      {/* Stand = jüngstes Datum der gezeigten Bewertungen (src/data/reviews/). */}
+      <p class="mt-4 text-sm text-neutral-500">
+        Hinweis: Durchschnittswert errechnet aus den führenden Online-Apotheken. Stand: {stand}.
+      </p>
+    </div>
+
+  </div>
+</div>
+)}
+
+<script>
+  import { trapFocus, setBackgroundInert, lockScroll, unlockScroll } from '../utils/dialog';
+
+  class ReviewsModal {
+    modal: HTMLElement;
+    closeBtn: HTMLElement | null;
+    slider: HTMLElement | null;
+    prevBtn: HTMLElement | null;
+    nextBtn: HTMLElement | null;
+    isOpen = false;
+    previousFocus: Element | null = null;
+
+    constructor(modal: HTMLElement) {
+      this.modal = modal;
+      this.closeBtn = document.getElementById('reviews-modal-close');
+      this.slider = modal.querySelector('.reviews-slider');
+      this.prevBtn = modal.querySelector('.reviews-prev');
+      this.nextBtn = modal.querySelector('.reviews-next');
+      this.setup();
+    }
+
+    setup() {
+      this.closeBtn?.addEventListener('click', () => this.close());
+      this.modal.addEventListener('click', (e) => {
+        if (e.target === this.modal) this.close();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && this.isOpen) this.close();
+      });
+      document.querySelectorAll('[data-open-reviews-modal]').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.open();
+        });
+      });
+      this.prevBtn?.addEventListener('click', () => this.scrollByCard(-1));
+      this.nextBtn?.addEventListener('click', () => this.scrollByCard(1));
+      // Fokusfalle (utils/dialog.ts): nur sichtbare Elemente — die Pfeile sind
+      // unter md per display:none ausgeblendet, bleiben aber im DOM.
+      this.modal.addEventListener('keydown', (e) => {
+        if (this.isOpen) trapFocus(this.modal, e);
+      });
+    }
+
+    scrollByCard(direction: number) {
+      if (!this.slider) return;
+      const card = this.slider.querySelector(':scope > div');
+      // gap aus dem CSS lesen statt hartcodieren.
+      const gap = parseFloat(getComputedStyle(this.slider).columnGap) || 0;
+      const amount = card ? card.getBoundingClientRect().width + gap : 300;
+      // Reduced Motion: global.css setzt scroll-behavior auf auto — hier zusätzlich
+      // das JS-Verhalten, weil scrollBy() die CSS-Einstellung nicht übernimmt.
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      this.slider.scrollBy({ left: direction * amount, behavior: reduceMotion ? 'auto' : 'smooth' });
+    }
+
+    open() {
+      if (this.isOpen) return;
+      this.isOpen = true;
+      this.previousFocus = document.activeElement;
+      this.modal.classList.remove('hidden');
+      this.modal.classList.add('flex');
+      lockScroll();
+      setBackgroundInert([this.modal], true);
+      if (this.slider) this.slider.scrollLeft = 0;
+      this.closeBtn?.focus();
+    }
+
+    close() {
+      if (!this.isOpen) return;
+      this.isOpen = false;
+      this.modal.classList.add('hidden');
+      this.modal.classList.remove('flex');
+      setBackgroundInert([this.modal], false);
+      unlockScroll();
+      // Fokus zum auslösenden Element zurückgeben (Barrierefreiheit)
+      if (this.previousFocus instanceof HTMLElement) this.previousFocus.focus();
+    }
+  }
+
+  // Astro-Skripte sind Module und laufen nach dem DOM-Parsing – direkt initialisieren.
+  const modalEl = document.getElementById('reviews-modal');
+  if (modalEl) new ReviewsModal(modalEl);
+</script>

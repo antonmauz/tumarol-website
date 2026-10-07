@@ -1,0 +1,50 @@
+---
+// Einheitliche "Quellen"-/Hinweis-Sektion am Seitenende.
+import Container from './Container.astro';
+
+/** Eintrag: reiner Text (Aufzählungspunkt) oder Hinweis mit Marker (z. B. "*"), auf
+ *  den der Fließtext per <sup><a href="#id"> verweist; der Marker ersetzt den Punkt.
+ *  Ziffern bleiben den Produktquellen ([1] …, produktSources.ts) vorbehalten. */
+export type SourceItem = string | { id: string; marker: string; text: string };
+
+interface Props {
+  /** Listeneinträge (Text wird mit führendem "•" gerendert, Hinweise mit Marker). */
+  items: SourceItem[];
+  /** H3-Überschrift der Sektion (Standard: "Quellen"). */
+  heading?: string;
+  /** Hintergrund/zusätzliche Klassen der <section> (Standard: transparent —
+   *  der gelb-weiße Seitenverlauf aus global.css soll durchscheinen). */
+  class?: string;
+}
+
+const { items, heading = 'Quellen', class: sectionClass = '' } = Astro.props;
+
+// Ohne Einträge rendert die Sektion nichts (keine Überschrift über leerer Liste);
+// sobald z. B. produktSources belegt ist, erscheint sie automatisch.
+---
+
+{items.length > 0 && (
+<section class={`py-16 md:py-20 px-6 ${sectionClass}`}>
+  <Container size="text">
+    <div class="space-y-4">
+      {/* h2 wie die Schwester-Sektionen (eigenständige Seitensektion), optisch klein. */}
+      <h2 class="text-lg text-neutral-900">{heading}</h2>
+      <ul class="list-disc pl-5 space-y-2 text-sm text-neutral-700">
+        {items.map((item) =>
+          typeof item === 'string' ? (
+            <li>{item}</li>
+          ) : (
+            /* Marker sitzt links im Einzug an der Stelle des Aufzählungspunkts,
+               der Text bleibt bündig mit den übrigen Einträgen; scroll-mt wegen
+               der festen Navbar (Sprungziel aus dem Fließtext). */
+            <li id={item.id} class="list-none relative scroll-mt-24">
+              <sup class="absolute -left-4 top-0" aria-hidden="true">{item.marker}</sup>
+              {item.text}
+            </li>
+          ),
+        )}
+      </ul>
+    </div>
+  </Container>
+</section>
+)}
