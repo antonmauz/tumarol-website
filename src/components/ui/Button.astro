@@ -22,15 +22,17 @@ const {
   ...rest
 } = Astro.props;
 
+// Primär (Kaufen) rot mit weißer Schrift; sekundär weiß mit 2px schwarzem Rand.
+// Padding der Outline-Variante um den Rand reduziert, damit beide gleich hoch sind.
 const color = {
-  solid: 'bg-primary text-white font-bold hover:bg-primary-dark',
-  outline: 'border-2 border-primary text-primary font-bold hover:bg-primary/10',
+  solid: 'px-6 py-3 bg-red text-white font-bold hover:bg-red-dark',
+  outline: 'px-[1.375rem] py-[0.625rem] border-2 border-ink bg-white text-ink font-bold hover:bg-surface',
 }[variant];
 
 const cls = [
-  'inline-flex items-center justify-center gap-2 px-6 py-3',
-  // Einheitlicher Radius (zentral über --radius-lg in global.css steuerbar).
-  'rounded-lg',
+  'inline-flex items-center justify-center gap-2',
+  // Pill-Form (zentral über --radius-pill in global.css).
+  'rounded-pill',
   color,
   transition,
   // Tailwind v4 rendert <button> mit cursor: default — explizit als klickbar kennzeichnen.

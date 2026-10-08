@@ -7,11 +7,14 @@ import Container from './Container.astro';
 import SliderControls from './SliderControls.astro';
 import { productImages } from '../data/productImages';
 import { iconSvg, type IconName } from '../data/icons';
+import { accentAt } from '../data/brand';
 
 interface Props {
-  /** Hintergrund/zusätzliche Klassen der <section> (Standard: transparent —
-   *  der gelb-weiße Seitenverlauf aus global.css soll durchscheinen). */
+  /** Hintergrund/zusätzliche Klassen der <section> (Standard: transparent, also weiß). */
   class?: string;
+  /** Sichtbare H2 über den Karten (z. B. „Pastillen oder Saft?“); ohne Angabe nur
+   *  eine Screenreader-Überschrift. */
+  heading?: string;
   /** Optionale Anker-ID der Sektion (z. B. "produkte" auf der Startseite). */
   id?: string;
   /** Auswahl der gezeigten Präparate (Reihenfolge dieser Liste zählt).
@@ -19,7 +22,7 @@ interface Props {
   only?: PharmacyProduct[];
 }
 
-const { class: sectionClass = '', id, only } = Astro.props;
+const { class: sectionClass = '', id, only, heading } = Astro.props;
 
 // Produktnamen aus der zentralen Liste (pharmacies.ts).
 const productName = Object.fromEntries(pharmacyProducts.map((p) => [p.key, p.name])) as Record<PharmacyProduct, string>;
@@ -74,18 +77,28 @@ const visibleProducts = only
 {visibleProducts.length > 0 && (
 <section id={id} class={`py-16 md:py-20 px-6 scroll-mt-24 ${sectionClass}`}>
   <Container size="content">
-    {/* Überschrift nur für Screenreader: die Karten tragen h3, ohne h2 gäbe es
-        einen Ebenensprung h1 → h3. */}
-    <h2 class="sr-only">Unsere Produkte</h2>
     <div data-snap-slider>
-      <SliderControls prevLabel="Vorherige Produkte" nextLabel="Weitere Produkte" class="justify-end mb-4" />
+      {/* Mit heading: sichtbare H2 links, Pfeile rechts (wie Bewertungen/Magazin). Ohne
+          heading nur eine Screenreader-Überschrift: die Karten tragen h3, ohne h2 gäbe es
+          einen Ebenensprung h1 → h3. */}
+      {heading ? (
+        <div class="flex items-end justify-between gap-4 mb-8">
+          <h2 class="min-w-0 hyphens-auto">{heading}</h2>
+          <SliderControls prevLabel="Vorherige Produkte" nextLabel="Weitere Produkte" />
+        </div>
+      ) : (
+        <>
+          <h2 class="sr-only">Unsere Produkte</h2>
+          <SliderControls prevLabel="Vorherige Produkte" nextLabel="Weitere Produkte" class="justify-end mb-4" />
+        </>
+      )}
 
       {/* Track: scroll-snap; mobil ~85 % Kartenbreite, ab md 2, ab lg 3 Spalten. */}
       <div
         data-slider-track
         class="flex gap-6 slider-bleed overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 -mb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {visibleProducts.map((product) => (
+        {visibleProducts.map((product, i) => (
           <div class="snap-start shrink-0 basis-[85%] md:basis-[calc((100%_-_1.5rem)/2)] lg:basis-[calc((100%_-_3rem)/3)]">
             {/* Ganze Karte = EIN Link; der CTA ist ein <span>, kein zweites Tab-Ziel. */}
             <a
@@ -93,6 +106,9 @@ const visibleProducts = only
               class="product-card"
               aria-label={`${product.name} – zum Produkt`}
             >
+              {/* Kurzer Farbbalken oben links, Folge Gelb/Orange/Rot (src/data/brand.ts). */}
+              <span class={`accent-bar mb-4 ${accentAt(i)}`} aria-hidden="true"></span>
+
               {/* Produkt-Icon (Tropfen = Flüssigkeit, Tube = Creme); Platz ist
                   dauerhaft reserviert, sichtbar erst beim Hover. */}
               <span class="product-card__icon" aria-hidden="true">
@@ -117,7 +133,7 @@ const visibleProducts = only
               </span>
 
               <span class="product-card__body">
-                <h3 class="text-blue mb-3" set:html={product.nameHtml ?? product.name} />
+                <h3 class="mb-3" set:html={product.nameHtml ?? product.name} />
                 <p class="text-neutral-700 leading-relaxed">{product.description}</p>
               </span>
 
@@ -145,22 +161,22 @@ const visibleProducts = only
     padding: 1.25rem;
     text-align: left;
     text-decoration: none;
-    /* Kartenfläche im abgeschwächten Markengelb (Token in global.css), bewusst
-       ohne Rahmen: die Fläche selbst trennt die Karte vom weißen Grund. */
-    background: var(--color-brand-soft);
-    border-radius: var(--radius-2xl);
+    /* Hellgraue Kartenfläche (Token in global.css), bewusst ohne Rahmen: die Fläche
+       selbst trennt die Karte vom weißen Grund. */
+    background: var(--color-surface);
+    border-radius: var(--radius-card);
   }
 
   /* Die Karte selbst reagiert nicht auf Hover (kein Rahmen, kein Anheben,
      kein Schatten) — nur der Inhalt: Bildwechsel, Text-Slide, CTA-Einblendung. */
 
-  /* Sichtbarer Fokus-Ring in der Leitfarbe (Tastatur). */
+  /* Sichtbarer Fokus-Ring in Textfarbe (Tastatur). */
   .product-card:focus-visible {
-    outline: 2px solid var(--color-blue);
+    outline: 2px solid var(--color-ink);
     outline-offset: 3px;
   }
 
-  /* Icon oben rechts in einem Kreis im kräftigeren Markengelb; liegt über dem
+  /* Icon oben rechts in einem Kreis in Markengelb (schwarzes Icon); liegt über dem
      Packshot (kein eigener Platz nötig) und blendet erst beim Hover ein.
      Auf Touch dauerhaft sichtbar (siehe unten). */
   .product-card__icon {
@@ -174,8 +190,8 @@ const visibleProducts = only
     width: 3rem;
     height: 3rem;
     border-radius: 9999px;
-    background: var(--color-brand);
-    color: var(--color-blue);
+    background: var(--color-yellow);
+    color: var(--color-ink);
     opacity: 0;
     transition: opacity 200ms ease;
   }
@@ -240,7 +256,7 @@ const visibleProducts = only
     height: 3rem;
     padding-top: 0.5rem;
   }
-  /* Umriss-Button wie der Hero-CTA; der gefüllte rote Button bleibt der Kauf-Funktion vorbehalten.
+  /* Sekundär-Button (Pill, 2px Schwarzrand); der gefüllte rote Button bleibt der Kauf-Funktion vorbehalten.
      Padding um die 2px Rahmenbreite reduziert, damit die Buttonhöhe in die CTA-Zone passt. */
   .product-card__cta {
     display: inline-flex;
@@ -248,15 +264,16 @@ const visibleProducts = only
     justify-content: center;
     padding: 0.375rem 1.125rem;
     font-size: 0.9rem;
-    border: 2px solid var(--color-primary);
-    border-radius: var(--radius-lg);
-    background: transparent;
-    color: var(--color-primary);
+    border: 2px solid var(--color-ink);
+    border-radius: var(--radius-pill);
+    background: var(--color-white);
+    color: var(--color-ink);
     font-weight: 700;
     transition: opacity 250ms ease-out, transform 250ms ease-out, background-color 150ms ease;
   }
   .product-card__cta:hover {
-    background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+    background: var(--color-ink);
+    color: var(--color-white);
   }
 
   /* Hover-Choreografie NUR auf Geräten mit echtem Hover — auf Touch ist

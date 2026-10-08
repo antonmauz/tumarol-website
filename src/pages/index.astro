@@ -1,36 +1,35 @@
 ---
-import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import Button from '../components/ui/Button.astro';
 import ProductHighlight from '../components/ProductHighlight.astro';
 import SourcesSection from '../components/SourcesSection.astro';
 import { produktSources } from '../data/produktSources';
-import TrustBanner from '../components/TrustBanner.astro';
-import KamillenanbauCta from '../components/KamillenanbauCta.astro';
 import RobugenBanner from '../components/RobugenBanner.astro';
 import ReviewSlider from '../components/ReviewSlider.astro';
 import ArticleSlider from '../components/ArticleSlider.astro';
 import Container from '../components/Container.astro';
 import { hinweise } from '../data/hinweise';
-// Hero-Hintergrund: links Fläche in #FEF6B5 (Kartenton) mit den Packshots von EXTERN und
-// KONZENTRAT, blauer Bogen, rechts das Kamillenfeld; alles im Bild (Marketing-Export,
-// 29.09.2026, 1280 × 720 px als JPG; ein Retina-Export mit 2688 × 1024 px wäre besser).
-import heroBg from '../assets/images/hero/kamillin-header.jpg';
+import { accentAt } from '../data/brand';
 
-// Claims im Hero (Marketing-Vorlage 08.09.2026, angepasst 09.09.2026: „Konzentrierter“
-// statt „Hochkonzentrierter“, „wundheilend“ ergänzt).
-const heroClaims = [
-  'Konzentrierter Kamillenblüten-Auszug',
-  'Entzündungshemmend und wundheilend',
-  'Kamille aus Thüringen',
+// Fakten-Leiste unter dem Hero, je mit kurzem Farbbalken (Folge Gelb/Orange/Rot).
+const facts = ['Reiz- und Krampfhusten', 'Ab 12 Jahren', 'Zwei Formen'];
+
+// „Trocken oder mit Schleim?“: drei Zeilen mit Farbbalken.
+// TODO Inhalte: Texte sind Platzhalter bis zur fachlichen Freigabe.
+const coughRows = [
+  {
+    title: 'Trockener Reizhusten',
+    text: 'Der Hals kratzt, der Husten kommt immer wieder, aber es löst sich kein Schleim. Hier setzt ein Husten-Stiller an.',
+  },
+  {
+    title: 'Husten mit Schleim',
+    text: 'Löst sich Schleim, soll er abgehustet werden. Ein Husten-Stiller ist dann nicht das Mittel der Wahl.',
+  },
+  {
+    title: 'Wann zum Arzt?',
+    text: 'Bei Fieber, Atemnot, Blut im Auswurf oder Husten, der länger als zwei Wochen anhält, ärztlichen Rat einholen.',
+  },
 ];
-// Balken in Markengelb mit blauer Schrift (Farbregel global.css). Mobil kompakt, damit alle
-// drei Balken in der rechten Bildhälfte des flachen Banners Platz finden; ab md volle Größe.
-const claimBarClass =
-  'rounded-lg bg-brand px-2 py-2 text-center text-sm font-semibold text-blue shadow-sm sm:text-base md:px-6 md:py-4 md:text-xl';
-
-// Erläuterungen zu GACP/GMP (Marker * und ** in der Einleitung): zentral in
-// src/data/hinweise.ts, gerendert in „Quellen & Hinweise" am Seitenende.
 ---
 
 <Layout
@@ -39,107 +38,78 @@ const claimBarClass =
   description="KAMILLIN® von ROBUGEN: Kamillenblüten-Auszug aus eigenem Anbau in Thüringen, hergestellt in Esslingen. Die Präparate, ihre Anwendung und Wissenswertes zur Kamille."
 >
 
-  {/* ─── HERO: Headerbild (mit Packshots) + Claim-Balken ─────────────────── */}
-  {/* Balken in Balkenbreite mit fester Höhe wie die Artikelheader (h-hero/h-hero-sm). Das Bild
-      enthält die Packshots; echter Text sind nur die drei Claim-Balken (rechts über dem Feld,
-      vertikal zentriert, mobil kompakt) und der Button (ab md unter den Claims, mobil darunter). */}
-  <section class="pt-2">
-    <div class="bar-w max-w-bar mx-auto relative overflow-hidden rounded-xl h-hero-sm md:h-hero">
-      {/* Bildlage: horizontal mobil links (Packshots sichtbar), ab md mittig; vertikal 78 %,
-          weil die Packshots unterhalb der Bildmitte sitzen (y ca. 185–610 von 720 px) und bei voller
-          Balkenbreite sonst der Fuß der Flasche abgeschnitten wäre. */}
-      <Image
-        src={heroBg}
-        alt=""
-        widths={[640, 1024, 1280]}
-        sizes="(min-width: 87rem) 1344px, (min-width: 48rem) calc(100vw - 3rem), calc(100vw - 1.5rem)"
-        loading="eager"
-        fetchpriority="high"
-        class="absolute inset-0 block w-full h-full object-cover object-[0%_78%] md:object-[50%_78%]"
-      />
-
-      <h1 class="sr-only">KAMILLIN® von ROBUGEN</h1>
-
-      {/* Rechte Spalte: Claims und (ab md) Button, vertikal zentriert; mobil
-          auf gut der halben Bildbreite, ab md mit fester Mindestbreite. */}
-      <Container
-        size="content"
-        class="relative z-10 flex h-full items-center justify-end px-3 md:px-8"
-      >
-        {/* Mobil knapp die halbe Bildbreite, damit die Packshots links sichtbar bleiben;
-            min-w-min lässt die Spalte auf 320-px-Displays wachsen, bis das längste Wort in
-            den Balken passt (nicht min-w-fit, das wäre die volle Zeilenbreite). */}
-        <div class="flex w-[48%] min-w-min flex-col gap-2 md:w-auto md:gap-6 md:min-w-[22rem] lg:min-w-[26rem]">
-          <ul class="flex flex-col gap-2 md:gap-4">
-            {heroClaims.map((claim) => <li class={claimBarClass}>{claim}</li>)}
-          </ul>
-          {/* Ab md rechtsbündig unter den Claims (unten links stünde er auf den Packshots).
-              Outline-Variante auf weißem Grund mit Schatten wie die Balken, damit er über
-              dem Foto lesbar bleibt; der Hover-Ton liegt so auf Weiß statt auf dem Bild. */}
-          <div class="hidden md:flex md:justify-end">
-            <div class="rounded-lg bg-white shadow-sm">
-              <Button href="#produkte" variant="outline" transition="transition-colors">
-                Zu den Produkten
-              </Button>
-            </div>
-          </div>
+  {/* ─── 1. HERO: links Text + Buttons, rechts Packshots ────────────────── */}
+  <section class="px-6 pt-10 pb-16 md:pt-16 md:pb-20">
+    <Container size="content" class="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
+      <div>
+        <p class="mb-5 flex items-center gap-3 text-sm font-bold uppercase tracking-wider">
+          <span class="accent-bar bg-yellow" aria-hidden="true"></span>
+          Husten-Stiller mit Dropropizin
+        </p>
+        <h1 class="mb-6">Bei trockenem <span class="mark">Reizhusten</span>.</h1>
+        {/* TODO Inhalte: Platzhaltertext bis zur fachlichen Freigabe. */}
+        <p class="mb-8 max-w-xl text-lg text-neutral-700">
+          Larylin® Husten-Stiller mit dem Wirkstoff Dropropizin – zur Wahl als Pastillen
+          oder als Saft.
+        </p>
+        <div class="flex flex-col gap-3 sm:flex-row">
+          <Button openDrawer>In der Apotheke kaufen</Button>
+          <Button href="#produkte" variant="outline">Pastillen oder Saft?</Button>
         </div>
-      </Container>
-    </div>
+      </div>
 
-    {/* Mobil: Button unter dem Banner. */}
-    <div class="bar-w max-w-bar mx-auto mt-4 md:hidden">
-      <Button href="#produkte" variant="outline" transition="transition-colors" class="w-full">
-        Zu den Produkten
-      </Button>
-    </div>
-  </section>
-
-  {/* ─── WARUM-SEKTION ──────────────────────────────────────────────────── */}
-  {/* Transparent, damit der Seitenverlauf hier auf Weiß ausläuft. Wortlaut Anton (14.09.2026):
-      „bei“ statt „gegen“ benennt das Anwendungsgebiet ohne Wirkversprechen, „sichergestellt“
-      bezieht sich auf die Herstellung, nicht auf einen Behandlungserfolg. */}
-  {/* pb kleiner als pt: rückt die Produktkarten näher an die Einleitung. */}
-  <section class="pt-16 md:pt-20 pb-8 md:pb-10 px-6">
-    <Container size="narrow" class="text-center">
-      <h2 class="mb-6">
-        KAMILLIN® von ROBUGEN bei Entzündungen der Haut und Schleimhäute
-      </h2>
-      {/* Marker * und ** verweisen auf die Erläuterungen in „Quellen & Hinweise“
-          (src/data/hinweise.ts); „Kamillenblüten-Auszug“ wie im Hero-Claim und auf der Packung. */}
-      <p class="text-neutral-700 leading-relaxed">
-        Unsere Kamillenblüten wachsen ausschließlich in Thüringen, dem
-        bedeutendsten Anbaugebiet für Arzneipflanzen nach
-        GACP<sup><a href="#hinweis-gacp" class="text-primary hover:underline" aria-label="Erläuterung zu GACP">*</a></sup> in
-        Deutschland. In Esslingen verarbeiten wir sie nach den strengen
-        pharmazeutischen Qualitätsstandards der
-        GMP<sup><a href="#hinweis-gmp" class="text-primary hover:underline" aria-label="Erläuterung zu GMP">**</a></sup>.
-        So ist sichergestellt, dass der Kamillenblüten-Auszug in höchster
-        Konzentration und Qualität in jeden Beutel und jede Flasche gelangt.
-      </p>
+      {/* Packshots: Platzhalter, bis die Bilder unter src/assets/images/products/ liegen. */}
+      <div class="flex aspect-[4/3] items-center justify-center rounded-card bg-surface text-sm font-semibold text-neutral-500">
+        Packshots folgen
+      </div>
     </Container>
   </section>
 
-  {/* ─── PRODUKT-HIGHLIGHT (wiederverwendbares Modul) ──────────────────── */}
-  {/* Transparent (Verlauf sichtbar); pt reduziert = näher an der Einleitung. */}
-  <ProductHighlight id="produkte" class="pt-8 md:pt-10" />
+  {/* ─── 2. FAKTEN-LEISTE ───────────────────────────────────────────────── */}
+  <section class="px-6 border-y border-divider" aria-label="Auf einen Blick">
+    <Container size="content">
+      <ul class="grid divide-y divide-divider md:grid-cols-3 md:divide-y-0 md:divide-x">
+        {facts.map((fact, i) => (
+          <li class="flex items-center gap-4 py-5 md:px-6 md:first:pl-0">
+            <span class={`accent-bar ${accentAt(i)}`} aria-hidden="true"></span>
+            <span class="text-lg font-extrabold tracking-tight">{fact}</span>
+          </li>
+        ))}
+      </ul>
+    </Container>
+  </section>
 
-  {/* ─── PRODUKTBEWERTUNGEN: rendert nichts, solange src/data/reviews/ leer ist ── */}
-  <ReviewSlider />
+  {/* ─── 3. PASTILLEN ODER SAFT? (Produktkarten hellgrau auf Weiß) ──────── */}
+  <ProductHighlight id="produkte" heading="Pastillen oder Saft?" />
 
-  {/* ─── KAMILLENANBAU-CTA: Feldfoto + drei Punkte, Link zu /magazin ───── */}
-  <KamillenanbauCta id="kamillenanbau" />
+  {/* ─── 4. PRODUKTBEWERTUNGEN (Sektion hellgrau, Karten weiß) ──────────── */}
+  <ReviewSlider class="bg-surface" />
 
-  {/* ─── VERTRAUEN-BANNER ──────────────────────────────────────────────── */}
-  <TrustBanner />
+  {/* ─── 5. TROCKEN ODER MIT SCHLEIM? ───────────────────────────────────── */}
+  <section class="px-6 py-16 md:py-20">
+    <Container size="content" class="grid gap-8 lg:grid-cols-[1fr_2fr] lg:gap-14">
+      <h2>Trocken oder mit <span class="mark">Schleim</span>?</h2>
+      <ul class="border-t border-divider">
+        {coughRows.map((row, i) => (
+          <li class="grid gap-2 border-b border-divider py-6 md:grid-cols-[14rem_1fr] md:gap-8">
+            <h3 class="flex items-center gap-3 text-lg">
+              <span class={`accent-bar ${accentAt(i)}`} aria-hidden="true"></span>
+              {row.title}
+            </h3>
+            <p class="text-neutral-700">{row.text}</p>
+          </li>
+        ))}
+      </ul>
+    </Container>
+  </section>
 
-  {/* ─── ARTIKEL: Wissenswertes-Kacheln (rendert leer ohne Inhalte) ─────── */}
-  <ArticleSlider heading="Mehr Informationen" />
+  {/* ─── 6. MAGAZIN (Karten hellgrau, Farbbalken Gelb/Orange/Rot) ───────── */}
+  <ArticleSlider heading="Wissenswertes rund um Husten" class="border-t border-divider" />
 
   {/* ─── HERSTELLER: Robugen-Vertrauensmodul ────────────────────────────── */}
-  <RobugenBanner />
+  <RobugenBanner class="bg-surface" />
 
-  {/* ─── QUELLEN & HINWEISE: Produktquellen ([1] …) + Erläuterungen * / ** ──── */}
+  {/* ─── QUELLEN & HINWEISE ─────────────────────────────────────────────── */}
   <SourcesSection heading="Quellen & Hinweise" items={[...produktSources, ...hinweise]} />
 
 </Layout>

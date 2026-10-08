@@ -5,6 +5,7 @@ import { Image } from 'astro:assets';
 import type { Review } from '../data/reviews';
 import { pharmacyLinkRel, pharmacyLinkUrl, pharmacySlug } from '../utils/tracking';
 import { starDisplay } from '../utils/stars';
+import type { AccentClass } from '../data/brand';
 
 interface Props {
   review: Review;
@@ -14,9 +15,11 @@ interface Props {
   showProduct?: boolean;
   /** GA4-data-placement, um Slider und Modal auseinanderzuhalten. */
   placement?: string;
+  /** Optionaler Farbbalken oben (bg-yellow/-orange/-red, Folge im Slider); im Modal ohne. */
+  accent?: AccentClass;
 }
 
-const { review, showDate = true, showProduct = true, placement = 'reviews' } = Astro.props;
+const { review, showDate = true, showProduct = true, placement = 'reviews', accent } = Astro.props;
 
 // Barrierefreiheit: Textlinks immer bold UND unterstrichen (siehe ArrowLink.astro);
 // py-2 erhält eine ausreichende Touch-Fläche.
@@ -24,8 +27,9 @@ const ctaClasses =
   'inline-flex items-center justify-center gap-2 py-2 text-primary font-bold hover:text-primary-dark transition-colors text-sm';
 ---
 
-{/* Off-White ohne Rahmen wie die Karten der Kamillenanbau-CTA; im Slider und im Modal gleich. */}
-<div class="bg-off-white rounded-lg p-4 md:p-6 space-y-3 text-center">
+{/* Weiße Karte mit 1px-Linie (liegt im Slider auf der hellgrauen Sektion), im Modal gleich. */}
+<div class="bg-white border border-divider rounded-card p-4 md:p-6 space-y-3 text-center">
+  {accent && <span class={`accent-bar mx-auto ${accent}`} aria-hidden="true"></span>}
   {/* Apotheken-Logo aus pharmacies.ts (ohne Logo: Name als Text) */}
   {review.logoImage ? (
     <div class="flex items-center justify-center h-12">
@@ -42,8 +46,8 @@ const ctaClasses =
     <div class="flex items-center justify-center h-12 font-semibold text-neutral-900">{review.pharmacy}</div>
   )}
 
-  {/* Voller Produktname in der Leitfarbe (nur in gemischten Ansichten) */}
-  {showProduct && <p class="text-blue">{review.productName}</p>}
+  {/* Voller Produktname (nur in gemischten Ansichten) */}
+  {showProduct && <p class="font-semibold text-ink">{review.productName}</p>}
 
   {/* flex-wrap: auf schmalen Karten rutscht die Zahl unter die Sterne statt überzulaufen */}
   <div class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
