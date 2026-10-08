@@ -34,7 +34,7 @@ const activeKey: PharmacyProduct = initialProduct ?? pharmacyProducts[0].key;
   {/* Drawer Content */}
   <div class="relative flex flex-col h-full">
     {/* Header with Close Button */}
-    <div class="sticky top-0 bg-white border-b border-neutral-200 px-6 py-3 flex items-center justify-between z-10">
+    <div class="sticky top-0 bg-white border-b border-divider px-6 py-3 flex items-center justify-between z-10">
       <h2 id="pharmacy-drawer-title" class="text-xl text-neutral-900">
         KAMILLIN® kaufen
       </h2>
@@ -54,7 +54,7 @@ const activeKey: PharmacyProduct = initialProduct ?? pharmacyProducts[0].key;
     <div class="flex-1 px-6 py-6 space-y-6 overflow-y-auto">
       {/* Produkt-Tabs als Textlinks im Navbar-Stil (aktiv = blau + unterstrichen);
           Tastatur: Pfeiltasten, Pos1/Ende wechseln den Tab, nur der aktive ist im Tab-Fokus. */}
-      <div class="flex items-center gap-x-5 gap-y-1 flex-wrap border-b border-neutral-200 pb-2" role="tablist" aria-label="Produkt wählen">
+      <div class="flex items-center gap-x-5 gap-y-1 flex-wrap border-b border-divider pb-2" role="tablist" aria-label="Produkt wählen">
         {pharmacyProducts.map((product) => (
           <button
             type="button"
@@ -106,7 +106,7 @@ const activeKey: PharmacyProduct = initialProduct ?? pharmacyProducts[0].key;
               rel="noopener noreferrer"
               data-pharmacy="ihreapotheken"
               data-placement="local-search"
-              class="block w-full py-3 px-4 rounded-lg bg-primary text-white font-bold text-center hover:bg-primary-dark transition-colors"
+              class="block w-full py-3 px-4 rounded-pill bg-red text-white font-bold text-center hover:bg-red-dark transition-colors"
             >
               Jetzt lokal kaufen
             </a>
@@ -115,7 +115,7 @@ const activeKey: PharmacyProduct = initialProduct ?? pharmacyProducts[0].key;
           {/* Divider */}
           <div class="relative">
             <div class="absolute inset-0 flex items-center">
-              <div class="w-full border-t border-neutral-200"></div>
+              <div class="w-full border-t border-divider"></div>
             </div>
             <div class="relative flex justify-center text-sm">
               <span class="px-3 bg-white text-neutral-600 font-medium">oder</span>

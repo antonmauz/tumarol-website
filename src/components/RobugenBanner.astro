@@ -7,7 +7,14 @@ import Container from './Container.astro';
 import { iconSvg, type IconName } from '../data/icons';
 import { COMPANY_NAME } from '../data/company';
 import robugenLogo from '../assets/images/logo/Robugen_Logo_noBg.png';
+import { accentAt } from '../data/brand';
 
+interface Props {
+  /** Hintergrund/zusätzliche Klassen der <section> (Startseite: bg-surface). */
+  class?: string;
+}
+
+const { class: sectionClass = '' } = Astro.props;
 
 const cards: { title: string; icon: IconName; bullets: string[] }[] = [
   {
@@ -28,9 +35,8 @@ const cards: { title: string; icon: IconName; bullets: string[] }[] = [
 ];
 ---
 
-{/* Sektion transparent (Seitenverlauf bleibt sichtbar); die Karten tragen das
-    blasse Grün (--color-accent-tint) deckend als dezenten Robugen-Akzent. */}
-<section class="py-14 md:py-16 px-6">
+{/* Weiße Karten mit 1px-Linie und Farbbalken (Folge Gelb/Orange/Rot); Sektionsfläche per class. */}
+<section class={`py-14 md:py-16 px-6 ${sectionClass}`}>
   <Container size="content">
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-10 lg:gap-14 items-center">
 
@@ -44,7 +50,7 @@ const cards: { title: string; icon: IconName; bullets: string[] }[] = [
           class="h-16 w-auto shrink-0 lg:mb-4"
         />
         {/* Lead-Größe (text-xl) wie die Einleitungen der Seiten. */}
-        <p class="text-xl font-semibold text-neutral-900 leading-relaxed">
+        <p class="text-xl font-extrabold tracking-tight text-ink leading-snug">
           Hergestellt von {COMPANY_NAME}.
         </p>
       </div>
@@ -52,17 +58,18 @@ const cards: { title: string; icon: IconName; bullets: string[] }[] = [
       {/* Rechts: drei Karten; mobil scroll-snap-Slider, ab sm 3er-Grid (Flex-/Snap-Klassen
           sind im Grid wirkungslos, slider-bleed wird per sm:mx-0/px-0 aufgehoben). */}
       <div class="flex overflow-x-auto snap-x snap-mandatory slider-bleed sm:grid sm:grid-cols-3 sm:overflow-visible sm:mx-0 sm:px-0 sm:scroll-px-0 gap-6 sm:gap-4 lg:gap-6 pb-2 -mb-2 sm:pb-0 sm:mb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {cards.map((card) => (
-          <div class="snap-start shrink-0 basis-[85%] rounded-lg bg-accent-tint p-6">
+        {cards.map((card, i) => (
+          <div class="snap-start shrink-0 basis-[85%] rounded-card bg-white border border-divider p-6">
+            <span class={`accent-bar mb-4 ${accentAt(i)}`} aria-hidden="true"></span>
             {/* Icon links neben der Headline, beide linksbündig */}
             <div class="flex items-center gap-3 mb-3">
-              <span class="flex text-blue shrink-0" set:html={iconSvg(card.icon, 'w-9 h-9')} />
-              <p class="font-semibold text-neutral-900">{card.title}</p>
+              <span class="flex text-ink shrink-0" set:html={iconSvg(card.icon, 'w-9 h-9')} />
+              <p class="font-extrabold text-ink">{card.title}</p>
             </div>
             <ul class="space-y-1.5">
               {card.bullets.map((bullet) => (
                 <li class="flex gap-2 text-neutral-600 leading-snug">
-                  <span class="text-blue shrink-0" aria-hidden="true">•</span>
+                  <span class="text-ink shrink-0" aria-hidden="true">•</span>
                   <span>{bullet}</span>
                 </li>
               ))}

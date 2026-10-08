@@ -1,0 +1,21 @@
+---
+// Larylin-Logo: Bildmarke aus drei eckigen Balken (Gelb, Orange, Rot) vor dem Schriftzug.
+// tone="dark" auf hellem Grund (Navigation), tone="light" auf dunklem Grund (Footer).
+interface Props {
+  tone?: 'dark' | 'light';
+  class?: string;
+}
+
+const { tone = 'dark', class: extra = '' } = Astro.props;
+---
+
+<span class:list={['inline-flex items-center gap-2.5', extra]}>
+  <span class="flex items-end gap-1" aria-hidden="true">
+    <span class="block w-2 h-6 bg-yellow"></span>
+    <span class="block w-2 h-6 bg-orange"></span>
+    <span class="block w-2 h-6 bg-red"></span>
+  </span>
+  <span class:list={['text-2xl font-extrabold tracking-tight leading-none', tone === 'light' ? 'text-white' : 'text-ink']}>
+    Larylin<sup class="text-[0.5em] font-bold align-super">®</sup>
+  </span>
+</span>
