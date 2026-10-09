@@ -1,13 +1,12 @@
-// Bewertungen der Online-Apotheken, je Produkt eine Datei (extern.ts, konzentrat.ts, repair.ts)
+// Bewertungen der Online-Apotheken, je Produkt eine Datei (pastillen.ts, saft.ts)
 // mit nur den produktspezifischen Zahlen; Logo und Shop-Link kommen über den Apotheken-`name`
 // aus src/data/pharmacies.ts. HWG: nur belegbare, echte Bewertungen veröffentlichen.
 import type { ImageMetadata } from 'astro';
 import { pharmacies, pharmacyProducts, type PharmacyProduct } from '../pharmacies';
-import { externReviews } from './extern';
-import { konzentratReviews } from './konzentrat';
-import { repairReviews } from './repair';
+import { pastillenReviews } from './pastillen';
+import { saftReviews } from './saft';
 
-/** Eintrag in den Produkt-Dateien (extern.ts, konzentrat.ts, repair.ts). */
+/** Eintrag in den Produkt-Dateien (pastillen.ts, saft.ts). */
 export interface ProductReview {
   /** Anzeigename der Apotheke — muss exakt dem `name` in pharmacies.ts entsprechen. */
   pharmacy: string;
@@ -25,7 +24,7 @@ export interface ProductReview {
 /** Für die Karten aufgelöste Bewertung (Logo + Shop-Link aus pharmacies.ts). */
 export interface Review extends Required<ProductReview> {
   product: PharmacyProduct;
-  /** Voller Produktname (z. B. "KAMILLIN® EXTERN ROBUGEN") für die Karte. */
+  /** Voller Produktname (z. B. "Larylin® Husten-Stiller Saft") für die Karte. */
   productName: string;
   logoImage?: ImageMetadata;
   /** Shop-Deeplink der Apotheke für genau dieses Produkt. */
@@ -33,9 +32,8 @@ export interface Review extends Required<ProductReview> {
 }
 
 const byProduct: Record<PharmacyProduct, ProductReview[]> = {
-  extern: externReviews,
-  konzentrat: konzentratReviews,
-  repair: repairReviews,
+  pastillen: pastillenReviews,
+  saft: saftReviews,
 };
 
 // Verknüpfung mit pharmacies.ts. Fehler fliegen beim Build, nicht erst beim

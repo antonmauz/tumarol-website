@@ -14,7 +14,6 @@ intro:
 showProductHighlight: true
 # Nur EXTERN: Die REPAIR CREME ist ein Kosmetikum und hat bei diesem Thema
 # nichts zu suchen. Überschreibt die Cluster-Vorgabe von "heile-haut".
-ctaProducts: ['extern']
 faq:
   - question: "Ab welchem Alter sollte sich die Vorhaut zurückziehen lassen?"
     answer: "Dafür gibt es keinen festen Stichtag. Bei Neugeborenen ist die Vorhaut fast immer mit der Eichel verklebt, und diese Verklebung löst sich über Jahre von selbst. Im Schulalter gelingt es den meisten Jungen, bis zum Ende der Pubertät nahezu allen. Solange keine Beschwerden bestehen, ist Abwarten der richtige Weg."

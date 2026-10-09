@@ -12,8 +12,8 @@ intro:
   - "Ein Sonnenbrand meldet sich verspätet. Wenn die Haut zu spannen beginnt, liegt der Auslöser meist schon Stunden zurück, und die Entzündung hat gerade erst angefangen."
   - "Dieser Artikel beschreibt, was in den ersten Stunden zählt, wie Sie richtig kühlen und ab wann Sie den Fall nicht mehr allein behandeln sollten."
 showProductHighlight: true
-# Ohne ctaProducts greift die Cluster-Vorgabe (heile-haut: EXTERN und REPAIR CREME);
-# zum Überschreiben je Artikel z. B. ctaProducts: ['extern'].
+# Ohne ctaProducts greift die Cluster-Vorgabe (src/data/categories.ts);
+# zum Überschreiben je Artikel z. B. ctaProducts: ['saft'].
 faq:
   - question: "Wie lange dauert ein Sonnenbrand?"
     answer: "Die Rötung erreicht ihren Höhepunkt meist 12 bis 24 Stunden nach dem Sonnenbad und klingt über zwei bis drei Tage ab. Schält sich die Haut, kann es eine weitere Woche dauern, bis die Oberfläche wieder geschlossen ist."

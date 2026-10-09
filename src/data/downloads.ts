@@ -1,6 +1,6 @@
 // Downloads je Präparat (DownloadsSection der Produktseiten); Dateien unter public/downloads/.
-// Einträge ohne vorhandene Datei werden beim Build ausgeblendet. TODO (KAMILLIN):
-// Gebrauchsinformationen und REPAIR-Produktinformation unter den Pfaden unten ablegen.
+// Einträge ohne vorhandene Datei werden beim Build ausgeblendet. TODO (LARYLIN):
+// Gebrauchs- und Fachinformationen unter den Pfaden unten ablegen.
 import type { PharmacyProduct } from './pharmacies';
 
 // Vorhandene PDFs unter public/downloads/ (Vite löst das Glob zur Build-Zeit statisch auf).
@@ -20,39 +20,31 @@ export interface DownloadItem {
 }
 
 const downloads: Record<PharmacyProduct, DownloadItem[]> = {
-  extern: [
+  pastillen: [
     {
       label: 'Gebrauchsinformation',
-      description: 'Packungsbeilage KAMILLIN® EXTERN ROBUGEN (TODO (KAMILLIN): Stand)',
-      href: '/downloads/kamillin-extern-robugen-gebrauchsinformation.pdf',
+      description: 'Packungsbeilage Larylin® Husten-Stiller Pastillen (TODO (LARYLIN): Stand)',
+      href: '/downloads/larylin-husten-stiller-pastillen-gebrauchsinformation.pdf',
       type: 'PDF',
     },
     {
       label: 'Fachinformation',
-      description: 'Für Fachkreise (Stand: Oktober 2024)',
-      href: '/downloads/kamillin-extern-robugen-fachinformationen.pdf',
+      description: 'Für Fachkreise (TODO (LARYLIN): Stand)',
+      href: '/downloads/larylin-husten-stiller-pastillen-fachinformation.pdf',
       type: 'PDF',
     },
   ],
-  konzentrat: [
+  saft: [
     {
       label: 'Gebrauchsinformation',
-      description: 'Packungsbeilage KAMILLIN® KONZENTRAT ROBUGEN (TODO (KAMILLIN): Stand)',
-      href: '/downloads/kamillin-konzentrat-robugen-gebrauchsinformation.pdf',
+      description: 'Packungsbeilage Larylin® Husten-Stiller Saft (TODO (LARYLIN): Stand)',
+      href: '/downloads/larylin-husten-stiller-saft-gebrauchsinformation.pdf',
       type: 'PDF',
     },
     {
       label: 'Fachinformation',
-      description: 'Für Fachkreise (Stand: August 2023)',
-      href: '/downloads/kamillin-konzentrat-robugen-fachinformationen.pdf',
-      type: 'PDF',
-    },
-  ],
-  repair: [
-    {
-      label: 'Produktinformation',
-      description: 'KAMILLIN® REPAIR CREME (TODO (KAMILLIN): Stand)',
-      href: '/downloads/kamillin-repair-creme-produktinformation.pdf',
+      description: 'Für Fachkreise (TODO (LARYLIN): Stand)',
+      href: '/downloads/larylin-husten-stiller-saft-fachinformation.pdf',
       type: 'PDF',
     },
   ],

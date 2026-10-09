@@ -14,7 +14,6 @@ intro:
 showProductHighlight: true
 # Reines Pflegethema: Der CTA zeigt nur das Kosmetikum, nicht die Arzneimittel.
 # Überschreibt die Cluster-Vorgabe von "heile-haut".
-ctaProducts: ['repair']
 faq:
   - question: "Wie oft sollte ich die Hände eincremen?"
     answer: "Nach jedem Waschen und zusätzlich immer dann, wenn sich die Haut spannt. Wichtiger als die Menge pro Anwendung ist die Regelmäßigkeit."

@@ -36,7 +36,7 @@ const activeKey: PharmacyProduct = initialProduct ?? pharmacyProducts[0].key;
     {/* Header with Close Button */}
     <div class="sticky top-0 bg-white border-b border-divider px-6 py-3 flex items-center justify-between z-10">
       <h2 id="pharmacy-drawer-title" class="text-xl text-neutral-900">
-        KAMILLIN® kaufen
+        Larylin® kaufen
       </h2>
       <button
         id="pharmacy-drawer-close"
@@ -101,7 +101,7 @@ const activeKey: PharmacyProduct = initialProduct ?? pharmacyProducts[0].key;
               In einer Apotheke vor Ort kaufen
             </h3>
             <a
-              href="https://ihreapotheken.de/suche?search=Kamillin"
+              href="https://ihreapotheken.de/suche?search=Larylin"
               target="_blank"
               rel="noopener noreferrer"
               data-pharmacy="ihreapotheken"
@@ -140,7 +140,7 @@ const activeKey: PharmacyProduct = initialProduct ?? pharmacyProducts[0].key;
                 rel={pharmacyLinkRel(url)}
                 data-pharmacy={pharmacySlug(pharmacy.name)}
                 data-placement={`drawer-${product.key}`}
-                aria-label={`KAMILLIN® ${product.label} bei ${pharmacy.name} kaufen`}
+                aria-label={`${product.name} bei ${pharmacy.name} kaufen`}
                 class="block w-full p-4 rounded-lg bg-neutral-50 border border-transparent hover:border-primary transition-colors group"
               >
                 <div class="flex items-center justify-between">

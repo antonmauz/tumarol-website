@@ -5,7 +5,6 @@ import LarylinLogo from './LarylinLogo.astro';
 import robugenLogo from '../assets/images/logo/Robugen_Logo_noBg.png';
 import korodinLogo from '../assets/images/social/korodin-hkt-logo.png';
 import antihydralLogo from '../assets/images/social/antihydral-logo.png';
-import type { PharmacyProduct } from '../data/pharmacies';
 import { COMPANY_NAME, COMPANY_URL, COMPANY_LINKEDIN_URL } from '../data/company';
 import { pflichtangaben, pflichtangabenSchluss, pflichtangabenHersteller } from '../data/pflichtangaben';
 
@@ -13,12 +12,7 @@ const infoLinks: { label: string; href: string; external?: boolean }[] = [
   { label: 'Über uns', href: COMPANY_URL, external: true },
 ];
 
-interface Props {
-  /** Produkt der aktuellen Seite (aus Layout); die REPAIR CREME ist ein Kosmetikum. */
-  product?: PharmacyProduct;
-}
-const { product } = Astro.props;
-const herstellerZeile = product === 'repair' ? 'Ein Kosmetikum von' : 'Ein Arzneimittel von';
+const herstellerZeile = 'Ein Arzneimittel von';
 
 const legalLinks = [
   { label: 'Pflichtangaben', href: '/pflichtangaben' },
@@ -132,7 +126,7 @@ const legalLinks = [
 
     {/* Pflichtangaben nach § 4 HWG für die zwei Arzneimittel (Name, Wirkstoff,
         Anwendungsgebiete, Warnhinweis), Wortlaut zentral in src/data/pflichtangaben.ts;
-        die REPAIR CREME ist ein Kosmetikum ohne Pflichttext. */}
+        TODO (LARYLIN): Liste ist leer, bis die Pflichtangaben eingetragen sind. */}
     <div class="mt-12 pt-8 border-t border-white/15 space-y-2">
       {pflichtangaben.map((product) => (
         <p class="text-xs text-white/80 leading-relaxed">

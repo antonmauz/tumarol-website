@@ -34,37 +34,29 @@ interface ProductCard {
   /** Optionaler manueller Umbruch der Überschrift (HTML, z. B. mit <br>);
    *  `name` bleibt der reine Text für aria-label. */
   nameHtml?: string;
-  /** Icon über dem Packshot (erscheint beim Hover): Tropfen (Flüssigkeit) oder Tube. */
-  icon: IconName;
+  /** Optionales Icon über dem Packshot (erscheint beim Hover), z. B. Tropfen für Flüssigkeiten. */
+  icon?: IconName;
   /** Kurzbeschreibung unter dem Produktnamen (Schriftbild wie der Einleitungstext). */
   description: string;
   href: string;
 }
 
+// TODO (LARYLIN): Kurztexte sind Platzhalter bis zur fachlichen Freigabe.
 const products: ProductCard[] = [
   {
-    key: 'extern',
-    name: productName.extern,
-    icon: 'drops',
-    description: 'Zur Anwendung auf der Haut in Umschlägen, Spülungen oder im Sitzbad.',
-    href: '/extern-robugen',
+    key: 'pastillen',
+    name: productName.pastillen,
+    nameHtml: 'Larylin® Husten-Stiller<br>Pastillen',
+    description: 'Lutschpastillen, Packung mit 24 Stück.',
+    href: '/larylin-pastillen',
   },
   {
-    key: 'konzentrat',
-    name: productName.konzentrat,
+    key: 'saft',
+    name: productName.saft,
+    nameHtml: 'Larylin® Husten-Stiller<br>Saft',
     icon: 'drops',
-    description: 'Stark konzentriert zur äußerlichen und innerlichen Anwendung.',
-    href: '/konzentrat-robugen',
-  },
-  {
-    // Kosmetikum — Texte ausschließlich auf Pflege-/Kosmetikebene.
-    key: 'repair',
-    name: productName.repair,
-    // Zweizeilig wie die beiden anderen Titel (gleiche Texthöhe in der Reihe).
-    nameHtml: 'KAMILLIN® REPAIR<br>CREME',
-    icon: 'tube',
-    description: 'Zur Pflege der Haut mit hohem Vitamin-E-Gehalt und Kamillenblütenextrakt.',
-    href: '/repair-creme',
+    description: 'Saft in der 200-ml-Flasche.',
+    href: '/larylin-saft',
   },
 ];
 
@@ -109,11 +101,13 @@ const visibleProducts = only
               {/* Kurzer Farbbalken oben links, Folge Gelb/Orange/Rot (src/data/brand.ts). */}
               <span class={`accent-bar mb-4 ${accentAt(i)}`} aria-hidden="true"></span>
 
-              {/* Produkt-Icon (Tropfen = Flüssigkeit, Tube = Creme); Platz ist
-                  dauerhaft reserviert, sichtbar erst beim Hover. */}
-              <span class="product-card__icon" aria-hidden="true">
-                <Fragment set:html={iconSvg(product.icon, 'w-8 h-8')} />
-              </span>
+              {/* Optionales Produkt-Icon (Tropfen = Flüssigkeit), liegt über dem Packshot,
+                  sichtbar erst beim Hover. */}
+              {product.icon && (
+                <span class="product-card__icon" aria-hidden="true">
+                  <Fragment set:html={iconSvg(product.icon, 'w-8 h-8')} />
+                </span>
+              )}
 
               <span class="product-card__media">
                 <Image

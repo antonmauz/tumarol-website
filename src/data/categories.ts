@@ -8,12 +8,12 @@ export const ratgeberCategories = ['gutes-bauchgefuehl', 'gesunder-mund', 'heile
 export type RatgeberCategory = (typeof ratgeberCategories)[number];
 
 /** Standard-Belegung des Produkt-CTA je Cluster (Artikel überschreiben sie per ctaProducts).
- *  Folgt den zugelassenen Anwendungsgebieten: EXTERN ist nur äußerlich zugelassen (§ 3a HWG),
- *  also nicht unter „Gesunder Mund“/„Gutes Bauchgefühl“; die REPAIR CREME nur bei Pflegethemen. */
+ *  Nur Präparate mit passendem zugelassenem Anwendungsgebiet (§ 3a HWG): Die Cluster stammen
+ *  noch aus der KAMILLIN-Vorlage und passen zu keinem Larylin-Präparat, daher leer. */
 export const ctaProductsByCluster: Record<RatgeberCategory, PharmacyProduct[]> = {
-  'gutes-bauchgefuehl': ['konzentrat'],
-  'gesunder-mund': ['konzentrat'],
-  'heile-haut': ['extern', 'repair'],
+  'gutes-bauchgefuehl': [],
+  'gesunder-mund': [],
+  'heile-haut': [],
 };
 
 /** Produkt-CTA-Vorgabe eines Clusters. */

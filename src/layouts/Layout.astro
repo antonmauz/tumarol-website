@@ -26,14 +26,14 @@ interface Props {
   ogImage?: string | ImageMetadata;
   /** og:type – "website" (Standard) oder "article" für Ratgeber-/Magazinseiten. */
   ogType?: 'website' | 'article';
-  /** Marken-Suffix " | KAMILLIN®" anhängen (Standard: an). Für Seiten aus,
+  /** Marken-Suffix " | Larylin®" anhängen (Standard: an). Für Seiten aus,
    *  deren Titel bereits mit dem Markennamen beginnt (verhindert Doppelnennung). */
   titleSuffix?: boolean;
 }
 
 const {
   title,
-  description = `KAMILLIN® von ROBUGEN: Kamillenpräparate der ${COMPANY_NAME}.`,
+  description = `Larylin® Husten-Stiller von ROBUGEN: Pastillen und Saft der ${COMPANY_NAME}.`,
   noindex = false,
   // og-default.png erzeugt scripts/make-og-image.cjs; liefert Marketing ein
   // eigenes Motiv, Datei ersetzen und Skript löschen.
@@ -56,7 +56,7 @@ const canonicalURL = new URL(pathname, siteUrl).href;
 const ogImageURL = new URL(typeof ogImage === 'string' ? ogImage : ogImage.src, siteUrl).href;
 const ogImageWidth = typeof ogImage === 'string' ? 1200 : ogImage.width;
 const ogImageHeight = typeof ogImage === 'string' ? 630 : ogImage.height;
-const fullTitle = titleSuffix ? `${title} | KAMILLIN®` : title;
+const fullTitle = titleSuffix ? `${title} | Larylin®` : title;
 const isHome = pathname === '/';
 
 // Organization + WebSite nur auf der Startseite (Google-Empfehlung für Site-weite Angaben).
@@ -75,7 +75,7 @@ const websiteSchema = {
   '@type': 'WebSite',
   '@id': `${siteUrl.origin}/#website`,
   url: siteUrl.origin,
-  name: 'KAMILLIN®',
+  name: 'Larylin®',
   inLanguage: 'de-DE',
   publisher: { '@id': `${siteUrl.origin}/#organization` },
   // Entitäts-Signal auf die Produktseiten der Hersteller-Domain (kein Canonical; die
@@ -142,7 +142,7 @@ const websiteSchema = {
 
     {/* Open Graph (Facebook, LinkedIn, WhatsApp …) */}
     <meta property="og:type" content={ogType} />
-    <meta property="og:site_name" content="KAMILLIN®" />
+    <meta property="og:site_name" content="Larylin®" />
     <meta property="og:locale" content="de_DE" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
@@ -178,7 +178,7 @@ const websiteSchema = {
       <slot />
     </main>
     <BackToTop />
-    <Footer product={pharmacyProduct} />
+    <Footer />
     <PharmacyDrawer initialProduct={pharmacyProduct} />
     <ReviewsModal product={pharmacyProduct} />
     {/* Delegierter Click-Listener für GA4-Apotheken-Events (data-pharmacy). */}

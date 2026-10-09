@@ -4,76 +4,65 @@ import BreadcrumbSection from '../components/BreadcrumbSection.astro';
 import ProductHero from '../components/ProductHero.astro';
 import ReviewSlider from '../components/ReviewSlider.astro';
 import ApplicationSlider from '../components/ApplicationSlider.astro';
-import KamillenanbauCta from '../components/KamillenanbauCta.astro';
 import Faq from '../components/sections/Faq.astro';
 import DownloadsSection from '../components/DownloadsSection.astro';
 import SourcesSection from '../components/SourcesSection.astro';
-import TrustBanner from '../components/TrustBanner.astro';
 import ArticleSlider from '../components/ArticleSlider.astro';
 import RobugenBanner from '../components/RobugenBanner.astro';
 import ProductSchema from '../components/ProductSchema.astro';
 import { faqsFor } from '../data/faqs';
 import { produktSources } from '../data/produktSources';
-import { zusammensetzungSatz } from '../data/pflichtangaben';
 
-// Produktseite KAMILLIN® EXTERN ROBUGEN (Arzneimittel), Slug festgelegt 01.09.2026. Aufbau:
-// Kopf → Bewertungen → Anwendung → Wirkstoff → FAQ → Downloads → Vertrauen → Wissenswertes →
-// Hersteller → Quellen; Kauf über den Apotheken-Drawer. Product-JSON-LD: ProductSchema.astro.
+// Produktseite Larylin® Husten-Stiller Pastillen (Arzneimittel). Aufbau: Kopf → Bewertungen → Anwendung → FAQ →
+// Downloads → Wissenswertes → Hersteller → Quellen; Kauf über den Apotheken-Drawer.
+// Gerüst: Bewertungen, Anwendung, FAQ und Downloads rendern erst, wenn ihre Daten in
+// src/data/ eingetragen sind (TODO (LARYLIN)). Product-JSON-LD: ProductSchema.astro.
 
 const breadcrumbItems = [
   { label: 'Startseite', href: '/' },
-  { label: 'KAMILLIN® EXTERN ROBUGEN' },
+  { label: 'Larylin® Husten-Stiller Pastillen' },
 ];
 
-// Kernpunkte des Seitenkopfs (Wortlaut Anton, 07.09.2026).
+// Kernpunkte des Seitenkopfs. TODO (LARYLIN): Wortlaut nach fachlicher Freigabe.
 const heroBullets = [
-  'DEV (1:2,0–2,8) Konzentrierter Kamillenblüten-Auszug',
-  'Entzündungshemmend und wundheilend',
-  'Für jedes Alter ab 4 Wochen',
-  'Kamille aus Thüringen',
+  'Wirkstoff Dropropizin',
+  '24 Lutschpastillen je Packung',
 ];
 
 // Eine Quelle für Meta-Description und Product-JSON-LD.
 const description =
-  'KAMILLIN® EXTERN ROBUGEN: pflanzliches Arzneimittel mit Kamillenblüten-Auszug zur äußerlichen Anwendung in Umschlägen, Spülungen und Bädern. Dosierung, FAQ und Downloads.';
+  'Larylin® Husten-Stiller Pastillen: Lutschpastillen mit dem Wirkstoff Dropropizin. Packungsgröße, PZN und Kauf in der Apotheke vor Ort oder online.';
 ---
 
 <Layout
-  title="KAMILLIN® EXTERN ROBUGEN: Anwendung, Bäder & Spülungen"
+  title="Larylin® Husten-Stiller Pastillen: Lutschpastillen mit Dropropizin"
   titleSuffix={false}
   description={description}
-  pharmacyProduct="extern"
+  pharmacyProduct="pastillen"
 >
 
-  <ProductSchema product="extern" name="KAMILLIN® EXTERN ROBUGEN" description={description} category="Pflanzliches Arzneimittel" />
+  <ProductSchema product="pastillen" name="Larylin® Husten-Stiller Pastillen" description={description} category="Arzneimittel" />
 
   {/* ─── NAVIGATION BREADCRUMBS ──────────────────────────────────────── */}
   <BreadcrumbSection items={breadcrumbItems} />
 
-  {/* Oben bewusst knapp: Breadcrumbs und Seitenkopf bilden eine Einheit. */}
   {/* ─── HERO / PRODUCT INTRO ────────────────────────────────────────── */}
-  <ProductHero product="extern" name="KAMILLIN® EXTERN ROBUGEN" bullets={heroBullets} />
+  <ProductHero product="pastillen" name="Larylin® Husten-Stiller Pastillen" bullets={heroBullets} />
 
-  {/* ─── PRODUKTBEWERTUNGEN dieses Präparats ────────────────────────── */}
-  <ReviewSlider product="extern" />
+  {/* ─── PRODUKTBEWERTUNGEN dieses Präparats (src/data/reviews/pastillen.ts) ── */}
+  <ReviewSlider product="pastillen" />
 
-  {/* ─── ANWENDUNG & DOSIERUNG (Kacheln, src/data/applications.ts) ──── */}
-  <ApplicationSlider id="anwendung" product="extern" />
-
-  {/* ─── WIRKSTOFF: Kamillen-CTA mit dem Zusammensetzungssatz aus den Pflichtangaben ─── */}
-  <KamillenanbauCta id="wirkstoff" heading="Wirkstoff Kamillenblüten-Auszug" intro={zusammensetzungSatz('extern')} />
+  {/* ─── ANWENDUNG & DOSIERUNG (src/data/applications.ts) ───────────── */}
+  <ApplicationSlider id="anwendung" product="pastillen" />
 
   {/* ─── FAQ (src/data/faqs.ts) ─────────────────────────────────────── */}
-  <Faq id="faqs" items={faqsFor('extern')} schema />
+  <Faq id="faqs" items={faqsFor('pastillen')} schema />
 
   {/* ─── DOWNLOADS (src/data/downloads.ts, Dateien in public/downloads/) ─ */}
-  <DownloadsSection id="downloads" product="extern" />
-
-  {/* ─── VERTRAUEN ───────────────────────────────────────────────────── */}
-  <TrustBanner />
+  <DownloadsSection id="downloads" product="pastillen" />
 
   {/* ─── ARTIKEL: Wissenswertes-Kacheln (wie Startseite) ─────────────── */}
-  <ArticleSlider heading="Mehr Informationen" />
+  <ArticleSlider heading="Wissenswertes rund um Husten" />
 
   {/* ─── HERSTELLER ───────────────────────────────────────────────────── */}
   <RobugenBanner />

@@ -33,7 +33,7 @@ const ratgeber = defineCollection({
       showProductHighlight: z.boolean().default(false),
       /** Präparate des Produkt-CTA am Artikelende; ohne Feld greift die Cluster-Vorgabe
        *  (ctaProductsFor). Nur Präparate mit passendem zugelassenem Anwendungsgebiet
-       *  eintragen: KAMILLIN EXTERN ist nur zur äußeren Anwendung zugelassen (§ 3a HWG). */
+       *  eintragen (§ 3a HWG). */
       ctaProducts: z.array(z.enum(pharmacyProductKeys)).optional(),
 
       // ─── Hero ────────────────────────────────────────────────────────────────

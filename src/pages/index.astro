@@ -13,29 +13,12 @@ import { accentAt } from '../data/brand';
 
 // Fakten-Leiste unter dem Hero, je mit kurzem Farbbalken (Folge Gelb/Orange/Rot).
 const facts = ['Reiz- und Krampfhusten', 'Ab 12 Jahren', 'Zwei Formen'];
-
-// „Trocken oder mit Schleim?“: drei Zeilen mit Farbbalken.
-// TODO Inhalte: Texte sind Platzhalter bis zur fachlichen Freigabe.
-const coughRows = [
-  {
-    title: 'Trockener Reizhusten',
-    text: 'Der Hals kratzt, der Husten kommt immer wieder, aber es löst sich kein Schleim. Hier setzt ein Husten-Stiller an.',
-  },
-  {
-    title: 'Husten mit Schleim',
-    text: 'Löst sich Schleim, soll er abgehustet werden. Ein Husten-Stiller ist dann nicht das Mittel der Wahl.',
-  },
-  {
-    title: 'Wann zum Arzt?',
-    text: 'Bei Fieber, Atemnot, Blut im Auswurf oder Husten, der länger als zwei Wochen anhält, ärztlichen Rat einholen.',
-  },
-];
 ---
 
 <Layout
-  title="KAMILLIN® von ROBUGEN – Kamille aus Thüringen"
+  title="Larylin® Husten-Stiller – bei trockenem Reizhusten"
   titleSuffix={false}
-  description="KAMILLIN® von ROBUGEN: Kamillenblüten-Auszug aus eigenem Anbau in Thüringen, hergestellt in Esslingen. Die Präparate, ihre Anwendung und Wissenswertes zur Kamille."
+  description="Larylin® Husten-Stiller von ROBUGEN mit dem Wirkstoff Dropropizin, als Pastillen oder Saft. Wo Sie Larylin® kaufen können und Wissenswertes rund um Husten."
 >
 
   {/* ─── 1. HERO: links Text + Buttons, rechts Packshots ────────────────── */}
@@ -85,25 +68,7 @@ const coughRows = [
   {/* ─── 4. PRODUKTBEWERTUNGEN (Sektion hellgrau, Karten weiß) ──────────── */}
   <ReviewSlider class="bg-surface" />
 
-  {/* ─── 5. TROCKEN ODER MIT SCHLEIM? ───────────────────────────────────── */}
-  <section class="px-6 py-16 md:py-20">
-    <Container size="content" class="grid gap-8 lg:grid-cols-[1fr_2fr] lg:gap-14">
-      <h2>Trocken oder mit <span class="mark">Schleim</span>?</h2>
-      <ul class="border-t border-divider">
-        {coughRows.map((row, i) => (
-          <li class="grid gap-2 border-b border-divider py-6 md:grid-cols-[14rem_1fr] md:gap-8">
-            <h3 class="flex items-center gap-3 text-lg">
-              <span class={`accent-bar ${accentAt(i)}`} aria-hidden="true"></span>
-              {row.title}
-            </h3>
-            <p class="text-neutral-700">{row.text}</p>
-          </li>
-        ))}
-      </ul>
-    </Container>
-  </section>
-
-  {/* ─── 6. MAGAZIN (Karten hellgrau, Farbbalken Gelb/Orange/Rot) ───────── */}
+  {/* ─── 5. MAGAZIN (Karten hellgrau, Farbbalken Gelb/Orange/Rot) ───────── */}
   <ArticleSlider heading="Wissenswertes rund um Husten" class="border-t border-divider" />
 
   {/* ─── HERSTELLER: Robugen-Vertrauensmodul ────────────────────────────── */}
