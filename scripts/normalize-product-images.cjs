@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..', 'src', 'assets', 'images', 'products');
-const PRODUCTS = ['extern', 'konzentrat', 'repair'];
+const PRODUCTS = ['pastillen', 'saft'];
 
 // Quadratische Leinwand (1:1 wie .product-card__media und der Produkt-Slider).
 const W = 1200, H = 1200;
@@ -35,7 +35,7 @@ async function normalize(file) {
   for (const product of PRODUCTS) {
     const dir = path.join(ROOT, product);
     if (!fs.existsSync(dir)) continue;
-    // Nur Packshots. Die nummerierten Galerie-Slides (kamillin-<produkt>-1.png …)
+    // Nur Packshots. Die nummerierten Galerie-Slides (larylin-<produkt>-1.png …)
     // sind fertige Motive mit weißem Grund und Layout — nicht anfassen.
     const isPackshot = (f) => /\.png$/i.test(f) && !/-\d+\.png$/i.test(f);
     for (const name of fs.readdirSync(dir).filter(isPackshot)) {

@@ -1,12 +1,16 @@
 // Zentrale Produktbilder: Packshots (freigestellt, normalisiert; Karten und Drawer) und
-// Galerie-Slides (fertige Motive, nicht normalisieren) aus src/assets/images/products/<produkt>/.
-// Neues Bild: Import ergänzen und mit Alt-Text eintragen.
-// TODO (LARYLIN): Packshots und Galerie-Slides für Pastillen und Saft fehlen noch; bis dahin
-// zeigen Karten, Drawer und Produktseiten den Platzhalter.
+// Galerie-Slides (larylin-<produkt>-1…4.png, fertige Motive, nicht normalisieren) aus
+// src/assets/images/products/<produkt>/. Neues Bild: Import ergänzen und mit Alt-Text eintragen.
+// TODO (LARYLIN): Hover-Motiv (Packung mit Inhalt) und Galerie-Slides fehlen noch; bis
+// dahin zeigen Hover und Produktseiten-Slider die Faltschachtel.
 import type { ImageMetadata } from 'astro';
 import type { PharmacyProduct } from './pharmacies';
 
-import platzhalter from '../assets/images/products/produkt-platzhalter.png';
+// ── Larylin® Husten-Stiller Pastillen ────────────────────────────────────
+import pastillenFaltschachtel from '../assets/images/products/pastillen/larylin-pastillen-faltschachtel.png';
+
+// ── Larylin® Husten-Stiller Saft ─────────────────────────────────────────
+import saftFaltschachtel from '../assets/images/products/saft/larylin-saft-faltschachtel.png';
 
 export interface ProductImage {
   src: ImageMetadata;
@@ -21,32 +25,35 @@ export interface ProductImageSet {
   /** Produktkarte beim Überfahren (Crossfade): Faltschachtel + Inhalt. */
   cardHover: ProductImage;
   /** Bild-Slider der Produktseite (Marketing-Slides, Reihenfolge = Slider);
-   *  leer = Platzhalter-Slides. */
+   *  leer = galleryFallback. */
   gallery: ProductImage[];
 }
 
 const pastillen = {
-  faltschachtel: { src: platzhalter, alt: 'Larylin® Husten-Stiller Pastillen – Faltschachtel' },
+  faltschachtel: {
+    src: pastillenFaltschachtel,
+    alt: 'Larylin® Husten-Stiller Pastillen – Faltschachtel, Wirkstoff Dropropizin, 20 mg pro Lutschpastille, 24 Lutschpastillen',
+  },
 };
 const saft = {
-  faltschachtel: { src: platzhalter, alt: 'Larylin® Husten-Stiller Saft – Faltschachtel' },
+  faltschachtel: {
+    src: saftFaltschachtel,
+    alt: 'Larylin® Husten-Stiller Saft – Faltschachtel, Wirkstoff Dropropizin, 300 mg in 100 g Sirup, 200 ml Sirup',
+  },
 };
 
 export const productImages: Record<PharmacyProduct, ProductImageSet> = {
   pastillen: {
     cardFront: pastillen.faltschachtel,
     cardHover: pastillen.faltschachtel,
-    gallery: [],
+    gallery: [pastillen.faltschachtel],
   },
   saft: {
     cardFront: saft.faltschachtel,
     cardHover: saft.faltschachtel,
-    gallery: [],
+    gallery: [saft.faltschachtel],
   },
 };
 
-/** Platzhalter-Slides für Präparate ohne Galerie. */
-export const galleryFallback: ProductImage[] = [
-  { src: platzhalter, alt: 'TODO (LARYLIN): Produktabbildung 1' },
-  { src: platzhalter, alt: 'TODO (LARYLIN): Produktabbildung 2' },
-];
+/** Slides für Präparate ohne Galerie (derzeit haben alle mindestens den Packshot). */
+export const galleryFallback: ProductImage[] = [];

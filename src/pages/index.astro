@@ -10,6 +10,7 @@ import ArticleSlider from '../components/ArticleSlider.astro';
 import Container from '../components/Container.astro';
 import { hinweise } from '../data/hinweise';
 import { accentAt } from '../data/brand';
+import bewertungenBg from '../assets/images/backgrounds/bewertungen-desktop.png';
 
 // Fakten-Leiste unter dem Hero, je mit kurzem Farbbalken (Folge Gelb/Orange/Rot).
 const facts = ['Reiz- und Krampfhusten', 'Ab 12 Jahren', 'Zwei Formen'];
@@ -65,8 +66,8 @@ const facts = ['Reiz- und Krampfhusten', 'Ab 12 Jahren', 'Zwei Formen'];
   {/* ─── 3. PASTILLEN ODER SAFT? (Produktkarten hellgrau auf Weiß) ──────── */}
   <ProductHighlight id="produkte" heading="Pastillen oder Saft?" />
 
-  {/* ─── 4. PRODUKTBEWERTUNGEN (Sektion hellgrau, Karten weiß) ──────────── */}
-  <ReviewSlider class="bg-surface" />
+  {/* ─── 4. PRODUKTBEWERTUNGEN (Farbverlauf als Hintergrundbild, Karten weiß) */}
+  <ReviewSlider background={bewertungenBg} />
 
   {/* ─── 5. MAGAZIN (Karten hellgrau, Farbbalken Gelb/Orange/Rot) ───────── */}
   <ArticleSlider heading="Wissenswertes rund um Husten" class="border-t border-divider" />

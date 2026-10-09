@@ -1,13 +1,15 @@
 ---
 // Produktkarten-Slider im scroll-snap-Container (Mechanik wie ArticleSlider/ReviewSlider).
 // Weitere Karten: Objekt in `products` ergänzen; Namen kommen aus pharmacies.ts.
+import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 import { pharmacyProducts, type PharmacyProduct } from '../data/pharmacies';
+import pastillenBg from '../assets/images/backgrounds/karte-pastillen-neu.png';
+import saftBg from '../assets/images/backgrounds/karte-saft-neu-2.png';
 import Container from './Container.astro';
 import SliderControls from './SliderControls.astro';
 import { productImages } from '../data/productImages';
 import { iconSvg, type IconName } from '../data/icons';
-import { accentAt } from '../data/brand';
 
 interface Props {
   /** Hintergrund/zusätzliche Klassen der <section> (Standard: transparent, also weiß). */
@@ -31,32 +33,47 @@ interface ProductCard {
   /** Interner Produkt-Key (identisch zu src/data/pharmacies.ts). */
   key: PharmacyProduct;
   name: string;
-  /** Optionaler manueller Umbruch der Überschrift (HTML, z. B. mit <br>);
-   *  `name` bleibt der reine Text für aria-label. */
+  /** Optionale sichtbare Überschrift, falls kürzer als `name` (HTML erlaubt, z. B. <br>);
+   *  `name` bleibt der volle Produktname für aria-label. */
   nameHtml?: string;
   /** Optionales Icon über dem Packshot (erscheint beim Hover), z. B. Tropfen für Flüssigkeiten. */
   icon?: IconName;
   /** Kurzbeschreibung unter dem Produktnamen (Schriftbild wie der Einleitungstext). */
   description: string;
   href: string;
+  /** Optionales Hintergrundbild der ganzen Karte (Hochformat, Studio-Look: Wand oben,
+   *  heller Boden unten, auf dem der Text steht). */
+  background?: ImageMetadata;
+  /** Lage der Studiokante (Wand/Boden) und des Kontaktschattens im Hintergrundbild, je als
+   *  Anteil der Bildhöhe (0–1). Das Bild wird so skaliert und verschoben, dass Kante und
+   *  Schatten in allen Karten auf derselben Höhe liegen. Werte am Bild ausmessen. */
+  backgroundEdgeAt?: number;
+  backgroundShadowAt?: number;
 }
 
-// TODO (LARYLIN): Kurztexte sind Platzhalter bis zur fachlichen Freigabe.
+// Kurztexte stellen den Unterschied der beiden Formen heraus (unterwegs / abends zu Hause).
+// TODO (LARYLIN): Wortlaut fachlich freigeben lassen (HWG).
 const products: ProductCard[] = [
   {
     key: 'pastillen',
     name: productName.pastillen,
-    nameHtml: 'Larylin® Husten-Stiller<br>Pastillen',
-    description: 'Lutschpastillen, Packung mit 24 Stück.',
+    nameHtml: 'Husten-Stiller Pastillen',
+    description: 'Praktisch für unterwegs: einfach lutschen, ohne Wasser oder Löffel.',
     href: '/larylin-pastillen',
+    background: pastillenBg,
+    backgroundEdgeAt: 0.557,
+    backgroundShadowAt: 0.615,
   },
   {
     key: 'saft',
     name: productName.saft,
-    nameHtml: 'Larylin® Husten-Stiller<br>Saft',
+    nameHtml: 'Husten-Stiller Saft',
     icon: 'drops',
-    description: 'Saft in der 200-ml-Flasche.',
+    description: 'Für ruhigere Nächte: beruhigt den trockenen Reizhusten am Abend.',
     href: '/larylin-saft',
+    background: saftBg,
+    backgroundEdgeAt: 0.522,
+    backgroundShadowAt: 0.565,
   },
 ];
 
@@ -90,7 +107,7 @@ const visibleProducts = only
         data-slider-track
         class="flex gap-6 slider-bleed overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 -mb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {visibleProducts.map((product, i) => (
+        {visibleProducts.map((product) => (
           <div class="snap-start shrink-0 basis-[85%] md:basis-[calc((100%_-_1.5rem)/2)] lg:basis-[calc((100%_-_3rem)/3)]">
             {/* Ganze Karte = EIN Link; der CTA ist ein <span>, kein zweites Tab-Ziel. */}
             <a
@@ -98,8 +115,23 @@ const visibleProducts = only
               class="product-card"
               aria-label={`${product.name} – zum Produkt`}
             >
-              {/* Kurzer Farbbalken oben links, Folge Gelb/Orange/Rot (src/data/brand.ts). */}
-              <span class={`accent-bar mb-4 ${accentAt(i)}`} aria-hidden="true"></span>
+              {/* Hintergrundbild der ganzen Karte; liegt per z-index hinter dem Inhalt,
+                  Ausrichtung über --bg-edge/--bg-shadow (CSS unten). */}
+              {product.background && (
+                <span
+                  class="product-card__bg"
+                  style={`--bg-edge: ${product.backgroundEdgeAt ?? 0.56}; --bg-shadow: ${product.backgroundShadowAt ?? 0.62}`}
+                  aria-hidden="true"
+                >
+                  <Image
+                    src={product.background}
+                    alt=""
+                    widths={[480, 800]}
+                    sizes="(min-width: 1024px) 400px, (min-width: 768px) 50vw, 85vw"
+                    loading="lazy"
+                  />
+                </span>
+              )}
 
               {/* Optionales Produkt-Icon (Tropfen = Flüssigkeit), liegt über dem Packshot,
                   sichtbar erst beim Hover. */}
@@ -159,6 +191,10 @@ const visibleProducts = only
        selbst trennt die Karte vom weißen Grund. */
     background: var(--color-surface);
     border-radius: var(--radius-card);
+    /* Eigener Stapelkontext: das Hintergrundbild (z-index -1) liegt über der Kartenfläche,
+       aber unter dem Inhalt; overflow schneidet es an den runden Ecken ab. */
+    isolation: isolate;
+    overflow: hidden;
   }
 
   /* Die Karte selbst reagiert nicht auf Hover (kein Rahmen, kein Anheben,
@@ -205,6 +241,32 @@ const visibleProducts = only
     display: block;
     aspect-ratio: 1 / 1;
     margin-bottom: 1rem;
+  }
+  /* Hintergrundbild der ganzen Karte. Kante (--bg-edge) und Kontaktschatten (--bg-shadow)
+     des Motivs, je Anteil der Bildhöhe, landen in jeder Karte auf denselben Höhen, damit
+     die Studiokante über nebeneinanderstehende Karten durchläuft:
+     - Schatten bei --bg-shadow-y: Bildfeld-Kante (100cqw = Inhaltsbreite der Karte, das
+       Bildfeld ist quadratisch) plus Padding oben (20px), minus 8px, weil
+       die Packshots knapp über der Leinwandunterkante enden.
+     - Kante 13cqw darüber (mitwachsend, damit es auf jeder Kartenbreite gleich wirkt).
+     Daraus folgen Bildhöhe (Abstand / (Schatten − Kante)) und Versatz nach oben. 13cqw ist
+     so gewählt, dass auch das Motiv mit dem kleinsten Abstand Kante/Schatten die Karte
+     oben und unten noch füllt; overflow: hidden schneidet den Überstand ab. */
+  .product-card { container-type: inline-size; }
+  .product-card__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    --bg-shadow-y: calc(100cqw + 12px);
+    --bg-h: calc(13cqw / (var(--bg-shadow) - var(--bg-edge)));
+  }
+  .product-card__bg img {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: var(--bg-h);
+    top: calc(var(--bg-shadow-y) - var(--bg-shadow) * var(--bg-h));
+    object-fit: cover;
   }
   .product-card__media .product-card__img {
     position: absolute;
