@@ -9,11 +9,7 @@ import ReviewSlider from '../components/ReviewSlider.astro';
 import ArticleSlider from '../components/ArticleSlider.astro';
 import Container from '../components/Container.astro';
 import { hinweise } from '../data/hinweise';
-import { accentAt } from '../data/brand';
 import bewertungenBg from '../assets/images/backgrounds/bewertungen-desktop.png';
-
-// Fakten-Leiste unter dem Hero, je mit kurzem Farbbalken (Folge Gelb/Orange/Rot).
-const facts = ['Reiz- und Krampfhusten', 'Ab 12 Jahren', 'Zwei Formen'];
 ---
 
 <Layout
@@ -49,17 +45,19 @@ const facts = ['Reiz- und Krampfhusten', 'Ab 12 Jahren', 'Zwei Formen'];
     </Container>
   </section>
 
-  {/* ─── 2. FAKTEN-LEISTE ───────────────────────────────────────────────── */}
-  <section class="px-6 border-y border-divider" aria-label="Auf einen Blick">
-    <Container size="content">
-      <ul class="grid divide-y divide-divider md:grid-cols-3 md:divide-y-0 md:divide-x">
-        {facts.map((fact, i) => (
-          <li class="flex items-center gap-4 py-5 md:px-6 md:first:pl-0">
-            <span class={`accent-bar ${accentAt(i)}`} aria-hidden="true"></span>
-            <span class="text-lg font-extrabold tracking-tight">{fact}</span>
-          </li>
-        ))}
-      </ul>
+  {/* ─── 2. TEXT: TROCKENER REIZHUSTEN? ─────────────────────────────────── */}
+  {/* TODO (LARYLIN): Wortlaut fachlich freigeben lassen (HWG: „zuverlässig“, „gute
+      Verträglichkeit“ und Wirkmechanismus brauchen einen Beleg). */}
+  <section class="px-6 pt-12 md:pt-16 border-t border-divider">
+    <Container size="content" class="text-center">
+      <h2 class="mb-4">Trockener Reizhusten?</h2>
+      <p class="mx-auto max-w-3xl text-lg text-neutral-700 leading-relaxed">
+        Trockener Reizhusten kann quälend sein, tagsüber und erst recht nachts.
+        Larylin® Husten-Stiller mit dem Wirkstoff Dropropizin lindert Reiz- und
+        Krampfhusten zuverlässig, ob als Saft oder als Pastillen. Er setzt gezielt an den
+        Hustenrezeptoren in den Atemwegen an, ohne im Gehirn zu wirken. Die Folge:
+        wirksame Linderung bei guter Verträglichkeit.
+      </p>
     </Container>
   </section>
 
