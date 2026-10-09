@@ -22,10 +22,10 @@ const legalLinks = [
 ];
 ---
 
-{/* Dunkle Fläche (#111111) in voller Breite: Logo, Hersteller, Links, darunter der
-    Pflichttext und die Legal-Zeile. Fremdlogos liegen auf weißen Kacheln, damit ihre
-    Originalfarben auf dem dunklen Grund lesbar bleiben. */}
-<footer class="bg-ink text-white">
+{/* Hellgraue Fläche (--color-surface, wie früher das Nach-oben-Band) in voller Breite: Logo,
+    Hersteller, Links, darunter der Pflichttext und die Legal-Zeile. Die Logos (transparente
+    PNGs) stehen direkt auf dem Grau. */}
+<footer class="bg-surface text-ink">
   <Container size="wide" class="px-6 lg:px-8 pt-16 pb-10">
     {/* 4-Spalten-Raster ab md (Spalte 2 bleibt als Abstand leer); mobil gestapelt. */}
     <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
@@ -33,10 +33,10 @@ const legalLinks = [
       {/* Marke + Hersteller */}
       <div class="md:col-start-1 space-y-5">
         <a href="/" class="inline-flex" aria-label="Larylin – zur Startseite">
-          <LarylinLogo tone="light" />
+          <LarylinLogo />
         </a>
         <div class="flex items-center gap-4">
-          <a href={COMPANY_URL} target="_blank" rel="noopener noreferrer" class="inline-flex shrink-0 rounded-card bg-white p-3" aria-label={`${COMPANY_NAME} (öffnet in neuem Tab)`}>
+          <a href={COMPANY_URL} target="_blank" rel="noopener noreferrer" class="inline-flex shrink-0" aria-label={`${COMPANY_NAME} (öffnet in neuem Tab)`}>
             <Image
               src={robugenLogo}
               alt={COMPANY_NAME}
@@ -45,20 +45,20 @@ const legalLinks = [
               class="h-10 w-auto"
             />
           </a>
-          <p class="text-sm font-medium text-white/80">{herstellerZeile}<br />{COMPANY_NAME}</p>
+          <p class="text-sm font-medium text-neutral-700">{herstellerZeile}<br />{COMPANY_NAME}</p>
         </div>
       </div>
 
       {/* Weitere Arzneimittel (ab md Spalte 3); Logos mit eigener Höhe je Proportion. */}
       <div class="md:col-start-3">
-        <h3 class="text-sm font-bold text-white mb-4">Weitere Arzneimittel</h3>
+        <h3 class="text-sm font-bold text-ink mb-4">Weitere Arzneimittel</h3>
         <ul class="flex flex-wrap gap-3 md:flex-col md:items-start">
           <li>
             <a
               href="https://www.korodin.de"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex rounded-card bg-white px-4 py-2"
+              class="inline-flex"
               aria-label="KORODIN Herz-Kreislauf-Tropfen (öffnet in neuem Tab)"
             >
               <Image
@@ -75,7 +75,7 @@ const legalLinks = [
               href="https://www.antihydral.de"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex rounded-card bg-white px-4 py-3"
+              class="inline-flex"
               aria-label="Antihydral Salbe (öffnet in neuem Tab)"
             >
               <Image
@@ -92,13 +92,13 @@ const legalLinks = [
 
       {/* Info (ab md in Spalte 4) */}
       <div class="md:col-start-4">
-        <h3 class="text-sm font-bold text-white mb-4">Informationen</h3>
+        <h3 class="text-sm font-bold text-ink mb-4">Informationen</h3>
         <ul class="space-y-3">
           {infoLinks.map((link) => (
             <li>
               <a
                 href={link.href}
-                class="text-sm text-white/80 hover:text-white hover:underline underline-offset-4 transition-colors"
+                class="text-sm text-neutral-700 hover:text-ink hover:underline underline-offset-4 transition-colors"
                 {...(link.external ? { target: '_blank', rel: 'noopener noreferrer', 'aria-label': `${link.label} (öffnet in neuem Tab)` } : {})}
               >
                 {link.label}
@@ -112,7 +112,7 @@ const legalLinks = [
           href={COMPANY_LINKEDIN_URL}
           target="_blank"
           rel="noopener noreferrer"
-          class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-white/80 hover:text-white transition-colors"
+          class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-neutral-700 hover:text-ink transition-colors"
           aria-label="Robugen auf LinkedIn (öffnet in neuem Tab)"
         >
           <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -127,27 +127,27 @@ const legalLinks = [
     {/* Pflichtangaben nach § 4 HWG für die zwei Arzneimittel (Name, Wirkstoff,
         Anwendungsgebiete, Warnhinweis), Wortlaut zentral in src/data/pflichtangaben.ts;
         TODO (LARYLIN): Liste ist leer, bis die Pflichtangaben eingetragen sind. */}
-    <div class="mt-12 pt-8 border-t border-white/15 space-y-2">
+    <div class="mt-12 pt-8 border-t border-divider space-y-2">
       {pflichtangaben.map((product) => (
-        <p class="text-xs text-white/80 leading-relaxed">
-          <strong class="text-white">{product.name}.</strong> Wirkstoff: {product.kurz.wirkstoff}. Anwendungsgebiete: {product.kurz.anwendungsgebiete} Warnhinweis: {product.kurz.warnhinweis}
+        <p class="text-xs text-neutral-700 leading-relaxed">
+          <strong class="text-ink">{product.name}.</strong> Wirkstoff: {product.kurz.wirkstoff}. Anwendungsgebiete: {product.kurz.anwendungsgebiete} Warnhinweis: {product.kurz.warnhinweis}
         </p>
       ))}
-      <p class="text-xs text-white/80 leading-relaxed">
+      <p class="text-xs text-neutral-700 leading-relaxed">
         {pflichtangabenSchluss} {pflichtangabenHersteller}
       </p>
     </div>
 
     {/* Legal-Zeile */}
-    <div class="mt-8 pt-6 border-t border-white/15 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <p class="text-sm text-white/70">
+    <div class="mt-8 pt-6 border-t border-divider flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <p class="text-sm text-neutral-600">
         {/* Jahr wird zur Build-Zeit eingesetzt (statische Site) — Rebuild zum Jahreswechsel. */}
         Copyright © {new Date().getFullYear()} {COMPANY_NAME}
       </p>
       <ul class="flex flex-wrap gap-4">
         {legalLinks.map((link) => (
           <li>
-            <a href={link.href} class="text-sm text-white/80 hover:text-white hover:underline underline-offset-4 transition-colors">
+            <a href={link.href} class="text-sm text-neutral-700 hover:text-ink hover:underline underline-offset-4 transition-colors">
               {link.label}
             </a>
           </li>

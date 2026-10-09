@@ -5,7 +5,6 @@ import { Image } from 'astro:assets';
 import type { Review } from '../data/reviews';
 import { pharmacyLinkRel, pharmacyLinkUrl, pharmacySlug } from '../utils/tracking';
 import { starDisplay } from '../utils/stars';
-import type { AccentClass } from '../data/brand';
 
 interface Props {
   review: Review;
@@ -15,11 +14,9 @@ interface Props {
   showProduct?: boolean;
   /** GA4-data-placement, um Slider und Modal auseinanderzuhalten. */
   placement?: string;
-  /** Optionaler Farbbalken oben (bg-yellow/-orange/-red, Folge im Slider); im Modal ohne. */
-  accent?: AccentClass;
 }
 
-const { review, showDate = true, showProduct = true, placement = 'reviews', accent } = Astro.props;
+const { review, showDate = true, showProduct = true, placement = 'reviews' } = Astro.props;
 
 // Barrierefreiheit: Textlinks immer bold UND unterstrichen (siehe ArrowLink.astro);
 // py-2 erhält eine ausreichende Touch-Fläche.
@@ -29,7 +26,6 @@ const ctaClasses =
 
 {/* Weiße Karte mit 1px-Linie (liegt im Slider auf der hellgrauen Sektion), im Modal gleich. */}
 <div class="bg-white border border-divider rounded-card p-4 md:p-6 space-y-3 text-center">
-  {accent && <span class={`accent-bar mx-auto ${accent}`} aria-hidden="true"></span>}
   {/* Apotheken-Logo aus pharmacies.ts (ohne Logo: Name als Text) */}
   {review.logoImage ? (
     <div class="flex items-center justify-center h-12">

@@ -8,7 +8,6 @@ import SliderControls from './SliderControls.astro';
 import ReviewCard from './ReviewCard.astro';
 import { reviewsFor } from '../data/reviews';
 import type { PharmacyProduct } from '../data/pharmacies';
-import { accentAt } from '../data/brand';
 
 interface Props {
   /** Präparat-Key (Produktseiten); ohne Angabe alle Produkte gemischt —
@@ -62,9 +61,9 @@ const displayReviews = reviewsFor(product);
         data-slider-track
         class="flex gap-6 slider-bleed overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 -mb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {displayReviews.map((review, i) => (
+        {displayReviews.map((review) => (
           <div class="snap-start shrink-0 basis-[85%] md:basis-[calc((100%_-_1.5rem)/2)] lg:basis-[calc((100%_-_3rem)/3)] [&>div]:h-full">
-            <ReviewCard review={review} showProduct={!product} placement="reviews-slider" accent={accentAt(i)} />
+            <ReviewCard review={review} showProduct={!product} placement="reviews-slider" />
           </div>
         ))}
       </div>

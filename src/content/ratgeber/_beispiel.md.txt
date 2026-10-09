@@ -9,7 +9,7 @@ title: "Beispielthema: was Sie wissen sollten"
 metaDescription: "Beispielthema: Ursachen, typische Anzeichen und was hilft. Wann ärztlicher Rat sinnvoll ist."
 h1: "Beispielthema: Anzeichen, Ursachen, was hilft"
 breadcrumbLabel: "Beispielthema"
-category: heile-haut # Cluster: gutes-bauchgefuehl | gesunder-mund | heile-haut
+category: reizhusten-im-alltag # Cluster: reizhusten-im-alltag | erkaeltungszeit | woher-der-husten-kommt
 publishDate: 2026-09-14
 lastUpdated: 2026-09-14
 # Produkt-CTA nur mit zugelassenem Produktbezug (HWG); ohne ctaProducts greift die Cluster-Vorgabe.
