@@ -247,10 +247,12 @@ const activeKey: PharmacyProduct = initialProduct ?? pharmacyProducts[0].key;
         }
       });
 
-      // Öffnen-Buttons (Navbar, Mobile-Menü, Produktseiten-CTA).
+      // Öffnen-Buttons (Navbar, Mobile-Menü, Produktseiten-CTA, Produktkarten); ein
+      // data-drawer-product am Button (z. B. "saft") wählt vorher den passenden Tab.
       document.querySelectorAll('[data-open-pharmacy-drawer]').forEach((btn) => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
+          setDrawerProduct(btn.getAttribute('data-drawer-product'));
           this.open();
         });
       });
