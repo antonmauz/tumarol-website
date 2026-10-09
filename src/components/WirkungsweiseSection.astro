@@ -1,0 +1,260 @@
+---
+// WirkungsweiseSection.astro - „So wirkt Dropropizin“: links eine schematische Figur (Kopf bis
+// Bauch) mit Gehirn, Atemwegen und Lunge, rechts drei Erklärungen.
+// Ab lg: feste Bühne im Seitenverhältnis 5:3 (viewBox 1000 × 600). Die Figur belegt die
+// linken 40 % (eigene viewBox 400 × 600, also deckungsgleich), die Pfeile liegen als
+// zweites SVG über der ganzen Bühne, die Texte sitzen absolut auf denselben Höhen (--y).
+// Darunter: Figur und Liste untereinander, die Nummern 1–3 ersetzen die Pfeile.
+// TODO (LARYLIN): Wortlaut fachlich freigeben lassen (HWG: Aussagen zum Wirkmechanismus
+// brauchen einen Beleg in der Fachinformation).
+import Container from './Container.astro';
+
+interface Point {
+  /** Nummer in Figur und Liste. */
+  n: number;
+  title: string;
+  /** true = Dropropizin wirkt hier (farbig), false = wirkt hier nicht (grau). */
+  acts: boolean;
+  text: string;
+  /** Ankerpunkt in der Figur (viewBox 400 × 600); y bestimmt auch die Höhe des Textes. */
+  x: number;
+  y: number;
+}
+
+const points: Point[] = [
+  {
+    n: 1,
+    title: 'Gehirn',
+    acts: false,
+    text: 'Dropropizin setzt nicht im Hustenzentrum des Gehirns an. Es wirkt dort, wo der Hustenreiz entsteht.',
+    x: 252,
+    y: 88,
+  },
+  {
+    n: 2,
+    title: 'Atemwege',
+    acts: true,
+    text: 'In Kehlkopf und Luftröhre sitzen Hustenrezeptoren. Dropropizin dämpft ihre Empfindlichkeit, sodass Reize seltener einen Hustenstoß auslösen.',
+    x: 214,
+    y: 250,
+  },
+  {
+    n: 3,
+    title: 'Lunge',
+    acts: true,
+    text: 'Auch in den Bronchien, den feinen Verzweigungen der Atemwege in der Lunge, beruhigt Dropropizin die gereizten Rezeptoren.',
+    x: 302,
+    y: 410,
+  },
+];
+
+// Ende der Pfeile (Bühnen-Koordinaten 1000 × 600) = linke Kante der Texte (48 %).
+const LINE_END_X = 465;
+---
+
+<section class="px-6 py-16 md:py-20" aria-labelledby="wirkungsweise-title">
+  <Container size="content">
+    <h2 id="wirkungsweise-title" class="mb-4">So wirkt Dropropizin</h2>
+    <p class="max-w-2xl text-lg text-neutral-700 leading-relaxed mb-10 lg:mb-6">
+      Dropropizin wirkt dort, wo der Hustenreiz entsteht: direkt an den Hustenrezeptoren der
+      Atemwege und nicht im Gehirn.
+    </p>
+
+    <div class="wirkung-stage">
+      {/* Figur: schematisch, dekorativ beschriftet über die Liste daneben. */}
+      <figure class="wirkung-figure">
+        <svg
+          viewBox="0 0 400 600"
+          class="w-full h-full"
+          role="img"
+          aria-label="Schematische Figur von Kopf bis Bauch: Gehirn grau (Dropropizin wirkt hier nicht), Atemwege und Lunge farbig hervorgehoben (hier wirkt Dropropizin)."
+        >
+          <defs>
+            <linearGradient id="wirkung-fade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#fff" stop-opacity="0" />
+              <stop offset="0.75" stop-color="#fff" stop-opacity="1" />
+            </linearGradient>
+          </defs>
+
+          {/* Körper: Kopf, Hals, Schultern und Rumpf in warmem Hellgrau; der Rumpf reicht über
+              die viewBox hinaus, damit unten keine Konturlinie sichtbar ist. */}
+          <g fill="var(--color-surface)" stroke="var(--color-divider)" stroke-width="2">
+            <path d="M172 222 C150 238 92 244 62 272 C38 296 30 336 30 380 L30 640 L370 640 L370 380 C370 336 362 296 338 272 C308 244 250 238 228 222 Z" />
+            <rect x="170" y="160" width="60" height="80" rx="18" />
+            <ellipse cx="200" cy="104" rx="72" ry="86" />
+          </g>
+
+          {/* Gehirn: grau, mit Furchen (hier wirkt Dropropizin nicht). */}
+          <g>
+            <path
+              d="M150 92 C142 60 172 34 200 38 C230 34 260 58 252 92 C254 112 236 124 214 120 C206 128 192 128 186 120 C164 124 146 112 150 92 Z"
+              fill="#D9D5CC"
+              stroke="#B9B4A9"
+              stroke-width="2"
+            />
+            <path
+              d="M200 42 L200 118 M172 58 C182 70 168 80 180 92 M228 58 C218 70 232 80 220 92 M160 98 C172 96 176 106 186 104 M240 98 C228 96 224 106 214 104"
+              fill="none"
+              stroke="#B9B4A9"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </g>
+
+          {/* Lunge: zwei Flügel in hellem Gelb. */}
+          <g fill="var(--color-yellow)" fill-opacity="0.35" stroke="var(--color-yellow)" stroke-width="3">
+            <path d="M186 304 C150 290 108 312 96 362 C84 414 90 470 110 496 C130 518 176 508 186 482 Z" />
+            <path d="M214 304 C250 290 292 312 304 362 C316 414 310 470 290 496 C270 518 224 508 214 482 Z" />
+          </g>
+
+          {/* Atemwege: Luftröhre mit Knorpelringen und Bronchialbaum in Orange (hier wirkt Dropropizin). */}
+          <g fill="none" stroke="var(--color-orange)" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M200 168 L200 330" stroke-width="16" />
+            <path
+              d="M192 190 h16 M192 210 h16 M192 230 h16 M192 250 h16 M192 270 h16 M192 290 h16 M192 310 h16"
+              stroke="#fff"
+              stroke-width="3"
+            />
+            <path d="M200 328 C186 342 172 350 158 366 M200 328 C214 342 228 350 242 366" stroke-width="11" />
+            <path
+              d="M158 366 C146 382 134 396 126 418 M158 366 C156 392 152 414 146 440 M158 366 C142 372 128 376 116 384 M242 366 C254 382 266 396 274 418 M242 366 C244 392 248 414 254 440 M242 366 C258 372 272 376 284 384"
+              stroke-width="6"
+            />
+            <path
+              d="M126 418 L116 438 M126 418 L134 444 M146 440 L138 462 M146 440 L156 464 M274 418 L284 438 M274 418 L266 444 M254 440 L262 462 M254 440 L244 464"
+              stroke-width="3.5"
+            />
+          </g>
+
+          {/* Unterer Rand weich ausblenden (Figur endet am Bauch). */}
+          <rect x="0" y="470" width="400" height="132" fill="url(#wirkung-fade)" />
+
+          {/* Nummern an den Ankerpunkten (mobil die Verbindung zur Liste). */}
+          {points.map((p) => (
+            <g>
+              <circle
+                cx={p.x}
+                cy={p.y}
+                r="15"
+                fill={p.acts ? 'var(--color-ink)' : '#fff'}
+                stroke="var(--color-ink)"
+                stroke-width="2.5"
+              />
+              <text
+                x={p.x}
+                y={p.y + 5.5}
+                text-anchor="middle"
+                font-size="16"
+                font-weight="800"
+                fill={p.acts ? '#fff' : 'var(--color-ink)'}
+                aria-hidden="true"
+              >
+                {p.n}
+              </text>
+            </g>
+          ))}
+        </svg>
+      </figure>
+
+      {/* Pfeile (nur ab lg): von den Erklärungen zur Figur, Spitze an der Nummer. */}
+      <svg viewBox="0 0 1000 600" class="wirkung-arrows" aria-hidden="true">
+        <defs>
+          <marker id="wirkung-arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 Z" fill="var(--color-ink)" />
+          </marker>
+        </defs>
+        {points.map((p) => (
+          <line
+            x1={LINE_END_X}
+            y1={p.y}
+            x2={p.x + 20}
+            y2={p.y}
+            stroke="var(--color-ink)"
+            stroke-width="2"
+            stroke-dasharray={p.acts ? undefined : '6 6'}
+            marker-end="url(#wirkung-arrowhead)"
+          />
+        ))}
+      </svg>
+
+      {/* Erklärungen; ab lg absolut auf Höhe ihres Ankerpunkts (--y in % der Bühnenhöhe). */}
+      <ol class="wirkung-list">
+        {points.map((p) => (
+          <li class="wirkung-item" style={`--y: ${(p.y / 600) * 100}%`}>
+            <div class="flex items-center gap-3 mb-2">
+              <span
+                class:list={[
+                  'flex w-8 h-8 shrink-0 items-center justify-center rounded-full border-2 border-ink text-sm font-extrabold',
+                  p.acts ? 'bg-ink text-white' : 'bg-white text-ink',
+                ]}
+                aria-hidden="true"
+              >
+                {p.n}
+              </span>
+              <h3 class="text-lg">{p.title}</h3>
+              <span
+                class:list={[
+                  'rounded-pill px-3 py-0.5 text-xs font-bold',
+                  p.acts ? 'bg-yellow text-ink' : 'bg-surface text-neutral-700 border border-divider',
+                ]}
+              >
+                {p.acts ? 'Wirkt hier' : 'Wirkt hier nicht'}
+              </span>
+            </div>
+            <p class="text-neutral-700 leading-relaxed">{p.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </Container>
+</section>
+
+<style>
+  /* Mobil/Tablet: Figur oben (begrenzte Breite), Liste darunter. */
+  .wirkung-figure {
+    max-width: 18rem;
+    margin: 0 auto 2.5rem;
+    aspect-ratio: 2 / 3;
+  }
+  .wirkung-arrows {
+    display: none;
+  }
+  .wirkung-list {
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  /* Ab lg: Bühne 5:3, Figur links (40 %), Pfeile darüber, Texte rechts auf Ankerhöhe. */
+  @media (min-width: 1024px) {
+    .wirkung-stage {
+      position: relative;
+      aspect-ratio: 5 / 3;
+    }
+    .wirkung-figure {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 40%;
+      max-width: none;
+      margin: 0;
+    }
+    .wirkung-arrows {
+      display: block;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .wirkung-list {
+      display: block;
+    }
+    .wirkung-item {
+      position: absolute;
+      left: 48%;
+      right: 0;
+      top: var(--y);
+      transform: translateY(-50%);
+      max-width: 34rem;
+    }
+  }
+</style>

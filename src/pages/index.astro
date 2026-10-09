@@ -7,9 +7,9 @@ import { produktSources } from '../data/produktSources';
 import RobugenBanner from '../components/RobugenBanner.astro';
 import ReviewSlider from '../components/ReviewSlider.astro';
 import ArticleSlider from '../components/ArticleSlider.astro';
+import WirkungsweiseSection from '../components/WirkungsweiseSection.astro';
 import Container from '../components/Container.astro';
 import { hinweise } from '../data/hinweise';
-import bewertungenBg from '../assets/images/backgrounds/bewertungen-desktop.png';
 ---
 
 <Layout
@@ -64,14 +64,17 @@ import bewertungenBg from '../assets/images/backgrounds/bewertungen-desktop.png'
   {/* ─── 3. PASTILLEN ODER SAFT? (Produktkarten hellgrau auf Weiß) ──────── */}
   <ProductHighlight id="produkte" heading="Pastillen oder Saft?" />
 
-  {/* ─── 4. PRODUKTBEWERTUNGEN (Farbverlauf als Hintergrundbild, Karten weiß) */}
-  <ReviewSlider background={bewertungenBg} />
+  {/* ─── 4. PRODUKTBEWERTUNGEN ──────────────────────────────────────────── */}
+  <ReviewSlider />
 
-  {/* ─── 5. MAGAZIN (Karten hellgrau, Farbbalken Gelb/Orange/Rot) ───────── */}
+  {/* ─── 5. WIRKUNGSWEISE: Figur mit Pfeilen auf Gehirn, Atemwege, Lunge ─── */}
+  <WirkungsweiseSection />
+
+  {/* ─── 6. MAGAZIN (Karten hellgrau, Farbbalken Gelb/Orange/Rot) ───────── */}
   <ArticleSlider heading="Wissenswertes rund um Husten" class="border-t border-divider" />
 
   {/* ─── HERSTELLER: Robugen-Vertrauensmodul ────────────────────────────── */}
-  <RobugenBanner class="bg-surface" />
+  <RobugenBanner />
 
   {/* ─── QUELLEN & HINWEISE ─────────────────────────────────────────────── */}
   <SourcesSection heading="Quellen & Hinweise" items={[...produktSources, ...hinweise]} />
