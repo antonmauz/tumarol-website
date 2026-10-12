@@ -1,6 +1,6 @@
 ---
-// FAQ-Modul: gelber Balken in Content-Breite, links die Überschrift, rechts das
-// Akkordeon (03.09.2026). answer unterstützt **fett** und [Text](url);
+// FAQ-Modul in Content-Breite ohne eigene Fläche: links die Überschrift, rechts das
+// Akkordeon zwischen feinen Trennlinien. answer unterstützt **fett** und [Text](url);
 // schema=true gibt FAQPage-JSON-LD aus.
 import Container from '../Container.astro';
 import { jsonLd } from '../../utils/jsonLd';
@@ -58,25 +58,22 @@ function stripMd(text: string): string {
 {items.length > 0 && (
   <section id={id} class={`py-16 md:py-20 px-6 scroll-mt-24 ${sectionClass}`}>
     <Container size="content">
-      {/* Gelber Balken im hellen Markengelb der Produktkarten; Fragen in der Leitfarbe. */}
-      <div class="faq-bar rounded-xl px-6 py-10 md:px-12 md:py-14">
-        <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-8 lg:gap-16">
-          <h2>{heading}</h2>
+      <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-8 lg:gap-16">
+        <h2>{heading}</h2>
 
-          <div class="divide-y divide-blue/30">
-            {items.map((item) => (
-              <details class="group">
-                <summary class="flex items-center justify-between gap-6 cursor-pointer list-none py-5 text-lg text-blue [&::-webkit-details-marker]:hidden">
-                  <span>{item.question}</span>
-                  {/* Plus → beim Öffnen um 45° gedreht (×) */}
-                  <svg class="w-6 h-6 text-blue shrink-0 transition-transform group-open:rotate-45" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14" />
-                  </svg>
-                </summary>
-                <p class="pb-5 pr-12 text-neutral-700 leading-relaxed" set:html={mdInline(item.answer)} />
-              </details>
-            ))}
-          </div>
+        <div class="divide-y divide-divider border-y border-divider">
+          {items.map((item) => (
+            <details class="group">
+              <summary class="flex items-center justify-between gap-6 cursor-pointer list-none py-5 text-lg text-blue [&::-webkit-details-marker]:hidden">
+                <span>{item.question}</span>
+                {/* Plus → beim Öffnen um 45° gedreht (×) */}
+                <svg class="w-6 h-6 text-blue shrink-0 transition-transform group-open:rotate-45" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14" />
+                </svg>
+              </summary>
+              <p class="pb-5 pr-12 text-neutral-700 leading-relaxed" set:html={mdInline(item.answer)} />
+            </details>
+          ))}
         </div>
       </div>
     </Container>
@@ -94,10 +91,3 @@ function stripMd(text: string): string {
     )}
   </section>
 )}
-
-<style>
-  /* Gleiche Fläche wie die Produktkarten (Token in global.css). */
-  .faq-bar {
-    background: var(--color-brand-soft);
-  }
-</style>

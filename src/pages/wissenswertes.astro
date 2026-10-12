@@ -36,27 +36,15 @@ const breadcrumbItems = [
 
 <Layout
   title="Wissenswertes"
-  description="Wissenswertes zu Bauch, Mund und Haut: verständliche Ratgeber zu typischen Beschwerden, was im Alltag hilft und wann ein Arztbesuch ratsam ist."
+  description="Wissenswertes rund um Husten: verständliche Ratgeber zu Reizhusten und Erkältung, was im Alltag hilft und wann ein Arztbesuch ratsam ist."
 >
 
   {/* ─── NAVIGATION BREADCRUMBS ──────────────────────────────────────── */}
   <BreadcrumbSection items={breadcrumbItems} />
 
-  {/* Oben bewusst knapp: Breadcrumbs und H1 bilden einen zusammenhängenden Seitenkopf. */}
-  {/* ─── HERO / INTRO SECTION ────────────────────────────────────────── */}
-  <section class="pt-4 pb-12 md:pt-6 md:pb-16 px-6">
-    <Container size="content">
-      <h1 class="mb-6">
-        Wissenswertes
-      </h1>
-      {/* Produktneutrale Einleitung (07.09.2026). */}
-      <p class="text-xl text-neutral-600 leading-relaxed max-w-3xl">
-        Verständliche Antworten rund um Bauch, Mund und Haut: Was hinter typischen
-        Beschwerden steckt, was im Alltag hilft und wann ein Arztbesuch ratsam ist –
-        sortiert nach den drei Themen Gutes Bauchgefühl, Gesunder Mund und Heile Haut.
-      </p>
-    </Container>
-  </section>
+  {/* Kein sichtbarer Seitenkopf: die Breadcrumbs führen direkt zu den Themen. Die H1
+      bleibt für Screenreader und Suchmaschinen erhalten (sr-only). */}
+  <h1 class="sr-only">Wissenswertes</h1>
 
   {/* ─── ARTIKEL (nach Themen-Cluster, Layouts im Wechsel) ─────────────── */}
   {/* Nach chase.de/blog: Cluster abwechselnd als
