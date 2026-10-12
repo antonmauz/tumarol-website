@@ -10,6 +10,9 @@ import ArticleSlider from '../components/ArticleSlider.astro';
 import WirkungsweiseSection from '../components/WirkungsweiseSection.astro';
 import Container from '../components/Container.astro';
 import { hinweise } from '../data/hinweise';
+import { Image } from 'astro:assets';
+import heroImage from '../assets/images/hero/larylin-header.png';
+import { productImages } from '../data/productImages';
 ---
 
 <Layout
@@ -18,29 +21,54 @@ import { hinweise } from '../data/hinweise';
   description="Larylin® Husten-Stiller von ROBUGEN mit dem Wirkstoff Dropropizin, als Pastillen oder Saft. Wo Sie Larylin® kaufen können und Wissenswertes rund um Husten."
 >
 
-  {/* ─── 1. HERO: links Text + Buttons, rechts Packshots ────────────────── */}
-  <section class="px-6 pt-10 pb-16 md:pt-16 md:pb-20">
-    <Container size="content" class="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
-      <div>
-        <p class="mb-5 flex items-center gap-3 text-sm font-bold uppercase tracking-wider">
-          <span class="accent-bar bg-yellow" aria-hidden="true"></span>
-          Husten-Stiller mit Dropropizin
-        </p>
-        <h1 class="mb-6">Bei trockenem <span class="mark">Reizhusten</span>.</h1>
-        {/* TODO Inhalte: Platzhaltertext bis zur fachlichen Freigabe. */}
-        <p class="mb-8 max-w-xl text-lg text-neutral-700">
-          Larylin® Husten-Stiller mit dem Wirkstoff Dropropizin – zur Wahl als Pastillen
-          oder als Saft.
-        </p>
+  {/* ─── 1. HERO: Headermotiv über die volle Breite, H1 + Buttons rechts ──── */}
+  {/* Motiv: Frau links (ca. 6–38 % der Bildbreite), rechts freie Wandfläche für den Text.
+      Ab lg liegt der Text über dem Bild: Mindesthöhe = Seitenverhältnis des Motivs (max.
+      820px), wächst mit dem Inhalt; object-cover beschneidet dann rechts bzw. unten.
+      Darunter steht das Bild als Ausschnitt (Frau links, rechts freie Wand), die Packshots
+      liegen dort unten rechts über dem Bild, der Text folgt darunter. */}
+  <section class="relative lg:flex lg:min-h-[min(calc(100vw*821/1916),820px)] lg:items-center lg:py-14">
+    <Image
+      src={heroImage}
+      alt="Frau atmet mit geschlossenen Augen tief ein; eingezeichnet sind Gehirn (grau), Atemwege (orange) und Lunge (gelb)."
+      widths={[800, 1280, 1916]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      class="aspect-[3/2] w-full object-cover object-left sm:aspect-[16/9] lg:absolute lg:inset-0 lg:aspect-auto lg:h-full lg:object-[0%_15%]"
+    />
+    <Container size="content" class="relative w-full px-6 pt-10 pb-16 lg:py-0">
+      <div class="lg:ml-auto lg:w-[48%]">
+        <h1 class="hero-title mb-8 lg:mb-6">Larylin<sup class="hero-reg">®</sup> gegen <span class="mark">Reizhusten</span></h1>
+
+        {/* Packshots: Rahmen = Umriss der beiden Schachteln (Saft hinten, Pastillen
+            davor); die freigestellten PNGs ragen mit ihrem transparenten Rand darüber
+            hinaus, daher pointer-events-none. Positionen in % des Rahmens. Unter lg
+            liegt die Gruppe absolut über dem Bild (Bezug: Container, der direkt unter dem
+            Bild beginnt), ab lg steht sie im Fluss zwischen H1 und Buttons. */}
+        <div class="hero-packs aspect-[1.107]">
+          <Image
+            src={productImages.saft.cardFront.src}
+            alt={productImages.saft.cardFront.alt}
+            widths={[300, 600]}
+            sizes="(min-width: 1024px) 260px, 36vw"
+            loading="eager"
+            class="hero-pack absolute left-[-25.6%] top-[-3.3%] w-[92.2%] max-w-none"
+          />
+          <Image
+            src={productImages.pastillen.cardFront.src}
+            alt={productImages.pastillen.cardFront.alt}
+            widths={[300, 600]}
+            sizes="(min-width: 1024px) 230px, 31vw"
+            loading="eager"
+            class="hero-pack absolute left-[22.9%] top-[14.5%] w-[79.8%] max-w-none"
+          />
+        </div>
+
         <div class="flex flex-col gap-3 sm:flex-row">
-          <Button openDrawer>In der Apotheke kaufen</Button>
+          <Button openDrawer>Jetzt kaufen</Button>
           <Button href="#produkte" variant="outline">Pastillen oder Saft?</Button>
         </div>
-      </div>
-
-      {/* Packshots: Platzhalter, bis die Bilder unter src/assets/images/products/ liegen. */}
-      <div class="flex aspect-[4/3] items-center justify-center rounded-card bg-surface text-sm font-semibold text-neutral-500">
-        Packshots folgen
       </div>
     </Container>
   </section>
@@ -80,3 +108,49 @@ import { hinweise } from '../data/hinweise';
   <SourcesSection heading="Quellen & Hinweise" items={[...produktSources, ...hinweise]} />
 
 </Layout>
+
+<style>
+  /* Hero-H1 größer als die globale H1 (eine Zeile pro Wortgruppe auf Desktop). */
+  .hero-title {
+    font-size: clamp(3rem, 6.5vw, 5.5rem);
+    line-height: 0.98;
+  }
+  /* Packshots: Kontaktschatten; transparente Ränder sollen keine Klicks abfangen. */
+  .hero-pack {
+    pointer-events: none;
+    filter: drop-shadow(0 12px 14px rgb(0 0 0 / 0.14));
+  }
+  /* Mobil (3:2-Ausschnitt, Frau endet bei ~59 % der Breite) und Tablet (16:9, ~50 %):
+     Gruppe unten rechts über dem Bild. Ab lg im Fluss. */
+  .hero-packs {
+    position: absolute;
+    right: 4.5vw;
+    bottom: calc(100% + 5vw);
+    width: 36vw;
+  }
+  @media (min-width: 40rem) {
+    .hero-packs {
+      right: 8vw;
+      bottom: calc(100% + 4vw);
+      width: min(30vw, 280px);
+    }
+  }
+  @media (min-width: 64rem) {
+    .hero-packs {
+      position: relative;
+      right: auto;
+      bottom: auto;
+      width: 260px;
+      margin-bottom: 2rem;
+    }
+  }
+  @media (min-width: 80rem) {
+    .hero-packs { width: 280px; }
+  }
+  .hero-reg {
+    font-size: 0.35em;
+    vertical-align: super;
+    line-height: 0;
+    font-weight: 600;
+  }
+</style>

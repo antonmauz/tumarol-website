@@ -52,9 +52,10 @@ const activeKey: PharmacyProduct = initialProduct ?? pharmacyProducts[0].key;
 
     {/* Body */}
     <div class="flex-1 px-6 py-6 space-y-6 overflow-y-auto">
-      {/* Produkt-Tabs als Textlinks im Navbar-Stil (aktiv = blau + unterstrichen);
+      {/* Produkt-Tabs teilen sich die volle Drawer-Breite; aktiv = gelb unterstrichen wie
+          die aktiven Navbar-Links. Optik hängt nur an aria-selected (das Skript setzt es).
           Tastatur: Pfeiltasten, Pos1/Ende wechseln den Tab, nur der aktive ist im Tab-Fokus. */}
-      <div class="flex items-center gap-x-5 gap-y-1 flex-wrap border-b border-divider pb-2" role="tablist" aria-label="Produkt wählen">
+      <div class="flex" role="tablist" aria-label="Produkt wählen">
         {pharmacyProducts.map((product) => (
           <button
             type="button"
@@ -64,12 +65,7 @@ const activeKey: PharmacyProduct = initialProduct ?? pharmacyProducts[0].key;
             aria-selected={product.key === activeKey ? 'true' : 'false'}
             aria-controls={`pharmacy-panel-${product.key}`}
             tabindex={product.key === activeKey ? 0 : -1}
-            class:list={[
-              'py-1 text-sm font-medium transition-colors cursor-pointer',
-              product.key === activeKey
-                ? 'text-primary underline decoration-2 underline-offset-4'
-                : 'text-neutral-600 hover:text-primary-dark',
-            ]}
+            class="flex-1 py-3 text-center text-base font-bold transition-colors cursor-pointer text-neutral-600 hover:text-ink aria-selected:text-ink aria-selected:underline aria-selected:decoration-yellow aria-selected:decoration-[3px] aria-selected:underline-offset-[6px]"
           >
             {product.label}
           </button>
@@ -193,17 +189,11 @@ const activeKey: PharmacyProduct = initialProduct ?? pharmacyProducts[0].key;
     productPanels.forEach((panel) => {
       panel.classList.toggle('hidden', panel.getAttribute('data-product-panel') !== key);
     });
-    // Klassen synchron zum Markup oben halten (Navbar-Stil: aktiv = blau + unterstrichen).
+    // Tab-Optik folgt aria-selected (aria-selected:-Utilities im Markup).
     drawerTabs.forEach((tab) => {
       const active = tab.getAttribute('data-drawer-tab') === key;
       tab.setAttribute('aria-selected', active ? 'true' : 'false');
       tab.setAttribute('tabindex', active ? '0' : '-1');
-      tab.classList.toggle('text-primary', active);
-      tab.classList.toggle('underline', active);
-      tab.classList.toggle('decoration-2', active);
-      tab.classList.toggle('underline-offset-4', active);
-      tab.classList.toggle('text-neutral-600', !active);
-      tab.classList.toggle('hover:text-primary-dark', !active);
     });
   }
 

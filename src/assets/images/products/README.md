@@ -29,9 +29,9 @@ sprechend nach Motiv, Slides nummeriert.
 | Produktkarte, Hover (`cardHover`)       | Packshot: Faltschachtel mit Inhalt (Beutel / Flasche / Tube) |
 | Bild-Slider Produktseite (`gallery`)    | die nummerierten Slides, Reihenfolge = Slider-Reihenfolge |
 
-Der Startseiten-Hero nutzt keine Packshots aus diesem Ordner, sondern ein
-Headermotiv mit einkomponierten Packungen
-(`src/assets/images/hero/kamillin-header.jpg`).
+Der Startseiten-Hero nutzt keine Packshots aus diesem Ordner, sondern das
+Headermotiv über die volle Breite
+(`src/assets/images/hero/larylin-header.png`).
 
 **Einbinden:** ausschließlich über `src/data/productImages.ts` — dort Import
 ergänzen und im Produkt-Eintrag mit Alt-Text eintragen. Die Komponenten
