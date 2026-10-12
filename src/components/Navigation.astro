@@ -51,7 +51,8 @@ const isActive = (link: NavItem): boolean => {
 const dropdownId = (link: NavItem) => `nav-dropdown-${link.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 
 
-// Navbar-Konzept: fester weißer Balken über die volle Breite; beim Scrollen oder
+// Navbar-Konzept: sticky weißer Balken über die volle Breite (unter einer optionalen
+// TopBar, die beim Scrollen herausläuft); beim Scrollen oder
 // offenem Mobile-Menü setzt das Script `data-scrolled`, dann erscheint unten eine
 // Trennlinie. Position und Breite ändern sich nie.
 const linkBase = 'text-base font-semibold transition-colors text-ink hover:text-black';
@@ -61,7 +62,7 @@ const linkActive = 'underline decoration-yellow decoration-[3px] underline-offse
 
 <header
   id="site-header"
-  class="group fixed top-0 left-0 right-0 z-50"
+  class="group sticky top-0 z-50"
 >
   {/* Der Balken: fest oben, volle Breite, immer weiß; beim Scrollen kommt nur eine
       1px-Trennlinie dazu (Farbwechsel, keine Bewegung). */}
@@ -179,8 +180,9 @@ const linkActive = 'underline decoration-yellow decoration-[3px] underline-offse
     </nav>
   </Container>
 
-  {/* Mobile Menu: flache Liste mit zwei Akkordeons (Teil des weißen Balkens) */}
-  <div id="mobile-menu" class="hidden md:hidden border-t border-divider bg-white max-h-[calc(100vh-5rem)] overflow-y-auto">
+  {/* Mobile Menu: flache Liste mit zwei Akkordeons; absolut unter dem Balken, damit es
+      den Seiteninhalt der sticky Navbar nicht nach unten schiebt. */}
+  <div id="mobile-menu" class="hidden md:hidden absolute inset-x-0 top-full border-t border-b border-divider bg-white max-h-[calc(100vh-5rem)] overflow-y-auto">
     <Container size="wide" class="px-6 py-2">
       <nav class="divide-y divide-divider" aria-label="Mobile Navigation">
 

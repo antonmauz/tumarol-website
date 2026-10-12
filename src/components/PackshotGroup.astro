@@ -1,0 +1,46 @@
+---
+// Beide Faltschachteln als Gruppe: Saft hinten links, Pastillen leicht tiefer davor.
+// Der Rahmen (Seitenverhältnis 1.107) entspricht dem Umriss der beiden Schachteln; die
+// freigestellten PNGs ragen mit ihrem transparenten Rand darüber hinaus (Positionen in %
+// des Rahmens, ausgemessen an den Packshots: Schachtel-Unterkante bei 96,7 % der
+// Bildhöhe), daher pointer-events-none. Breite/Position bestimmt der Aufrufer über `class`.
+// Genutzt im Startseiten-Hero und im TrustBanner.
+import { Image } from 'astro:assets';
+import { productImages } from '../data/productImages';
+
+interface Props {
+  class?: string;
+  /** sizes-Attribut der Saft-Schachtel; die Pastillen sind ~13 % schmaler. */
+  sizes?: string;
+  loading?: 'eager' | 'lazy';
+}
+
+const { class: extra = '', sizes = '260px', loading = 'lazy' } = Astro.props;
+---
+
+<div class:list={['relative aspect-[1.107]', extra]}>
+  <Image
+    src={productImages.saft.cardFront.src}
+    alt={productImages.saft.cardFront.alt}
+    widths={[300, 600, 900]}
+    sizes={sizes}
+    loading={loading}
+    class="packshot absolute left-[-25.6%] top-[-3.3%] w-[92.2%] max-w-none"
+  />
+  <Image
+    src={productImages.pastillen.cardFront.src}
+    alt={productImages.pastillen.cardFront.alt}
+    widths={[300, 600, 900]}
+    sizes={sizes}
+    loading={loading}
+    class="packshot absolute left-[22.9%] top-[14.5%] w-[79.8%] max-w-none"
+  />
+</div>
+
+<style>
+  /* Weicher Kontaktschatten, damit die Schachteln stehen statt zu schweben. */
+  .packshot {
+    pointer-events: none;
+    filter: drop-shadow(0 12px 14px rgb(0 0 0 / 0.14));
+  }
+</style>

@@ -1,0 +1,92 @@
+---
+// Dünner Info-Balken über der Navbar (nur Startseite, per Layout-Prop `topBar`). Liegt im
+// normalen Fluss ganz oben: beim Scrollen läuft er aus dem Bild, die sticky Navbar rückt
+// an den oberen Rand. Hintergrund = Verlauf des „Nach oben“-Bands (BackToTop.astro).
+// Die Botschaften wechseln alle 10 s; Pfeile links/rechts wechseln manuell. Hover oder
+// Fokus im Balken pausiert den Wechsel (WCAG 2.2.2).
+// TODO (LARYLIN): Wortlaut fachlich freigeben lassen (HWG).
+const messages = ['Gegen Reizhusten', 'Gegen Krampfhusten', 'Hergestellt in Deutschland'];
+
+const arrowBtn =
+  'flex h-7 w-7 shrink-0 items-center justify-center rounded-pill text-ink hover:bg-white/50 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/60';
+---
+
+<div class="top-bar w-full" data-top-bar role="region" aria-roledescription="Laufband" aria-label="Hinweise">
+  <div class="mx-auto flex h-9 max-w-md items-center justify-between gap-3 px-4">
+    <button type="button" class={arrowBtn} data-top-bar-prev aria-label="Vorheriger Hinweis">
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+
+    {/* Alle Texte in derselben Grid-Zelle: Breite bleibt stabil, Wechsel per Überblendung. */}
+    <p class="grid flex-1 text-center text-xs font-semibold uppercase tracking-wide text-ink">
+      {messages.map((text, i) => (
+        <span
+          data-top-bar-item
+          class:list={['col-start-1 row-start-1 transition-opacity duration-300', i === 0 ? 'opacity-100' : 'opacity-0']}
+          aria-hidden={i === 0 ? undefined : 'true'}
+        >
+          {text}
+        </span>
+      ))}
+    </p>
+
+    <button type="button" class={arrowBtn} data-top-bar-next aria-label="Nächster Hinweis">
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  </div>
+</div>
+
+<style>
+  .top-bar {
+    background: linear-gradient(90deg, #fde79a 0%, #fff4d8 45%, #fde3c0 70%, #fdcb98 100%);
+  }
+</style>
+
+<script>
+  const INTERVAL_MS = 10_000;
+
+  document.querySelectorAll<HTMLElement>('[data-top-bar]').forEach((bar) => {
+    const items = Array.from(bar.querySelectorAll<HTMLElement>('[data-top-bar-item]'));
+    if (items.length < 2) return;
+    let index = 0;
+    let timer: number | undefined;
+    let paused = false;
+
+    const show = (next: number) => {
+      index = (next + items.length) % items.length;
+      items.forEach((item, i) => {
+        const active = i === index;
+        item.classList.toggle('opacity-100', active);
+        item.classList.toggle('opacity-0', !active);
+        if (active) item.removeAttribute('aria-hidden');
+        else item.setAttribute('aria-hidden', 'true');
+      });
+    };
+
+    // Timer nach jedem manuellen Wechsel neu starten, damit der nächste Text volle 10 s steht.
+    const restart = () => {
+      window.clearInterval(timer);
+      if (!paused) timer = window.setInterval(() => show(index + 1), INTERVAL_MS);
+    };
+
+    bar.querySelector('[data-top-bar-prev]')?.addEventListener('click', () => { show(index - 1); restart(); });
+    bar.querySelector('[data-top-bar-next]')?.addEventListener('click', () => { show(index + 1); restart(); });
+
+    const pause = () => { paused = true; window.clearInterval(timer); };
+    const resume = () => {
+      if (bar.matches(':hover') || bar.contains(document.activeElement)) return;
+      paused = false;
+      restart();
+    };
+    bar.addEventListener('mouseenter', pause);
+    bar.addEventListener('mouseleave', resume);
+    bar.addEventListener('focusin', pause);
+    bar.addEventListener('focusout', () => setTimeout(resume, 0));
+
+    restart();
+  });
+</script>

@@ -18,10 +18,11 @@ interface Props {
 
 const { review, showDate = true, showProduct = true, placement = 'reviews' } = Astro.props;
 
-// Barrierefreiheit: Textlinks immer bold UND unterstrichen (siehe ArrowLink.astro);
+// Barrierefreiheit: Textlinks immer bold UND unterstrichen (siehe ArrowLink.astro); bei
+// Hover/Tastaturfokus wird der Unterstrich gelb und der Pfeil rückt vor (wie ArticleTile);
 // py-2 erhält eine ausreichende Touch-Fläche.
 const ctaClasses =
-  'inline-flex items-center justify-center gap-2 py-2 text-primary font-bold hover:text-primary-dark transition-colors text-sm';
+  'group inline-flex items-center justify-center gap-2 py-2 text-ink font-bold text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink';
 ---
 
 {/* Weiße Karte mit 1px-Linie (liegt im Slider auf der hellgrauen Sektion), im Modal gleich. */}
@@ -64,8 +65,8 @@ const ctaClasses =
     aria-label={`${review.ctaLabel} – ${review.productName} bei ${review.pharmacy} (öffnet in neuem Tab)`}
     class={ctaClasses}
   >
-    <span class="underline underline-offset-4">{review.ctaLabel}</span>
-    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+    <span class="underline underline-offset-4 decoration-2 transition-colors group-hover:decoration-yellow group-focus-visible:decoration-yellow">{review.ctaLabel}</span>
+    <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-focus-visible:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
     </svg>
   </a>

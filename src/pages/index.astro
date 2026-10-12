@@ -8,14 +8,16 @@ import RobugenBanner from '../components/RobugenBanner.astro';
 import ReviewSlider from '../components/ReviewSlider.astro';
 import ArticleSlider from '../components/ArticleSlider.astro';
 import WirkungsweiseSection from '../components/WirkungsweiseSection.astro';
+import TrustBanner from '../components/TrustBanner.astro';
 import Container from '../components/Container.astro';
 import { hinweise } from '../data/hinweise';
 import { Image } from 'astro:assets';
 import heroImage from '../assets/images/hero/larylin-header.png';
-import { productImages } from '../data/productImages';
+import PackshotGroup from '../components/PackshotGroup.astro';
 ---
 
 <Layout
+  topBar
   title="Larylin® Husten-Stiller – bei trockenem Reizhusten"
   titleSuffix={false}
   description="Larylin® Husten-Stiller von ROBUGEN mit dem Wirkstoff Dropropizin, als Pastillen oder Saft. Wo Sie Larylin® kaufen können und Wissenswertes rund um Husten."
@@ -41,29 +43,9 @@ import { productImages } from '../data/productImages';
       <div class="lg:ml-auto lg:w-[48%]">
         <h1 class="hero-title mb-8 lg:mb-6">Larylin<sup class="hero-reg">®</sup> gegen <span class="mark">Reizhusten</span></h1>
 
-        {/* Packshots: Rahmen = Umriss der beiden Schachteln (Saft hinten, Pastillen
-            davor); die freigestellten PNGs ragen mit ihrem transparenten Rand darüber
-            hinaus, daher pointer-events-none. Positionen in % des Rahmens. Unter lg
-            liegt die Gruppe absolut über dem Bild (Bezug: Container, der direkt unter dem
-            Bild beginnt), ab lg steht sie im Fluss zwischen H1 und Buttons. */}
-        <div class="hero-packs aspect-[1.107]">
-          <Image
-            src={productImages.saft.cardFront.src}
-            alt={productImages.saft.cardFront.alt}
-            widths={[300, 600]}
-            sizes="(min-width: 1024px) 260px, 36vw"
-            loading="eager"
-            class="hero-pack absolute left-[-25.6%] top-[-3.3%] w-[92.2%] max-w-none"
-          />
-          <Image
-            src={productImages.pastillen.cardFront.src}
-            alt={productImages.pastillen.cardFront.alt}
-            widths={[300, 600]}
-            sizes="(min-width: 1024px) 230px, 31vw"
-            loading="eager"
-            class="hero-pack absolute left-[22.9%] top-[14.5%] w-[79.8%] max-w-none"
-          />
-        </div>
+        {/* Packshots: unter lg absolut über dem Bild (Bezug: Container, der direkt unter
+            dem Bild beginnt), ab lg im Fluss zwischen H1 und Buttons (CSS unten). */}
+        <PackshotGroup class="hero-packs" sizes="(min-width: 1024px) 260px, 36vw" loading="eager" />
 
         <div class="flex flex-col gap-3 sm:flex-row">
           <Button openDrawer>Jetzt kaufen</Button>
@@ -98,8 +80,11 @@ import { productImages } from '../data/productImages';
   {/* ─── 5. WIRKUNGSWEISE: Figur mit Pfeilen auf Gehirn, Atemwege, Lunge ─── */}
   <WirkungsweiseSection />
 
+  {/* ─── VERTRAUEN-BANNER: Packshots + vier Punkte auf Studio-Hintergrund ─── */}
+  <TrustBanner />
+
   {/* ─── 6. MAGAZIN (Karten hellgrau, Farbbalken Gelb/Orange/Rot) ───────── */}
-  <ArticleSlider heading="Wissenswertes rund um Husten" class="border-t border-divider" />
+  <ArticleSlider heading="Wissenswertes rund um Husten" />
 
   {/* ─── HERSTELLER: Robugen-Vertrauensmodul ────────────────────────────── */}
   <RobugenBanner />
@@ -115,28 +100,24 @@ import { productImages } from '../data/productImages';
     font-size: clamp(3rem, 6.5vw, 5.5rem);
     line-height: 0.98;
   }
-  /* Packshots: Kontaktschatten; transparente Ränder sollen keine Klicks abfangen. */
-  .hero-pack {
-    pointer-events: none;
-    filter: drop-shadow(0 12px 14px rgb(0 0 0 / 0.14));
-  }
-  /* Mobil (3:2-Ausschnitt, Frau endet bei ~59 % der Breite) und Tablet (16:9, ~50 %):
+  /* PackshotGroup im Hero (global, weil die Klasse am Komponenten-Root sitzt).
+     Mobil (3:2-Ausschnitt, Frau endet bei ~59 % der Breite) und Tablet (16:9, ~50 %):
      Gruppe unten rechts über dem Bild. Ab lg im Fluss. */
-  .hero-packs {
+  :global(.hero-packs) {
     position: absolute;
     right: 4.5vw;
     bottom: calc(100% + 5vw);
     width: 36vw;
   }
   @media (min-width: 40rem) {
-    .hero-packs {
+    :global(.hero-packs) {
       right: 8vw;
       bottom: calc(100% + 4vw);
       width: min(30vw, 280px);
     }
   }
   @media (min-width: 64rem) {
-    .hero-packs {
+    :global(.hero-packs) {
       position: relative;
       right: auto;
       bottom: auto;
@@ -145,7 +126,7 @@ import { productImages } from '../data/productImages';
     }
   }
   @media (min-width: 80rem) {
-    .hero-packs { width: 280px; }
+    :global(.hero-packs) { width: 280px; }
   }
   .hero-reg {
     font-size: 0.35em;

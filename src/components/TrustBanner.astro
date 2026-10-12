@@ -1,62 +1,53 @@
 ---
-// TrustBanner.astro - Vertrauensanker: links Wort-Bild-Marke, rechts vier Vertrauenspunkte.
+// TrustBanner.astro – Vertrauensanker über die volle Seitenbreite: Studio-Hintergrund
+// (larylin-vertrauensbanner-bg.png, Wand oben, heller Boden ab ~78 % der Bildhöhe),
+// links die beiden Packshots auf dem Boden, rechts vier Punkte mit Haken.
+// Hintergrund unten verankert (object-bottom), damit der Boden bei jeder Höhe unten
+// liegt; der untere Innenabstand stellt die Schachteln auf den Boden.
+// TODO (LARYLIN): Wortlaut fachlich freigeben lassen (HWG, v. a. „Wirkung direkt in
+// Lunge und Bronchien“).
 import { Image } from 'astro:assets';
 import Container from './Container.astro';
-// Wort-Bild-Marke „KAMILLIN® von ROBUGEN" (dieselbe Quelle wie das OG-Bild).
-import logo from '../assets/images/logo/kamillin-og-default.png';
+import PackshotGroup from './PackshotGroup.astro';
+import background from '../assets/images/backgrounds/larylin-vertrauensbanner-bg.png';
 
-// Vertrauenspunkte (Wortlaut Anton, 07.09.2026; erster Punkt 10.09.2026).
 const trustPoints = [
-  { title: 'Entzündungshemmend', text: 'und wundheilend' },
-  { title: 'Eigener Anbau', text: 'In Thüringen' },
-  { title: 'Alles in einer Hand', text: 'Feld bis Flasche' },
-  { title: 'Geprüfte Qualität', text: 'Jede Charge' },
+  'Gegen Reizhusten',
+  'Gegen Krampfhusten',
+  'Wirkung direkt in Lunge und Bronchien',
+  'Hergestellt in Deutschland',
 ];
 ---
 
-{/* Gelbe Markenfläche — Farbregel (global.css): Text auf Gelb immer Blau #10108f.
-    Als abgesetzter Balken in zentraler Balkenbreite (bar-w/max-w-bar, global.css):
-    nie breiter als die Navbar. */}
-<section>
-  <div class="bar-w max-w-bar mx-auto rounded-xl bg-brand py-14 md:py-16 px-6">
-  {/* Bewusst "wide" (max-w-7xl): breiter als der übrige Inhalt. */}
-  <Container size="wide">
-    {/* Ab lg: Logo/Claim linksbündig, die vier Punkte rechtsbündig — Freiraum dazwischen. */}
-    <div class="flex flex-col lg:flex-row items-center gap-8 lg:justify-between">
+<section class="relative overflow-hidden px-6 pt-14 pb-10 md:pt-16 lg:pb-[clamp(2.5rem,4vw,4.5rem)]" aria-label="Larylin® auf einen Blick">
+  <Image
+    src={background}
+    alt=""
+    widths={[800, 1280, 1916]}
+    sizes="100vw"
+    loading="lazy"
+    class="absolute inset-0 h-full w-full object-cover object-bottom"
+  />
 
-      {/* Links: Wort-Bild-Marke ohne separaten Claim; items-center am Eltern-Flex
-          hält sie vertikal auf Höhe der Vertrauenspunkte, linksbündig wie diese. */}
-      <div class="shrink-0 w-full lg:w-auto flex justify-start">
-        <Image
-          src={logo}
-          alt="KAMILLIN® von ROBUGEN"
-          height={192}
-          loading="lazy"
-          class="h-14 sm:h-16 w-auto"
-        />
-      </div>
-
-      {/* Rechts: vier Vertrauenspunkte im 2×2-Raster (auch mobil), ab lg eine Reihe.
-          Mobil kleinere Schrift, engerer Abstand zum Haken und Silbentrennung
-          (hyphens-auto, min-w-0 + break-words), damit lange Wörter in die halbe Kartenbreite passen. */}
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-x-4 sm:gap-x-6 lg:gap-x-10 gap-y-6 sm:gap-y-8 w-full lg:w-auto max-sm:text-sm">
-        {trustPoints.map((point) => (
-          <div class="flex items-start gap-2 sm:gap-3">
-            {/* Doppelter Haken in Blau, ohne Hintergrund */}
-            <svg class="w-6 h-6 sm:w-7 sm:h-7 text-blue shrink-0 mt-0 sm:mt-0.5" fill="none" viewBox="0 0 28 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M2 13l5 5L17 8" />
-              <path stroke-linecap="round" stroke-linejoin="round" d="M11 13l5 5L26 8" />
-            </svg>
-            <div class="min-w-0 hyphens-auto break-words">
-              {/* Hierarchie über Schriftgewicht — auf Gelb sind alle Texte blau. */}
-              <p class="font-semibold text-blue">{point.title}</p>
-              <p class="text-blue">{point.text}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
+  {/* Mobil: Punkte oben, Packshots darunter auf dem Boden; ab md nebeneinander,
+      Packshots links unten, Punkte rechts vertikal mittig. */}
+  <Container size="content" class="relative grid items-end gap-10 md:grid-cols-2 md:gap-14">
+    <div class="order-2 flex justify-center md:order-1">
+      <PackshotGroup class="w-[240px] sm:w-[300px] lg:w-[360px]" sizes="(min-width: 1024px) 340px, 280px" />
     </div>
+
+    <ul class="order-1 space-y-5 self-center md:order-2">
+      {trustPoints.map((point) => (
+        <li class="flex items-center gap-4">
+          {/* Haken in Ink auf gelbem Kreis (Markengelb). */}
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-yellow text-ink" aria-hidden="true">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </span>
+          <span class="text-lg font-bold text-ink md:text-xl">{point}</span>
+        </li>
+      ))}
+    </ul>
   </Container>
-  </div>
 </section>

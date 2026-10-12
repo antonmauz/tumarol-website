@@ -1,21 +1,22 @@
 ---
-// Larylin-Logo: Bildmarke aus drei eckigen Balken (Gelb, Orange, Rot) vor dem Schriftzug.
-// tone="dark" auf hellem Grund (Navigation, Footer), tone="light" auf dunklem Grund.
+// Larylin-Logo (Wort-Bild-Marke „Larylin® Husten-Stiller“) als Bild aus
+// src/assets/images/logo/larylin-logo.png (transparent, 599 × 173). Nur für hellen Grund;
+// eine weiße Variante gibt es noch nicht. Höhe über `class` anpassbar (Standard h-12).
+import { Image } from 'astro:assets';
+import logo from '../assets/images/logo/larylin-logo.png';
+
 interface Props {
-  tone?: 'dark' | 'light';
   class?: string;
 }
 
-const { tone = 'dark', class: extra = '' } = Astro.props;
+const { class: extra = 'h-12' } = Astro.props;
 ---
 
-<span class:list={['inline-flex items-center gap-2.5', extra]}>
-  <span class="flex items-end gap-1" aria-hidden="true">
-    <span class="block w-2 h-6 bg-yellow"></span>
-    <span class="block w-2 h-6 bg-orange"></span>
-    <span class="block w-2 h-6 bg-red"></span>
-  </span>
-  <span class:list={['text-2xl font-extrabold tracking-tight leading-none', tone === 'light' ? 'text-white' : 'text-ink']}>
-    Larylin<sup class="text-[0.5em] font-bold align-super">®</sup>
-  </span>
-</span>
+<Image
+  src={logo}
+  alt="Larylin® Husten-Stiller"
+  densities={[1, 2, 3]}
+  height={48}
+  loading="eager"
+  class:list={['w-auto', extra]}
+/>
