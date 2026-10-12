@@ -59,7 +59,11 @@ const breadcrumbItems = [
     return (
       <section id={c.category} class:list={['scroll-mt-24 px-6 py-14 md:py-20', tiles && 'bg-surface']}>
         <Container size="content">
-          <h2 class="mb-8 md:mb-10">{c.heading}</h2>
+          <h2 class="mb-8 md:mb-10">
+            {c.mark && c.heading.includes(c.mark) ? (
+              <>{c.heading.slice(0, c.heading.indexOf(c.mark))}<span class="mark">{c.mark}</span>{c.heading.slice(c.heading.indexOf(c.mark) + c.mark.length)}</>
+            ) : c.heading}
+          </h2>
 
           {tiles ? (
             /* Mobil Peek-Slider (basis-[85%], slider-bleed bis zum Bildschirmrand), ab md

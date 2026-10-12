@@ -21,10 +21,11 @@ export const ctaProductsByCluster: Record<RatgeberCategory, PharmacyProduct[]> =
 export const ctaProductsFor = (category: RatgeberCategory): PharmacyProduct[] =>
   ctaProductsByCluster[category];
 
-export const categoryClusters: { category: RatgeberCategory; heading: string }[] = [
-  { category: 'reizhusten-im-alltag', heading: 'Reizhusten im Alltag' },
+// mark: Wort der Überschrift, das auf /wissenswertes gelb unterstrichen wird (mark-Utility).
+export const categoryClusters: { category: RatgeberCategory; heading: string; mark?: string }[] = [
+  { category: 'reizhusten-im-alltag', heading: 'Reizhusten im Alltag', mark: 'Reizhusten' },
   { category: 'erkaeltungszeit', heading: 'Erkältungszeit' },
-  { category: 'woher-der-husten-kommt', heading: 'Woher der Husten kommt' },
+  { category: 'woher-der-husten-kommt', heading: 'Woher der Husten kommt', mark: 'Husten' },
 ];
 
 // URL-Slug je Cluster (Artikel-Pfad /wissenswertes/<slug>/<artikel>); kann bei

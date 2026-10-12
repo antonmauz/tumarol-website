@@ -15,13 +15,19 @@ import { readingTimeLabel } from '../data/readingTime';
 
 interface Props {
   heading: string;
+  /** Wort in der Überschrift, das gelb unterstrichen wird (mark-Utility wie „Reizhusten“
+   *  im Startseiten-Hero); muss im heading vorkommen. */
+  mark?: string;
   /** Artikel-URL, die NICHT gezeigt wird (z. B. die aktuelle Seite). */
   excludeHref?: string;
   /** Hintergrund/zusätzliche Klassen der <section> (Standard: transparent, also weiß). */
   class?: string;
 }
 
-const { heading, excludeHref, class: sectionClass = '' } = Astro.props;
+const { heading, mark, excludeHref, class: sectionClass = '' } = Astro.props;
+
+// Überschrift am markierten Wort teilen (erstes Vorkommen).
+const markAt = mark ? heading.indexOf(mark) : -1;
 
 interface SliderItem {
   href: string;
@@ -51,7 +57,11 @@ const items = ratgeber.filter((item) => item.href !== excludeHref);
 <section class={`py-16 md:py-20 px-6 ${sectionClass}`}>
   <Container size="content">
     <div class="flex items-end justify-between gap-4 mb-8">
-      <h2 class="min-w-0 hyphens-auto">{heading}</h2>
+      <h2 class="min-w-0 hyphens-auto">
+        {markAt >= 0 ? (
+          <>{heading.slice(0, markAt)}<span class="mark">{mark}</span>{heading.slice(markAt + mark!.length)}</>
+        ) : heading}
+      </h2>
 
       <SliderControls prevLabel="Vorherige Artikel" nextLabel="Weitere Artikel" />
     </div>

@@ -5,12 +5,15 @@ import { Image } from 'astro:assets';
 import type { Review } from '../data/reviews';
 import { pharmacyLinkRel, pharmacyLinkUrl, pharmacySlug } from '../utils/tracking';
 import { starDisplay } from '../utils/stars';
+import { iconSvg, type IconName } from '../data/icons';
+import type { PharmacyProduct } from '../data/pharmacies';
 
 interface Props {
   review: Review;
   /** Stand-Datum in der Karte zeigen (Modal: aus — dort steht der Stand im Hinweis). */
   showDate?: boolean;
-  /** Produktname zeigen (Produktseiten: aus — dort ist das Produkt klar). */
+  /** Produktname für Screenreader am Produkt-Icon (gemischte Ansichten); aus auf
+   *  Produktseiten, dort ist das Produkt klar. */
   showProduct?: boolean;
   /** GA4-data-placement, um Slider und Modal auseinanderzuhalten. */
   placement?: string;
@@ -21,53 +24,80 @@ const { review, showDate = true, showProduct = true, placement = 'reviews' } = A
 // Barrierefreiheit: Textlinks immer bold UND unterstrichen (siehe ArrowLink.astro); bei
 // Hover/Tastaturfokus wird der Unterstrich gelb und der Pfeil rückt vor (wie ArticleTile);
 // py-2 erhält eine ausreichende Touch-Fläche.
+// Monat in der Detailzeile abgekürzt (Duden-Kurzformen), damit Anzahl und Stand in einer
+// Zeile neben den Kauf-Link passen.
+const MONTH_SHORT: Record<string, string> = {
+  Januar: 'Jan.', Februar: 'Feb.', April: 'Apr.', August: 'Aug.', September: 'Sept.',
+  Oktober: 'Okt.', November: 'Nov.', Dezember: 'Dez.',
+};
+const monthShort = MONTH_SHORT[review.dateMonth] ?? review.dateMonth;
+
+// Produkt-Icon je Darreichungsform (dieselben wie in ProductHighlight).
+const productIcon: Record<PharmacyProduct, IconName> = { pastillen: 'pastille', saft: 'drop' };
+
 const ctaClasses =
-  'group inline-flex items-center justify-center gap-2 py-2 text-ink font-bold text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink';
+  'group inline-flex shrink-0 items-center gap-2 py-2 text-ink font-bold text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink';
 ---
 
-{/* Weiße Karte mit 1px-Linie (liegt im Slider auf der hellgrauen Sektion), im Modal gleich. */}
-<div class="bg-white border border-divider rounded-card p-4 md:p-6 space-y-3 text-center">
-  {/* Apotheken-Logo aus pharmacies.ts (ohne Logo: Name als Text) */}
-  {review.logoImage ? (
-    <div class="flex items-center justify-center h-12">
-      {/* max-h/max-w statt fester Höhe: breite Wortmarken werden proportional verkleinert. */}
-      <Image
-        src={review.logoImage}
-        alt={`${review.pharmacy} Logo`}
-        height={96}
-        loading="lazy"
-        class="max-h-10 max-w-[70%] w-auto h-auto object-contain"
-      />
+{/* Weiße Karte mit 1px-Linie (liegt im Slider auf der hellgrauen Sektion), im Modal gleich.
+    Linksbündig, Bewertung zuerst: oben große Sterne + Durchschnitt, rechts das Produkt-Icon;
+    Produkts; darunter Apotheke, Anzahl/Stand und Kauf-Link. Container-Query: ist die Karte
+    schmal (mobil), rutscht der Link unter die Detailzeile. */}
+<div class="@container flex flex-col bg-white border border-divider rounded-card p-4 md:p-5">
+  <div class="flex items-center justify-between gap-3">
+    <div class="flex items-center gap-2">
+      <div class="flex gap-0.5 text-2xl leading-none" aria-hidden="true" set:html={starDisplay(review.rating)} />
+      <span class="text-xl font-extrabold text-ink">
+        {review.rating.toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}
+        <span class="sr-only"> von 5 Sternen</span>
+      </span>
     </div>
-  ) : (
-    <div class="flex items-center justify-center h-12 font-semibold text-neutral-900">{review.pharmacy}</div>
-  )}
-
-  {/* Voller Produktname (nur in gemischten Ansichten) */}
-  {showProduct && <p class="font-semibold text-ink">{review.productName}</p>}
-
-  {/* flex-wrap: auf schmalen Karten rutscht die Zahl unter die Sterne statt überzulaufen */}
-  <div class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
-    <div class="flex gap-0.5 text-xl leading-none" aria-hidden="true" set:html={starDisplay(review.rating)} />
-    <span class="font-bold text-neutral-900">{review.rating.toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}</span>
+    {/* Produkt-Icon wie in den Produktkarten (Pastille / Tropfen im Logo-Gelb) statt
+        Produktname; den Namen bekommen Screenreader nur in gemischten Ansichten. */}
+    <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-logo-yellow text-ink">
+      <Fragment set:html={iconSvg(productIcon[review.product], 'w-6 h-6')} />
+      {showProduct && <span class="sr-only">{review.productName}</span>}
+    </span>
   </div>
-  <p class="text-sm text-neutral-600">
-    {review.reviewCount.toLocaleString('de-DE')} Bewertungen{showDate && ` – ${review.dateMonth} ${review.dateYear}`}
-  </p>
 
-  {/* CTA: Unterstrich auf dem inneren <span>, da text-decoration nicht auf Flex-Items propagiert */}
-  <a
-    href={pharmacyLinkUrl(review.shopUrl, placement)}
-    target="_blank"
-    rel={pharmacyLinkRel(review.shopUrl)}
-    data-pharmacy={pharmacySlug(review.pharmacy)}
-    data-placement={placement}
-    aria-label={`${review.ctaLabel} – ${review.productName} bei ${review.pharmacy} (öffnet in neuem Tab)`}
-    class={ctaClasses}
-  >
-    <span class="underline underline-offset-4 decoration-2 transition-colors group-hover:decoration-yellow group-focus-visible:decoration-yellow">{review.ctaLabel}</span>
-    <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-focus-visible:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-    </svg>
-  </a>
+  {/* mt-auto: Detailbereich sitzt bei unterschiedlich hohen Karten auf gleicher Höhe. */}
+  <div class="mt-auto pt-3">
+    {/* Apotheken-Logo aus pharmacies.ts (ohne Logo: Name als Text); max-h/max-w statt
+        fester Höhe, damit breite Wortmarken proportional kleiner werden. */}
+    {review.logoImage ? (
+      <div class="flex h-7 max-w-[8rem] items-center">
+        <Image
+          src={review.logoImage}
+          alt={`${review.pharmacy} Logo`}
+          height={56}
+          loading="lazy"
+          class="max-h-7 max-w-full w-auto h-auto object-contain object-left"
+        />
+      </div>
+    ) : (
+      <p class="flex h-7 items-center font-semibold text-ink">{review.pharmacy}</p>
+    )}
+
+    <div class="mt-1 flex flex-col items-start gap-x-4 @min-[17.5rem]:flex-row @min-[17.5rem]:items-center @min-[17.5rem]:justify-between">
+      <p class="whitespace-nowrap text-sm text-neutral-600">
+        {review.reviewCount.toLocaleString('de-DE')} {review.reviewCount === 1 ? 'Bewertung' : 'Bewertungen'}{showDate && ` · ${monthShort} ${review.dateYear}`}
+      </p>
+
+      {/* CTA: Unterstrich auf dem inneren <span>, da text-decoration nicht auf Flex-Items propagiert */}
+      <a
+        href={pharmacyLinkUrl(review.shopUrl, placement)}
+        target="_blank"
+        rel={pharmacyLinkRel(review.shopUrl)}
+        data-pharmacy={pharmacySlug(review.pharmacy)}
+        data-placement={placement}
+        aria-label={`${review.ctaLabel} – ${review.productName} bei ${review.pharmacy} (öffnet in neuem Tab)`}
+        class={ctaClasses}
+      >
+        <span class="underline underline-offset-4 decoration-2 transition-colors group-hover:decoration-yellow group-focus-visible:decoration-yellow">{review.ctaLabel}</span>
+        <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-focus-visible:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+      </a>
+    </div>
+  </div>
 </div>
