@@ -4,7 +4,6 @@ import Button from '../components/ui/Button.astro';
 import ProductHighlight from '../components/ProductHighlight.astro';
 import SourcesSection from '../components/SourcesSection.astro';
 import { produktSources } from '../data/produktSources';
-import RobugenBanner from '../components/RobugenBanner.astro';
 import ReviewSlider from '../components/ReviewSlider.astro';
 import ArticleSlider from '../components/ArticleSlider.astro';
 import WirkungsweiseSection from '../components/WirkungsweiseSection.astro';
@@ -85,9 +84,6 @@ import PackshotGroup from '../components/PackshotGroup.astro';
 
   {/* ─── 6. MAGAZIN (Karten hellgrau, Farbbalken Gelb/Orange/Rot) ───────── */}
   <ArticleSlider heading="Wissenswertes rund um Husten" />
-
-  {/* ─── HERSTELLER: Robugen-Vertrauensmodul ────────────────────────────── */}
-  <RobugenBanner />
 
   {/* ─── QUELLEN & HINWEISE ─────────────────────────────────────────────── */}
   <SourcesSection heading="Quellen & Hinweise" items={[...produktSources, ...hinweise]} />

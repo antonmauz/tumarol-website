@@ -5,8 +5,8 @@ publishDate: 2026-10-09
 lastUpdated: 2026-10-09
 category: woher-der-husten-kommt
 # TODO (LARYLIN): Platzhalter, durch ein eigenes Headerbild ersetzen.
-headerImage: ./_images/larylin-platzhalter-header.jpg
-headerImageAlt: ""
+headerImage: ./_images/husten-durch-medikamente-header.jpg
+headerImageAlt: "Hände halten eine Medikamentenbox mit verschiedenen Tabletten und Kapseln."
 h1: "Reizhusten als Nebenwirkung: Wenn Medikamente den Husten auslösen"
 breadcrumbLabel: "Husten durch Medikamente"
 intro:

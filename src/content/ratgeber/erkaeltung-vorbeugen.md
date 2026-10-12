@@ -5,8 +5,8 @@ publishDate: 2026-10-09
 lastUpdated: 2026-10-09
 category: erkaeltungszeit
 # TODO (LARYLIN): Platzhalter, durch ein eigenes Headerbild ersetzen.
-headerImage: ./_images/larylin-platzhalter-header.jpg
-headerImageAlt: ""
+headerImage: ./_images/erkaeltung-vorbeugen-header.jpg
+headerImageAlt: "Zwei Frauen gehen untergehakt auf einem sonnigen Gehweg spazieren."
 h1: "Erkältung vorbeugen: So kommen Sie gut durch Herbst und Winter"
 breadcrumbLabel: "Erkältung vorbeugen"
 intro:

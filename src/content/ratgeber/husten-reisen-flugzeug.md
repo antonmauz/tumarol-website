@@ -5,8 +5,8 @@ publishDate: 2026-10-09
 lastUpdated: 2026-10-09
 category: erkaeltungszeit
 # TODO (LARYLIN): Platzhalter, durch ein eigenes Headerbild ersetzen.
-headerImage: ./_images/larylin-platzhalter-header.jpg
-headerImageAlt: ""
+headerImage: ./_images/husten-reisen-flugzeug-header.jpg
+headerImageAlt: "Ein Kind schaut mit seinem Vater aus dem Flugzeugfenster auf die Wolken."
 h1: "Mit Husten auf Reisen und im Flugzeug"
 breadcrumbLabel: "Husten auf Reisen"
 intro:

@@ -5,8 +5,8 @@ publishDate: 2026-10-09
 lastUpdated: 2026-10-09
 category: reizhusten-im-alltag
 # TODO (LARYLIN): Platzhalter, durch ein eigenes Headerbild ersetzen.
-headerImage: ./_images/larylin-platzhalter-header.jpg
-headerImageAlt: ""
+headerImage: ./_images/hustenreiz-unterdruecken-header.jpg
+headerImageAlt: "Eine Frau sitzt in einer Besprechung mit einem Glas Wasser und macht sich Notizen."
 h1: "Hustenreiz unterdrücken: Tipps für Büro, Meeting und Konzert"
 breadcrumbLabel: "Hustenreiz unterdrücken"
 intro:

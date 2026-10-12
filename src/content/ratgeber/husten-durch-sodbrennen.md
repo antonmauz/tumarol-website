@@ -5,8 +5,8 @@ publishDate: 2026-10-09
 lastUpdated: 2026-10-09
 category: woher-der-husten-kommt
 # TODO (LARYLIN): Platzhalter, durch ein eigenes Headerbild ersetzen.
-headerImage: ./_images/larylin-platzhalter-header.jpg
-headerImageAlt: ""
+headerImage: ./_images/husten-durch-sodbrennen-header.jpg
+headerImageAlt: "Eine Frau sitzt abends nach dem Essen am Küchentisch und schaut auf ihr Handy."
 h1: "Husten durch Sodbrennen: Wie Magensäure die Atemwege reizt"
 breadcrumbLabel: "Husten durch Sodbrennen"
 intro:

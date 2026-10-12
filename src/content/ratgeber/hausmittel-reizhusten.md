@@ -5,8 +5,8 @@ publishDate: 2026-10-09
 lastUpdated: 2026-10-09
 category: reizhusten-im-alltag
 # TODO (LARYLIN): Platzhalter, durch ein eigenes Headerbild ersetzen.
-headerImage: ./_images/larylin-platzhalter-header.jpg
-headerImageAlt: ""
+headerImage: ./_images/hausmittel-reizhusten-header.jpg
+headerImageAlt: "Tee mit Zitrone, ein Glas Honig und Zitronenscheiben auf einem Holzbrett."
 h1: "Hausmittel bei Reizhusten: Was wirklich hilft"
 breadcrumbLabel: "Hausmittel bei Reizhusten"
 intro:

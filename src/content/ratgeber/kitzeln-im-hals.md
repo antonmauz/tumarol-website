@@ -5,8 +5,8 @@ publishDate: 2026-10-09
 lastUpdated: 2026-10-09
 category: reizhusten-im-alltag
 # TODO (LARYLIN): Platzhalter, durch ein eigenes Headerbild ersetzen.
-headerImage: ./_images/larylin-platzhalter-header.jpg
-headerImageAlt: ""
+headerImage: ./_images/kitzeln-im-hals-header.jpg
+headerImageAlt: "Ein junges Paar lacht im herbstlichen Park, er trägt sie huckepack."
 h1: "Kitzeln im Hals: Woher es kommt und was hilft"
 breadcrumbLabel: "Kitzeln im Hals"
 intro:

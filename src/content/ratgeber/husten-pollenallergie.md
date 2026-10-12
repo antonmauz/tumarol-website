@@ -5,8 +5,8 @@ publishDate: 2026-10-09
 lastUpdated: 2026-10-09
 category: woher-der-husten-kommt
 # TODO (LARYLIN): Platzhalter, durch ein eigenes Headerbild ersetzen.
-headerImage: ./_images/larylin-platzhalter-header.jpg
-headerImageAlt: ""
+headerImage: ./_images/husten-pollenallergie-header.jpg
+headerImageAlt: "Eine Frau hält sich draußen unter Bäumen die Hände vor Mund und Nase."
 h1: "Husten bei Pollenallergie: Heuschnupfen oder Erkältung?"
 breadcrumbLabel: "Husten bei Pollenallergie"
 intro:

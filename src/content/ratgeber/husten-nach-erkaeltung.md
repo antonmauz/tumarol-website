@@ -5,8 +5,8 @@ publishDate: 2026-10-09
 lastUpdated: 2026-10-09
 category: erkaeltungszeit
 # TODO (LARYLIN): Platzhalter, durch ein eigenes Headerbild ersetzen.
-headerImage: ./_images/larylin-platzhalter-header.jpg
-headerImageAlt: ""
+headerImage: ./_images/husten-nach-erkaeltung-header.jpg
+headerImageAlt: "Eine Frau sitzt mit Tasse und Handy auf dem Sofa und schaut aus dem Fenster."
 h1: "Husten nach der Erkältung: Warum er so lange bleibt"
 breadcrumbLabel: "Husten nach der Erkältung"
 intro:

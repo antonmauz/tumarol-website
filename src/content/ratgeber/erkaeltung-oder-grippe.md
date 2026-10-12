@@ -5,8 +5,8 @@ publishDate: 2026-10-09
 lastUpdated: 2026-10-09
 category: erkaeltungszeit
 # TODO (LARYLIN): Platzhalter, durch ein eigenes Headerbild ersetzen.
-headerImage: ./_images/larylin-platzhalter-header.jpg
-headerImageAlt: ""
+headerImage: ./_images/erkaeltung-oder-grippe-header.jpg
+headerImageAlt: "Eine Hand hält ein Fieberthermometer, im Hintergrund liegt ein Mädchen krank im Bett."
 h1: "Erkältung oder Grippe? Die Unterschiede im Überblick"
 breadcrumbLabel: "Erkältung oder Grippe"
 intro:

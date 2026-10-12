@@ -5,8 +5,8 @@ publishDate: 2026-10-09
 lastUpdated: 2026-10-09
 category: erkaeltungszeit
 # TODO (LARYLIN): Platzhalter, durch ein eigenes Headerbild ersetzen.
-headerImage: ./_images/larylin-platzhalter-header.jpg
-headerImageAlt: ""
+headerImage: ./_images/husten-aeltere-menschen-header.jpg
+headerImageAlt: "Eine ältere Frau mit Brille sitzt lächelnd mit einer Tasse auf dem Sofa."
 h1: "Husten bei älteren Menschen: Worauf es ankommt"
 breadcrumbLabel: "Husten im Alter"
 intro:

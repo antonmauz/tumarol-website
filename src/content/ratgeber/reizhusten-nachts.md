@@ -5,8 +5,8 @@ publishDate: 2026-10-09
 lastUpdated: 2026-10-09
 category: reizhusten-im-alltag
 # TODO (LARYLIN): Platzhalter, durch ein eigenes Headerbild ersetzen.
-headerImage: ./_images/larylin-platzhalter-header.jpg
-headerImageAlt: ""
+headerImage: ./_images/reizhusten-nachts-header.jpg
+headerImageAlt: "Eine Frau öffnet morgens im Schlafzimmer die Vorhänge, Sonnenlicht fällt herein."
 h1: "Reizhusten in der Nacht: Was beim Durchschlafen hilft"
 breadcrumbLabel: "Reizhusten nachts"
 intro:

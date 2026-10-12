@@ -5,8 +5,8 @@ publishDate: 2026-10-09
 lastUpdated: 2026-10-09
 category: reizhusten-im-alltag
 # TODO (LARYLIN): Platzhalter, durch ein eigenes Headerbild ersetzen.
-headerImage: ./_images/larylin-platzhalter-header.jpg
-headerImageAlt: ""
+headerImage: ./_images/sport-bei-husten-header.jpg
+headerImageAlt: "Ein Mann in roter Jacke und Mütze dehnt sich vor dem Laufen im verschneiten Wald."
 h1: "Sport bei Husten: Pause oder weitertrainieren?"
 breadcrumbLabel: "Sport bei Husten"
 intro:

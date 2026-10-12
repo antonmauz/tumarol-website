@@ -5,8 +5,8 @@ publishDate: 2026-10-09
 lastUpdated: 2026-10-09
 category: reizhusten-im-alltag
 # TODO (LARYLIN): Platzhalter, durch ein eigenes Headerbild ersetzen.
-headerImage: ./_images/larylin-platzhalter-header.jpg
-headerImageAlt: ""
+headerImage: ./_images/heizungsluft-reizhusten-header.jpg
+headerImageAlt: "Eine Frau trinkt aus einer Tasse und legt die Füße auf die Heizung am Fenster."
 h1: "Trockene Heizungsluft: Wie sie den Hustenreiz verstärkt"
 breadcrumbLabel: "Heizungsluft und Reizhusten"
 intro:

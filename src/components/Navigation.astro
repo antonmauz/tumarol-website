@@ -27,13 +27,12 @@ const wissenswertesLinks: NavLink[] = categoryClusters.map((c) => ({
   href: `/wissenswertes#${c.category}`,
 }));
 
-// Sektionsnamen (01.09.2026): Themenwelt = „Wissenswertes", Magazin =
-// „Unser Kamillenanbau". Slug /wissenswertes festgelegt (02.09.2026);
-// /magazin bleibt Arbeitsname.
+// Reihenfolge: Produkte, die Wissensseite /husten (Grundlagen und Ursachen), dann
+// Wissenswertes (Ratgeber, Slug /wissenswertes festgelegt 02.09.2026).
 const navLinks: NavItem[] = [
   { label: 'Produkte', dropdown: productLinks },
+  { label: 'Husten', href: '/husten' },
   { label: 'Wissenswertes', href: '/wissenswertes', dropdown: wissenswertesLinks },
-  { label: 'Unser Kamillenanbau', href: '/magazin' },
 ];
 
 // Slash-lose Form wie die href-Werte oben — sonst greift die Aktiv-Markierung im Build nie.
@@ -206,6 +205,11 @@ const linkActive = 'underline decoration-yellow decoration-[3px] underline-offse
           </div>
         </details>
 
+        {/* Husten (Wissensseite) */}
+        <a href="/husten" class="block py-3.5 font-semibold text-neutral-900 hover:text-primary">
+          Husten
+        </a>
+
         {/* Wissenswertes (Akkordeon) */}
         <details class="group/acc">
           <summary class="flex items-center justify-between gap-4 py-3.5 font-semibold text-neutral-900 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
@@ -225,12 +229,6 @@ const linkActive = 'underline decoration-yellow decoration-[3px] underline-offse
             ))}
           </div>
         </details>
-
-        {/* Unser Kamillenanbau (Magazin) */}
-        <a href="/magazin" class="block py-3.5 font-semibold text-neutral-900 hover:text-primary">
-          Unser Kamillenanbau
-        </a>
-
 
         {/* CTA Button */}
         <div class="py-4">

@@ -8,7 +8,6 @@ import Faq from '../components/sections/Faq.astro';
 import DownloadsSection from '../components/DownloadsSection.astro';
 import SourcesSection from '../components/SourcesSection.astro';
 import ArticleSlider from '../components/ArticleSlider.astro';
-import RobugenBanner from '../components/RobugenBanner.astro';
 import ProductSchema from '../components/ProductSchema.astro';
 import { faqsFor } from '../data/faqs';
 import { produktSources } from '../data/produktSources';
@@ -63,9 +62,6 @@ const description =
 
   {/* ─── ARTIKEL: Wissenswertes-Kacheln (wie Startseite) ─────────────── */}
   <ArticleSlider heading="Wissenswertes rund um Husten" />
-
-  {/* ─── HERSTELLER ───────────────────────────────────────────────────── */}
-  <RobugenBanner />
 
   {/* ─── QUELLEN ─────────────────────────────────────────────────────── */}
   <SourcesSection heading="Quellen & Hinweise" items={produktSources} />
