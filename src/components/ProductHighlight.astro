@@ -381,8 +381,9 @@ const visibleProducts = only
     outline: 2px solid var(--color-ink);
     outline-offset: 2px;
   }
-  /* Sekundär (Pill, 2px Schwarzrand); Padding um die Rahmenbreite reduziert, damit beide
-     Buttons gleich hoch sind. Füllt sich beim Hover über sich selbst oder über die übrige
+  /* Sekundär, gleiche Farben wie der Outline-Button im Hero („Pastillen oder Saft?“):
+     weiß mit 2px Ink-Rand, beim Hover hellgrau (surface). Padding um die Rahmenbreite
+     reduziert, damit beide Buttons gleich hoch sind. Hover greift auch über die übrige
      Kartenfläche (beides führt zur Produktseite). */
   .product-card__cta {
     padding: calc(0.5rem - 2px) calc(1.25rem - 2px);
@@ -393,8 +394,7 @@ const visibleProducts = only
   }
   .product-card__cta:hover,
   .product-card:has(.product-card__overlay:hover) .product-card__cta {
-    background: var(--color-ink);
-    color: var(--color-white);
+    background: var(--color-surface);
   }
 </style>
 

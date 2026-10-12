@@ -3,7 +3,7 @@
 // (larylin-vertrauensbanner-bg.png, Wand oben, heller Boden ab ~78 % der Bildhöhe),
 // links die beiden Packshots auf dem Boden, rechts vier Punkte mit Haken.
 // Hintergrund unten verankert (object-bottom), damit der Boden bei jeder Höhe unten
-// liegt; der untere Innenabstand stellt die Schachteln auf den Boden. Untere Ecken
+// liegt; der untere Innenabstand stellt die Schachteln auf den Boden. Obere Ecken
 // abgerundet (overflow-hidden schneidet das Bild mit ab).
 // TODO (LARYLIN): Wortlaut fachlich freigeben lassen (HWG, v. a. „Wirkung direkt in
 // Lunge und Bronchien“).
@@ -20,7 +20,7 @@ const trustPoints = [
 ];
 ---
 
-<section class="relative overflow-hidden rounded-b-[1.5rem] md:rounded-b-[2.5rem] px-6 pt-14 pb-10 md:pt-16 lg:pb-[clamp(2.5rem,4vw,4.5rem)]" aria-label="Larylin® auf einen Blick">
+<section class="relative overflow-hidden rounded-t-[1.5rem] md:rounded-t-[2.5rem] px-6 pt-14 pb-10 md:pt-16 lg:pb-[clamp(2.5rem,4vw,4.5rem)]" aria-label="Larylin® auf einen Blick">
   <Image
     src={background}
     alt=""
@@ -30,23 +30,23 @@ const trustPoints = [
     class="absolute inset-0 h-full w-full object-cover object-bottom"
   />
 
-  {/* Mobil: Punkte oben, Packshots darunter auf dem Boden; ab md nebeneinander,
-      Packshots links unten, Punkte rechts vertikal mittig. */}
-  <Container size="content" class="relative grid items-end gap-10 md:grid-cols-2 md:gap-14">
-    <div class="order-2 flex justify-center md:order-1">
-      <PackshotGroup class="w-[240px] sm:w-[300px] lg:w-[360px]" sizes="(min-width: 1024px) 340px, 280px" />
+  {/* Immer nebeneinander: Packshots links unten auf dem Boden, Punkte rechts vertikal
+      mittig. Mobil schmalere Packshot-Spalte (2:3), kleinere Haken und Schrift. */}
+  <Container size="content" class="relative grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-end gap-5 sm:gap-8 md:grid-cols-2 md:gap-14">
+    <div class="flex justify-center">
+      <PackshotGroup class="w-full max-w-[300px] lg:w-[360px] lg:max-w-none" sizes="(min-width: 1024px) 340px, (min-width: 768px) 300px, 40vw" />
     </div>
 
-    <ul class="order-1 space-y-5 self-center md:order-2">
+    <ul class="space-y-3 self-center sm:space-y-5">
       {trustPoints.map((point) => (
-        <li class="flex items-center gap-4">
+        <li class="flex items-center gap-2.5 sm:gap-4">
           {/* Haken in Ink auf gelbem Kreis (Markengelb). */}
-          <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-yellow text-ink" aria-hidden="true">
-            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+          <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-yellow text-ink sm:h-8 sm:w-8" aria-hidden="true">
+            <svg class="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
               <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
             </svg>
           </span>
-          <span class="text-lg font-bold text-ink md:text-xl">{point}</span>
+          <span class="text-sm leading-snug font-bold text-ink sm:text-lg md:text-xl">{point}</span>
         </li>
       ))}
     </ul>

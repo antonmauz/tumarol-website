@@ -7,7 +7,8 @@
 // Ab lg: feste Bühne im Seitenverhältnis 5:3 (viewBox 1000 × 600). Die Figur belegt die
 // linken 40 % (eigene viewBox 400 × 600, also deckungsgleich), die Pfeile liegen als
 // zweites SVG über der ganzen Bühne, die Texte sitzen absolut auf denselben Höhen (--y).
-// Darunter: Figur und Liste untereinander, die Nummern 1–3 ersetzen die Pfeile.
+// Darunter: Figur links (bleibt beim Scrollen stehen, sticky), Liste rechts; die Nummern
+// 1–3 ersetzen die Pfeile.
 // TODO (LARYLIN): Wortlaut fachlich freigeben lassen (HWG: Aussagen zum Wirkmechanismus
 // brauchen einen Beleg in der Fachinformation).
 import Container from './Container.astro';
@@ -142,6 +143,7 @@ const LINE_END_X = 465;
           {points.map((p) => (
             <g>
               <circle
+                class="wirkung-dot"
                 cx={p.x}
                 cy={p.y}
                 r="15"
@@ -151,7 +153,9 @@ const LINE_END_X = 465;
               />
               <text
                 x={p.x}
-                y={p.y + 5.5}
+                y={p.y}
+                dominant-baseline="central"
+                class="wirkung-dot-n"
                 text-anchor="middle"
                 font-size="16"
                 font-weight="800"
@@ -190,19 +194,19 @@ const LINE_END_X = 465;
       <ol class="wirkung-list">
         {points.map((p) => (
           <li class="wirkung-item" style={`--y: ${(p.y / 600) * 100}%`}>
-            <div class="flex items-center gap-3 mb-2">
+            <div class="flex items-center gap-2.5 sm:gap-3 mb-2">
               <span
                 class:list={[
-                  'flex w-8 h-8 shrink-0 items-center justify-center rounded-full border-2 border-ink text-sm font-extrabold',
+                  'flex w-7 h-7 sm:w-8 sm:h-8 shrink-0 items-center justify-center rounded-full border-2 border-ink text-sm font-extrabold',
                   p.acts ? 'bg-ink text-white' : 'bg-white text-ink',
                 ]}
                 aria-hidden="true"
               >
                 {p.n}
               </span>
-              <h3 class="text-lg">{p.title}</h3>
+              <h3 class="text-base sm:text-lg">{p.title}</h3>
             </div>
-            <p class="text-neutral-700 leading-relaxed">{p.text}</p>
+            <p class="text-sm sm:text-base text-neutral-700 leading-relaxed">{p.text}</p>
           </li>
         ))}
       </ol>
@@ -211,10 +215,18 @@ const LINE_END_X = 465;
 </section>
 
 <style>
-  /* Mobil/Tablet: Figur oben (begrenzte Breite), Liste darunter. */
+  /* Mobil/Tablet: Figur links (2 : 3 der Breite), bleibt beim Scrollen durch die Texte
+     unter der Navbar (4rem) stehen; Liste rechts. */
+  .wirkung-stage {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: 1.25rem;
+    align-items: start;
+  }
   .wirkung-figure {
-    max-width: 18rem;
-    margin: 0 auto 2.5rem;
+    position: sticky;
+    top: 5rem;
+    margin: 0;
     aspect-ratio: 2 / 3;
   }
   .wirkung-arrows {
@@ -222,12 +234,43 @@ const LINE_END_X = 465;
   }
   .wirkung-list {
     display: grid;
-    gap: 1.75rem;
+    gap: 1.5rem;
+  }
+  /* Nummern in der schmalen Figur größer, damit sie lesbar bleiben (SVG-Einheiten). */
+  .wirkung-dot {
+    r: 26px;
+    stroke-width: 4px;
+  }
+  .wirkung-dot-n {
+    font-size: 28px;
+  }
+  @media (min-width: 640px) {
+    .wirkung-dot {
+      r: 20px;
+      stroke-width: 3px;
+    }
+    .wirkung-dot-n {
+      font-size: 21px;
+    }
+    .wirkung-stage {
+      gap: 2.5rem;
+    }
+    .wirkung-list {
+      gap: 1.75rem;
+    }
   }
 
   /* Ab lg: Bühne 5:3, Figur links (40 %), Pfeile darüber, Texte rechts auf Ankerhöhe. */
   @media (min-width: 1024px) {
+    .wirkung-dot {
+      r: 15px;
+      stroke-width: 2.5px;
+    }
+    .wirkung-dot-n {
+      font-size: 16px;
+    }
     .wirkung-stage {
+      display: block;
       position: relative;
       aspect-ratio: 5 / 3;
     }
@@ -235,8 +278,6 @@ const LINE_END_X = 465;
       position: absolute;
       inset: 0 auto 0 0;
       width: 40%;
-      max-width: none;
-      margin: 0;
     }
     .wirkung-arrows {
       display: block;

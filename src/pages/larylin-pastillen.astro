@@ -8,6 +8,7 @@ import Faq from '../components/sections/Faq.astro';
 import DownloadsSection from '../components/DownloadsSection.astro';
 import SourcesSection from '../components/SourcesSection.astro';
 import ArticleSlider from '../components/ArticleSlider.astro';
+import TrustBanner from '../components/TrustBanner.astro';
 import ProductSchema from '../components/ProductSchema.astro';
 import { faqsFor } from '../data/faqs';
 import { produktSources } from '../data/produktSources';
@@ -59,6 +60,9 @@ const description =
 
   {/* ─── DOWNLOADS (src/data/downloads.ts, Dateien in public/downloads/) ─ */}
   <DownloadsSection id="downloads" product="pastillen" />
+
+  {/* ─── VERTRAUEN-BANNER ──────────────────────────────────────────── */}
+  <TrustBanner />
 
   {/* ─── ARTIKEL: Wissenswertes-Kacheln (wie Startseite) ─────────────── */}
   <ArticleSlider heading="Wissenswertes rund um Husten" />

@@ -18,6 +18,7 @@
   --color-surface: #F4F3EF; /* alternierende Sektionen, hellgraue Karten */
   --color-ink: #111111; /* Text, Überschriften, sekundäre Buttons, Footer-Fläche */
   --color-divider: #D6D3CC; /* 1px-Linien */
+  --color-success: #15803D; /* Verfügbarkeits-Signal (Einkaufswagen Produktseite), AA auf Hellgrau */
 
   /* Alt-Token aus der KAMILLIN-Vorlage, auf die neue Farbwelt umgebogen: Komponenten und
      Unterseiten ziehen so ohne Einzeländerung mit. */
