@@ -17,13 +17,13 @@ export const pastillenFaqs: FaqItem[] = [
     // FI 4.1
     question: 'Bei welcher Art von Husten helfen Larylin® Husten-Stiller Pastillen?',
     answer:
-      'Larylin® Husten-Stiller Pastillen sind für **Reiz- und Krampfhusten** gedacht, also trockenen Husten ohne Schleim, sowie für Reizungen der oberen Atemwege. Bei Husten mit viel Schleim sollten Sie sie nur nach Rücksprache mit Ihrem Arzt oder Apotheker anwenden.',
+      'Larylin® Husten-Stiller Pastillen sind für **Reiz- und Krampfhusten** gedacht, also trockenen Husten ohne Schleim, sowie für Reizungen der oberen Atemwege.',
   },
   {
     // FI 4.2, 4.3
     question: 'Ab welchem Alter sind die Pastillen geeignet?',
     answer:
-      'Die Pastillen sind für **Erwachsene und Jugendliche ab 12 Jahren**. Kinder unter 12 Jahren dürfen sie nicht anwenden.',
+      'Die Pastillen sind zugelassen für **Erwachsene und Jugendliche ab 12 Jahren**.',
   },
   {
     // FI 4.2
@@ -53,13 +53,7 @@ export const pastillenFaqs: FaqItem[] = [
     // FI 4.4
     question: 'Enthalten die Pastillen Zucker?',
     answer:
-      'Ja. Eine Pastille enthält etwa **1,41 g Saccharose und 1,13 g Glucose**. Das ist bei Diabetes zu berücksichtigen. Bei häufiger und dauerhafter Anwendung kann Zucker den Zähnen schaden.',
-  },
-  {
-    // FI 4.7
-    question: 'Kann ich nach der Einnahme Auto fahren?',
-    answer:
-      'Bei einzelnen Menschen macht Dropropizin müde. Achten Sie deshalb darauf, wie Sie die Pastillen vertragen, bevor Sie Auto fahren oder Maschinen bedienen. Alkohol sowie Schlaf- und Beruhigungsmittel können die Müdigkeit verstärken.',
+      'Ja. Eine Pastille enthält etwa **1,41 g Saccharose und 1,13 g Glucose**. Das ist bei Diabetes zu berücksichtigen.',
   },
   {
     // FI 11
@@ -75,13 +69,13 @@ export const saftFaqs: FaqItem[] = [
     // FI 4.1
     question: 'Bei welcher Art von Husten hilft Larylin® Husten-Stiller Saft?',
     answer:
-      'Larylin® Husten-Stiller Saft ist für **Reiz- und Krampfhusten** gedacht, also trockenen Husten ohne Schleim, sowie für Reizungen der oberen Atemwege. Bei Husten mit viel Schleim sollten Sie ihn nur nach Rücksprache mit Ihrem Arzt oder Apotheker anwenden.',
+      'Larylin® Husten-Stiller Saft ist für **Reiz- und Krampfhusten** gedacht, also trockenen Husten ohne Schleim, sowie für Reizungen der oberen Atemwege.',
   },
   {
     // FI 4.2, 4.3
     question: 'Ab welchem Alter ist der Saft geeignet?',
     answer:
-      'Der Saft ist für **Erwachsene und Jugendliche ab 12 Jahren**. Kinder unter 12 Jahren dürfen ihn nicht einnehmen.',
+      'Der Saft ist zugelassen für **Erwachsene und Jugendliche ab 12 Jahren**.',
   },
   {
     // FI 4.2, 6.5
@@ -111,19 +105,13 @@ export const saftFaqs: FaqItem[] = [
     // FI 2, 4.4
     question: 'Enthält der Saft Zucker oder Alkohol?',
     answer:
-      'Ein Messlöffel (10 ml) enthält **7,6 g Saccharose**. Das ist bei Diabetes zu berücksichtigen, bei häufiger und dauerhafter Anwendung kann Zucker den Zähnen schaden. Außerdem enthält ein Messlöffel **80 mg Alkohol**. Das ist weniger als in 3 ml Bier und hat keine wahrnehmbaren Auswirkungen.',
+      'Ein Messlöffel (10 ml) enthält **7,6 g Saccharose**. Das ist bei Diabetes zu berücksichtigen. Außerdem enthält ein Messlöffel **80 mg Alkohol**. Das ist weniger als in 3 ml Bier und hat keine wahrnehmbaren Auswirkungen.',
   },
   {
     // FI 6.3, 6.4
     question: 'Wie lange ist der Saft nach dem Öffnen haltbar?',
     answer:
       'Nach dem Öffnen ist der Saft **3 Monate** haltbar. Bewahren Sie die Flasche gut verschlossen und nicht über 30 °C auf.',
-  },
-  {
-    // FI 4.7
-    question: 'Kann ich nach der Einnahme Auto fahren?',
-    answer:
-      'Bei einzelnen Menschen macht Dropropizin müde. Achten Sie deshalb darauf, wie Sie den Saft vertragen, bevor Sie Auto fahren oder Maschinen bedienen. Alkohol sowie Schlaf- und Beruhigungsmittel können die Müdigkeit verstärken.',
   },
   {
     // FI 11
