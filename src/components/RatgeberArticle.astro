@@ -143,11 +143,11 @@ const articleSchema = {
 {/* ─── PRODUKT-HIGHLIGHT (nur bei freigegebenem Produktbezug, HWG) ──── */}
 {data.showProductHighlight && <ProductHighlight only={ctaProducts} />}
 
-{/* ─── FAQ ─────────────────────────────────────────────────────────── */}
-{data.faq.length > 0 && <Faq items={data.faq} schema />}
-
-{/* ─── VERTRAUEN-BANNER (zwischen FAQ und weiteren Artikeln, 14.09.2026) ── */}
+{/* ─── VERTRAUEN-BANNER ──────────────────────────────────────────── */}
 <TrustBanner />
+
+{/* ─── FAQ (unter dem Vertrauensbanner) ──────────────────────────────── */}
+{data.faq.length > 0 && <Faq items={data.faq} schema />}
 
 {/* ─── WEITERE ARTIKEL (Wissenswertes, ohne den aktuellen) ──────────── */}
 <ArticleSlider heading="Weitere Artikel" excludeHref={currentHref} />

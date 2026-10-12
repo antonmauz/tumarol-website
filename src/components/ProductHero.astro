@@ -24,7 +24,7 @@ const { product, name, bullets } = Astro.props;
 const sizes = packageSizesFor(product);
 ---
 
-<section class="pt-4 pb-16 md:pt-6 md:pb-20 px-6">
+<section data-sticky-buy-trigger class="pt-4 pb-16 md:pt-6 md:pb-20 px-6">
   <Container size="content">
     {/* auto_1fr: linke Spalte exakt Slider-Breite, sichtbarer Mittelabstand damit genau gap-12. */}
     <div class="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-12 items-center">

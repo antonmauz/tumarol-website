@@ -23,10 +23,12 @@ const breadcrumbItems = [
   { label: 'Larylin® Husten-Stiller Pastillen' },
 ];
 
-// Kernpunkte des Seitenkopfs. TODO (LARYLIN): Wortlaut nach fachlicher Freigabe.
+// Kernpunkte des Seitenkopfs. TODO (LARYLIN): Wortlaut fachlich freigeben lassen (HWG).
 const heroBullets = [
-  'Wirkstoff Dropropizin',
-  '24 Lutschpastillen je Packung',
+  'Hemmt den Hustenreiz direkt in der Lunge',
+  'Ohne Konservierungsstoffe',
+  'Hemmt Reiz- und Krampfhusten',
+  'Ideal für unterwegs',
 ];
 
 // Eine Quelle für Meta-Description und Product-JSON-LD.
@@ -39,6 +41,7 @@ const description =
   titleSuffix={false}
   description={description}
   pharmacyProduct="pastillen"
+  stickyBuy
 >
 
   <ProductSchema product="pastillen" name="Larylin® Husten-Stiller Pastillen" description={description} category="Arzneimittel" />
@@ -55,14 +58,14 @@ const description =
   {/* ─── ANWENDUNG & DOSIERUNG (src/data/applications.ts) ───────────── */}
   <ApplicationSlider id="anwendung" product="pastillen" />
 
+  {/* ─── VERTRAUEN-BANNER ──────────────────────────────────────────── */}
+  <TrustBanner />
+
   {/* ─── FAQ (src/data/faqs.ts) ─────────────────────────────────────── */}
   <Faq id="faqs" items={faqsFor('pastillen')} schema />
 
   {/* ─── DOWNLOADS (src/data/downloads.ts, Dateien in public/downloads/) ─ */}
   <DownloadsSection id="downloads" product="pastillen" />
-
-  {/* ─── VERTRAUEN-BANNER ──────────────────────────────────────────── */}
-  <TrustBanner />
 
   {/* ─── ARTIKEL: Wissenswertes-Kacheln (wie Startseite) ─────────────── */}
   <ArticleSlider heading="Wissenswertes rund um Husten" />

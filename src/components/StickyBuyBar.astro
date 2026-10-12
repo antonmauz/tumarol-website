@@ -1,0 +1,52 @@
+---
+// StickyBuyBar.astro – nur mobil (< md): fester Balken am unteren Bildschirmrand mit
+// „Jetzt kaufen“ (öffnet den Apotheken-Drawer). Fährt hoch, sobald der Seitenkopf
+// ([data-sticky-buy-trigger], z. B. der Hero) nach oben aus dem Bild gescrollt ist, und
+// wieder herunter, wenn man zurück nach oben scrollt. Eingebunden über die Layout-Prop
+// `stickyBuy` (Startseite, Produktseiten).
+interface Props {
+  /** Vorgewählter Produkt-Tab im Drawer (Produktseiten). */
+  product?: string;
+}
+
+const { product } = Astro.props;
+---
+
+<div
+  data-sticky-buy
+  class="fixed inset-x-0 bottom-0 z-40 translate-y-full border-t border-divider bg-white px-6 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-[0_-6px_20px_rgb(0_0_0/0.08)] transition-transform duration-300 ease-out data-[visible]:translate-y-0 motion-reduce:transition-none md:hidden"
+  aria-hidden="true"
+  inert
+>
+  <button
+    type="button"
+    data-open-pharmacy-drawer
+    data-drawer-product={product}
+    class="w-full rounded-pill bg-red py-3 text-center text-base font-bold text-white transition-colors hover:bg-red-dark cursor-pointer"
+  >
+    Jetzt kaufen
+  </button>
+</div>
+
+{/* Platzhalter unter dem Footer (Footer-Fläche), damit der Balken am Seitenende
+    nichts verdeckt. */}
+<div class="h-[calc(4.5rem+env(safe-area-inset-bottom))] bg-surface md:hidden" aria-hidden="true"></div>
+
+<script>
+  const bar = document.querySelector<HTMLElement>('[data-sticky-buy]');
+  const trigger = document.querySelector('[data-sticky-buy-trigger]');
+
+  if (bar && trigger) {
+    const setVisible = (visible: boolean) => {
+      bar.toggleAttribute('data-visible', visible);
+      // Versteckt nicht fokussierbar und für Screenreader unsichtbar.
+      bar.toggleAttribute('inert', !visible);
+      bar.setAttribute('aria-hidden', String(!visible));
+    };
+
+    // Sichtbar, sobald der Seitenkopf vollständig oberhalb des Viewports liegt.
+    new IntersectionObserver(([entry]) => {
+      setVisible(!entry.isIntersecting && entry.boundingClientRect.top < 0);
+    }).observe(trigger);
+  }
+</script>

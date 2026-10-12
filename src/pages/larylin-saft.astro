@@ -23,10 +23,12 @@ const breadcrumbItems = [
   { label: 'Larylin® Husten-Stiller Saft' },
 ];
 
-// Kernpunkte des Seitenkopfs. TODO (LARYLIN): Wortlaut nach fachlicher Freigabe.
+// Kernpunkte des Seitenkopfs. TODO (LARYLIN): Wortlaut fachlich freigeben lassen (HWG).
 const heroBullets = [
-  'Wirkstoff Dropropizin',
-  '200 ml Saft je Flasche',
+  'Hemmt den Hustenreiz direkt in der Lunge',
+  'Ohne Konservierungsstoffe',
+  'Hemmt Reiz- und Krampfhusten',
+  'Ideal zur Einnahme vor dem Schlafengehen für ruhige Nächte',
 ];
 
 // Eine Quelle für Meta-Description und Product-JSON-LD.
@@ -39,6 +41,7 @@ const description =
   titleSuffix={false}
   description={description}
   pharmacyProduct="saft"
+  stickyBuy
 >
 
   <ProductSchema product="saft" name="Larylin® Husten-Stiller Saft" description={description} category="Arzneimittel" />
@@ -55,14 +58,14 @@ const description =
   {/* ─── ANWENDUNG & DOSIERUNG (src/data/applications.ts) ───────────── */}
   <ApplicationSlider id="anwendung" product="saft" />
 
+  {/* ─── VERTRAUEN-BANNER ──────────────────────────────────────────── */}
+  <TrustBanner />
+
   {/* ─── FAQ (src/data/faqs.ts) ─────────────────────────────────────── */}
   <Faq id="faqs" items={faqsFor('saft')} schema />
 
   {/* ─── DOWNLOADS (src/data/downloads.ts, Dateien in public/downloads/) ─ */}
   <DownloadsSection id="downloads" product="saft" />
-
-  {/* ─── VERTRAUEN-BANNER ──────────────────────────────────────────── */}
-  <TrustBanner />
 
   {/* ─── ARTIKEL: Wissenswertes-Kacheln (wie Startseite) ─────────────── */}
   <ArticleSlider heading="Wissenswertes rund um Husten" />

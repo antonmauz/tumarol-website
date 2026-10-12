@@ -17,6 +17,7 @@ import PackshotGroup from '../components/PackshotGroup.astro';
 
 <Layout
   topBar
+  stickyBuy
   title="Larylin® Husten-Stiller – bei trockenem Reizhusten"
   titleSuffix={false}
   description="Larylin® Husten-Stiller von ROBUGEN mit dem Wirkstoff Dropropizin, als Pastillen oder Saft. Wo Sie Larylin® kaufen können und Wissenswertes rund um Husten."
@@ -28,7 +29,7 @@ import PackshotGroup from '../components/PackshotGroup.astro';
       820px), wächst mit dem Inhalt; object-cover beschneidet dann rechts bzw. unten.
       Darunter steht das Bild als Ausschnitt (Frau links, rechts freie Wand), die Packshots
       liegen dort unten rechts über dem Bild, der Text folgt darunter. */}
-  <section class="relative lg:flex lg:min-h-[min(calc(100vw*821/1916),820px)] lg:items-center lg:py-14">
+  <section data-sticky-buy-trigger class="relative lg:flex lg:min-h-[min(calc(100vw*821/1916),820px)] lg:items-center lg:py-14">
     <Image
       src={heroImage}
       alt="Frau atmet mit geschlossenen Augen tief ein; eingezeichnet sind Gehirn (grau), Atemwege (orange) und Lunge (gelb)."
@@ -62,10 +63,10 @@ import PackshotGroup from '../components/PackshotGroup.astro';
       <h2 class="mb-4">Trockener Reizhusten?</h2>
       <p class="mx-auto max-w-3xl text-lg text-neutral-700 leading-relaxed">
         Trockener Reizhusten kann quälend sein, tagsüber und erst recht nachts.
-        Larylin® Husten-Stiller mit dem Wirkstoff Dropropizin lindert Reiz- und
-        Krampfhusten zuverlässig, ob als Saft oder als Pastillen. Er setzt gezielt an den
-        Hustenrezeptoren in den Atemwegen an, ohne im Gehirn zu wirken. Die Folge:
-        wirksame Linderung bei guter Verträglichkeit.
+        Larylin® Husten-Stiller mit dem Wirkstoff Dropropizin ist bei Reiz- und
+        Krampfhusten zugelassen, als Saft oder als Pastillen. Dropropizin wirkt vor allem
+        dort, wo der Hustenreiz entsteht: Es schwächt die Nervensignale aus der Lunge ab,
+        die den Hustenreflex auslösen.
       </p>
     </Container>
   </section>
