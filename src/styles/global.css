@@ -9,6 +9,7 @@
 
   /* Markenfarben (Akzente) */
   --color-yellow: #FFD400;
+  --color-logo-yellow: #FFEE1E; /* Gelb aus dem Larylin-Logo (gemessen an larylin-logo.png) */
   --color-orange: #FF7A00;
   --color-red: #D4160F;
   --color-red-dark: #A8110B; /* Hover auf dem Kauf-CTA */

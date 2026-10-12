@@ -36,7 +36,8 @@ interface ProductCard {
   /** Optionale sichtbare Überschrift, falls kürzer als `name` (HTML erlaubt, z. B. <br>);
    *  `name` bleibt der volle Produktname für aria-label. */
   nameHtml?: string;
-  /** Optionales Icon über dem Packshot (erscheint beim Hover), z. B. Tropfen für Flüssigkeiten. */
+  /** Optionales Icon über dem Packshot (erscheint beim Hover): SVG aus icons.ts (Tropfen
+   *  beim Saft, Pastille bei den Pastillen). */
   icon?: IconName;
   /** Kurzbeschreibung unter dem Produktnamen (Schriftbild wie der Einleitungstext). */
   description: string;
@@ -58,6 +59,7 @@ const products: ProductCard[] = [
     key: 'pastillen',
     name: productName.pastillen,
     nameHtml: 'Husten-Stiller Pastillen',
+    icon: 'pastille',
     description: 'Praktisch für unterwegs: einfach lutschen, ohne Wasser oder Löffel.',
     href: '/larylin-pastillen',
     background: pastillenBg,
@@ -68,7 +70,7 @@ const products: ProductCard[] = [
     key: 'saft',
     name: productName.saft,
     nameHtml: 'Husten-Stiller Saft',
-    icon: 'drops',
+    icon: 'drop',
     description: 'Für ruhigere Nächte: beruhigt den trockenen Reizhusten am Abend.',
     href: '/larylin-saft',
     background: saftBg,
@@ -136,11 +138,11 @@ const visibleProducts = only
                 </span>
               )}
 
-              {/* Optionales Produkt-Icon (Tropfen = Flüssigkeit), liegt über dem Packshot,
-                  sichtbar erst beim Hover. */}
+              {/* Optionales Produkt-Icon (Tropfen beim Saft, Pastille bei den Pastillen),
+                  liegt über dem Packshot, sichtbar erst beim Hover. */}
               {product.icon && (
                 <span class="product-card__icon" aria-hidden="true">
-                  <Fragment set:html={iconSvg(product.icon, 'w-8 h-8')} />
+                  <Fragment set:html={iconSvg(product.icon, 'w-7 h-7')} />
                 </span>
               )}
 
@@ -223,7 +225,7 @@ const visibleProducts = only
     z-index: 1;
   }
 
-  /* Icon oben rechts in einem Kreis in Markengelb (schwarzes Icon); liegt über dem
+  /* Icon oben rechts in einem Kreis im Logo-Gelb (schwarzes Icon); liegt über dem
      Packshot (kein eigener Platz nötig) und blendet erst beim Hover ein.
      Auf Touch dauerhaft sichtbar (siehe unten). */
   .product-card__icon {
@@ -237,7 +239,7 @@ const visibleProducts = only
     width: 3rem;
     height: 3rem;
     border-radius: 9999px;
-    background: var(--color-yellow);
+    background: var(--color-logo-yellow);
     color: var(--color-ink);
     opacity: 0;
     transition: opacity 200ms ease;
