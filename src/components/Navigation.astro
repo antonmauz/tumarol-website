@@ -51,9 +51,9 @@ const isActive = (link: NavItem): boolean => {
 const dropdownId = (link: NavItem) => `nav-dropdown-${link.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 
 
-// Navbar-Konzept: am Seitenanfang transparent auf dem weißen Grund; beim Scrollen oder
-// offenem Mobile-Menü setzt das Script `data-scrolled`, und die Navbar wird ein
-// schwebender weißer Balken mit Schatten.
+// Navbar-Konzept: fester weißer Balken über die volle Breite; beim Scrollen oder
+// offenem Mobile-Menü setzt das Script `data-scrolled`, dann erscheint unten eine
+// Trennlinie. Position und Breite ändern sich nie.
 const linkBase = 'text-base font-semibold transition-colors text-ink hover:text-black';
 // Aktiv-Markierung als dicker gelber Unterstrich (Logo-Motiv) — Farbe allein reicht nicht.
 const linkActive = 'underline decoration-yellow decoration-[3px] underline-offset-[6px]';
@@ -63,10 +63,9 @@ const linkActive = 'underline decoration-yellow decoration-[3px] underline-offse
   id="site-header"
   class="group fixed top-0 left-0 right-0 z-50"
 >
-  {/* Der Balken: transparent am Seitenanfang, beim Scrollen weiß mit Schatten in
-      Balkenbreite (Seitenrand + --container-bar aus global.css). Beide Zustände setzen
-      die Breite als Länge, damit sie mit Hintergrund und Schatten animiert. */}
-  <div class="mx-auto w-full mt-0 rounded-none bg-transparent shadow-none transition-all duration-300 group-data-[scrolled]:w-[min(100%_-_var(--spacing-gutter),var(--container-bar))] md:group-data-[scrolled]:w-[min(100%_-_var(--spacing-gutter-md),var(--container-bar))] group-data-[scrolled]:mt-3 group-data-[scrolled]:rounded-card group-data-[scrolled]:bg-white group-data-[scrolled]:shadow-lg">
+  {/* Der Balken: fest oben, volle Breite, immer weiß; beim Scrollen kommt nur eine
+      1px-Trennlinie dazu (Farbwechsel, keine Bewegung). */}
+  <div class="w-full bg-white border-b border-transparent transition-colors duration-300 group-data-[scrolled]:border-divider">
   <Container size="wide" class="px-6 lg:px-8">
     <nav class="flex items-center justify-between h-16" aria-label="Hauptnavigation">
 
@@ -181,7 +180,7 @@ const linkActive = 'underline decoration-yellow decoration-[3px] underline-offse
   </Container>
 
   {/* Mobile Menu: flache Liste mit zwei Akkordeons (Teil des weißen Balkens) */}
-  <div id="mobile-menu" class="hidden md:hidden border-t border-divider bg-white rounded-b-card max-h-[calc(100vh-5rem)] overflow-y-auto">
+  <div id="mobile-menu" class="hidden md:hidden border-t border-divider bg-white max-h-[calc(100vh-5rem)] overflow-y-auto">
     <Container size="wide" class="px-6 py-2">
       <nav class="divide-y divide-divider" aria-label="Mobile Navigation">
 
@@ -249,8 +248,8 @@ const linkActive = 'underline decoration-yellow decoration-[3px] underline-offse
   const btn = document.getElementById('mobile-menu-btn');
   const menu = document.getElementById('mobile-menu');
 
-  // Navbar liegt am Seitenanfang transparent auf dem weißen Grund; beim Scrollen
-  // (oder bei offenem Mobile-Menü) hebt sie sich als weißer Balken ab.
+  // Navbar bleibt fest an ihrer Stelle; beim Scrollen (oder bei offenem Mobile-Menü)
+  // bekommt sie nur eine Trennlinie nach unten.
   const updateHeader = () => {
     const menuOpen = menu ? !menu.classList.contains('hidden') : false;
     const solid = menuOpen || window.scrollY > 16;
