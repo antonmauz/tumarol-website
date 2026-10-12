@@ -1,0 +1,40 @@
+---
+// Große Aufmacher-Karte der Wissenswertes-Übersicht (nach chase.de/blog „Neueste Artikel“):
+// hohes Bild ohne Kartenfläche, darunter Titel, Kurztext und Lesezeit. Ganze Karte = ein
+// Link; Hover zoomt das Bild und unterstreicht den Titel gelb.
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+interface Props {
+  href: string;
+  title: string;
+  excerpt?: string;
+  image?: ImageMetadata;
+  imageAlt?: string;
+  readingTime?: string;
+}
+
+const { href, title, excerpt, image, imageAlt, readingTime } = Astro.props;
+---
+
+<a href={href} class="group flex h-full flex-col focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink">
+  <div class="relative aspect-[4/3] overflow-hidden rounded-card bg-divider">
+    {image && (
+      <Image
+        src={image}
+        alt={imageAlt ?? ''}
+        widths={[640, 960, 1280]}
+        sizes="(min-width: 1024px) 560px, 100vw"
+        loading="lazy"
+        class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+      />
+    )}
+  </div>
+  <div class="pt-5">
+    <h3 class="text-xl leading-snug font-extrabold text-ink md:text-2xl">
+      <span class="underline decoration-transparent decoration-[3px] underline-offset-[6px] transition-colors group-hover:decoration-yellow group-focus-visible:decoration-yellow">{title}</span>
+    </h3>
+    {excerpt && <p class="mt-3 text-neutral-700 leading-relaxed">{excerpt}</p>}
+    {readingTime && <p class="mt-3 text-sm text-neutral-600">{readingTime}</p>}
+  </div>
+</a>

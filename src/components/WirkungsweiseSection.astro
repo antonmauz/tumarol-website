@@ -1,6 +1,8 @@
 ---
 // WirkungsweiseSection.astro - „So wirkt Dropropizin“: links eine schematische Figur (Kopf bis
 // Bauch) mit Gehirn, Atemwegen und Lunge, rechts drei Erklärungen.
+// Fachinformation 5.1: „peripher wirkendes, nicht opioides Antitussivum mit teilweise zentraler
+// Wirkung“ – das Gehirn ist deshalb als „wirkt teilweise“ markiert, nicht als „wirkt nicht“.
 // Ab lg: feste Bühne im Seitenverhältnis 5:3 (viewBox 1000 × 600). Die Figur belegt die
 // linken 40 % (eigene viewBox 400 × 600, also deckungsgleich), die Pfeile liegen als
 // zweites SVG über der ganzen Bühne, die Texte sitzen absolut auf denselben Höhen (--y).
@@ -8,12 +10,13 @@
 // TODO (LARYLIN): Wortlaut fachlich freigeben lassen (HWG: Aussagen zum Wirkmechanismus
 // brauchen einen Beleg in der Fachinformation).
 import Container from './Container.astro';
+import ArrowLink from './ArrowLink.astro';
 
 interface Point {
   /** Nummer in Figur und Liste. */
   n: number;
   title: string;
-  /** true = Dropropizin wirkt hier (farbig), false = wirkt hier nicht (grau). */
+  /** true = Hauptwirkort, peripher (farbig); false = nur teilweise Wirkung, zentral (grau). */
   acts: boolean;
   text: string;
   /** Ankerpunkt in der Figur (viewBox 400 × 600); y bestimmt auch die Höhe des Textes. */
@@ -26,7 +29,7 @@ const points: Point[] = [
     n: 1,
     title: 'Gehirn',
     acts: false,
-    text: 'Dropropizin setzt nicht im Hustenzentrum des Gehirns an. Es wirkt dort, wo der Hustenreiz entsteht.',
+    text: 'Dropropizin wirkt vor allem peripher, also dort, wo der Hustenreiz entsteht. Im Hustenzentrum des Gehirns wirkt es nur zum Teil.',
     x: 252,
     y: 88,
   },
@@ -52,12 +55,12 @@ const points: Point[] = [
 const LINE_END_X = 465;
 ---
 
-<section class="px-6 py-16 md:py-20" aria-labelledby="wirkungsweise-title">
+<section id="wirkungsweise" class="px-6 py-16 md:py-20 scroll-mt-24" aria-labelledby="wirkungsweise-title">
   <Container size="content">
     <h2 id="wirkungsweise-title" class="mb-4">So wirkt Dropropizin</h2>
     <p class="max-w-2xl text-lg text-neutral-700 leading-relaxed mb-10 lg:mb-6">
-      Dropropizin wirkt dort, wo der Hustenreiz entsteht: direkt an den Hustenrezeptoren der
-      Atemwege und nicht im Gehirn.
+      Dropropizin wirkt vor allem peripher, also dort, wo der Hustenreiz entsteht: in den
+      Atemwegen. Im Gehirn wirkt es nur zum Teil.
     </p>
 
     <div class="wirkung-stage">
@@ -67,7 +70,7 @@ const LINE_END_X = 465;
           viewBox="0 0 400 600"
           class="w-full h-full"
           role="img"
-          aria-label="Schematische Figur von Kopf bis Bauch: Gehirn grau (Dropropizin wirkt hier nicht), Atemwege und Lunge farbig hervorgehoben (hier wirkt Dropropizin)."
+          aria-label="Schematische Figur von Kopf bis Bauch: Gehirn grau (hier wirkt Dropropizin nur zum Teil), Atemwege und Lunge farbig hervorgehoben (hier wirkt Dropropizin vor allem)."
         >
           <defs>
             <linearGradient id="wirkung-fade" x1="0" y1="0" x2="0" y2="1">
@@ -84,7 +87,7 @@ const LINE_END_X = 465;
             <ellipse cx="200" cy="104" rx="72" ry="86" />
           </g>
 
-          {/* Gehirn: grau, mit Furchen (hier wirkt Dropropizin nicht). */}
+          {/* Gehirn: grau, mit Furchen (hier wirkt Dropropizin nur zum Teil). */}
           <g>
             <path
               d="M150 92 C142 60 172 34 200 38 C230 34 260 58 252 92 C254 112 236 124 214 120 C206 128 192 128 186 120 C164 124 146 112 150 92 Z"
@@ -198,7 +201,7 @@ const LINE_END_X = 465;
                   p.acts ? 'bg-yellow text-ink' : 'bg-surface text-neutral-700 border border-divider',
                 ]}
               >
-                {p.acts ? 'Wirkt hier' : 'Wirkt hier nicht'}
+                {p.acts ? 'Wirkt hier' : 'Wirkt teilweise'}
               </span>
             </div>
             <p class="text-neutral-700 leading-relaxed">{p.text}</p>
@@ -206,6 +209,11 @@ const LINE_END_X = 465;
         ))}
       </ol>
     </div>
+
+    {/* Einstieg zur Wissensseite /husten (Grundlagen, Ursachen, wann zum Arzt). */}
+    <p class="mt-12 lg:mt-8">
+      <ArrowLink href="/husten">Mehr über Husten und seine Ursachen</ArrowLink>
+    </p>
   </Container>
 </section>
 

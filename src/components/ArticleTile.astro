@@ -12,18 +12,26 @@ interface Props {
   imageAlt?: string;
   /** Optionales Kategorie-Label über dem Titel. */
   badge?: string;
+  /** Kartenfläche: hellgrau (Standard, auf Weiß), weiß (auf hellgrauer Sektion) oder
+   *  none: keine Fläche, Bild mit eigenen Ecken, Text frei darunter (ArticleSlider). */
+  surface?: 'gray' | 'white' | 'none';
   /** Optionales Lesezeit-Label, z. B. "3 Min. Lesezeit". */
   readingTime?: string;
 }
 
-const { href, title, image, imageAlt, badge, readingTime } = Astro.props;
+const { href, title, image, imageAlt, badge, surface = 'gray', readingTime } = Astro.props;
 ---
 
 <a
   href={href}
-  class="group flex h-full flex-col overflow-hidden rounded-card bg-surface focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ink"
+  class:list={[
+    'group flex h-full flex-col rounded-card focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ink',
+    surface === 'none' ? '' : 'overflow-hidden',
+    surface === 'white' && 'bg-white',
+    surface === 'gray' && 'bg-surface',
+  ]}
 >
-  <div class="relative aspect-[4/3] overflow-hidden bg-divider">
+  <div class:list={['relative aspect-[4/3] overflow-hidden bg-divider', surface === 'none' && 'rounded-card']}>
     {image ? (
       <Image
         src={image}
@@ -41,7 +49,7 @@ const { href, title, image, imageAlt, badge, readingTime } = Astro.props;
     )}
   </div>
 
-  <div class="flex flex-1 flex-col p-5">
+  <div class:list={['flex flex-1 flex-col', surface === 'none' ? 'pt-4' : 'p-5']}>
     {badge && <span class="mb-1 text-sm font-semibold text-neutral-600">{badge}</span>}
     {/* text-lg statt h3-Standardgröße: es steht der volle Artikel-Header (h1) in der
         Karte, der braucht 2–3 Zeilen Platz. */}

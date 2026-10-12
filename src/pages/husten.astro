@@ -1,0 +1,237 @@
+---
+// /husten – Wissensseite „Husten: Ursachen, Formen und was hilft“ (Grundlagen, eine Seite mit
+// Sprungmarken). Einstieg von der Startseite über WirkungsweiseSection („So wirkt Dropropizin“);
+// alle Wissenswertes-Artikel verlinken hierher. Alltagsthemen stehen in den Artikeln, hier nur
+// der Überblick mit Links dorthin.
+// TODO (LARYLIN): Texte fachlich/regulatorisch freigeben lassen; der Abschnitt zu Dropropizin
+// folgt dem Wortlaut der Fachinformation (5.1), Anwendungsgebiet nach 4.1.
+import Layout from '../layouts/Layout.astro';
+import BreadcrumbSection from '../components/BreadcrumbSection.astro';
+import Container from '../components/Container.astro';
+import ArticleProse from '../components/ArticleProse.astro';
+import ProductHighlight from '../components/ProductHighlight.astro';
+import ArticleSlider from '../components/ArticleSlider.astro';
+import SourcesSection from '../components/SourcesSection.astro';
+import { ratgeberArticleUrl } from '../data/categories';
+
+const a = {
+  nachts: ratgeberArticleUrl('reizhusten-im-alltag', 'reizhusten-nachts'),
+  hausmittel: ratgeberArticleUrl('reizhusten-im-alltag', 'hausmittel-reizhusten'),
+  heizung: ratgeberArticleUrl('reizhusten-im-alltag', 'heizungsluft-reizhusten'),
+  nachErkaeltung: ratgeberArticleUrl('erkaeltungszeit', 'husten-nach-erkaeltung'),
+  grippe: ratgeberArticleUrl('erkaeltungszeit', 'erkaeltung-oder-grippe'),
+  ansteckend: ratgeberArticleUrl('erkaeltungszeit', 'husten-ansteckend'),
+  medikamente: ratgeberArticleUrl('woher-der-husten-kommt', 'husten-durch-medikamente'),
+  sodbrennen: ratgeberArticleUrl('woher-der-husten-kommt', 'husten-durch-sodbrennen'),
+  pollen: ratgeberArticleUrl('woher-der-husten-kommt', 'husten-pollenallergie'),
+};
+
+const toc = [
+  { id: 'wie-entsteht-husten', label: 'Wie entsteht Husten?' },
+  { id: 'trocken-oder-schleim', label: 'Trockener Husten oder Husten mit Schleim?' },
+  { id: 'dropropizin', label: 'Wie wirkt Dropropizin?' },
+  { id: 'wie-lange', label: 'Wie lange dauert Husten?' },
+  { id: 'ursachen', label: 'Was sind häufige Ursachen?' },
+  { id: 'was-hilft', label: 'Was hilft bei trockenem Reizhusten?' },
+  { id: 'wann-zum-arzt', label: 'Wann sollte ich zum Arzt gehen?' },
+];
+
+const sources = [
+  'Deutsche Gesellschaft für Allgemeinmedizin und Familienmedizin (DEGAM): S3-Leitlinie Akuter und chronischer Husten, 2022. register.awmf.org',
+  'Deutsche Gesellschaft für Pneumologie und Beatmungsmedizin (DGP): S2k-Leitlinie Fachärztliche Diagnostik und Therapie von erwachsenen Patienten mit Husten, 2025. register.awmf.org',
+  'Fachinformation Larylin® Husten-Stiller Pastillen, Abschnitte 4.1 und 5.1. fachinfo.de',
+  'Robert Koch-Institut: RKI-Ratgeber Keuchhusten (Pertussis). rki.de',
+];
+---
+
+<Layout
+  title="Husten: Ursachen, Formen und was hilft"
+  description="Wie Husten entsteht, worin sich trockener Reizhusten und Husten mit Schleim unterscheiden, wie Dropropizin wirkt, wie lange Husten dauert und wann Sie ärztlichen Rat brauchen."
+>
+  <BreadcrumbSection items={[{ label: 'Startseite', href: '/' }, { label: 'Husten' }]} size="text" />
+
+  {/* ─── KOPF + INHALTSVERZEICHNIS ─────────────────────────────────────── */}
+  <section class="pt-4 md:pt-6 px-6">
+    <Container size="text">
+      <h1 class="mb-6">Husten: Ursachen, Formen und was hilft</h1>
+      <p class="text-xl text-neutral-600 leading-relaxed mb-4 max-w-3xl">
+        Husten ist einer der häufigsten Gründe für einen Arztbesuch. Meist steckt eine harmlose
+        Erkältung dahinter, und der Husten klingt von selbst wieder ab. Manchmal bleibt er aber
+        länger, raubt den Schlaf oder hat eine ganz andere Ursache.
+      </p>
+      <p class="text-xl text-neutral-600 leading-relaxed max-w-3xl">
+        Diese Seite erklärt die Grundlagen: wie Husten entsteht, welche Formen es gibt, wie der
+        Wirkstoff in Larylin® wirkt und woran Sie erkennen, wann Husten ärztlich abgeklärt
+        gehört.
+      </p>
+
+      <nav aria-labelledby="toc-title" class="mt-10 rounded-xl bg-surface p-6 md:p-8">
+        <h2 id="toc-title" class="text-lg text-ink mb-4">Das Wichtigste auf einen Blick</h2>
+        <ol class="space-y-2">
+          {toc.map((item, i) => (
+            <li class="flex gap-3">
+              <span class="w-6 shrink-0 font-bold text-ink" aria-hidden="true">{i + 1}.</span>
+              <a href={`#${item.id}`} class="font-semibold text-ink underline underline-offset-4 hover:text-primary">
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </Container>
+  </section>
+
+  {/* ─── INHALT ─────────────────────────────────────────────────────── */}
+  <section class="pt-4 pb-16 md:pb-20 px-6">
+    <Container size="text">
+      <ArticleProse>
+        <h2 id="wie-entsteht-husten">Wie entsteht Husten?</h2>
+        <p>
+          Husten ist ein Schutzreflex. In der Schleimhaut von Kehlkopf, Luftröhre und Bronchien
+          sitzen empfindliche Nervenenden, die Fremdkörper, Schleim oder Reizstoffe erkennen.
+          Werden sie gereizt, senden sie über Nervenbahnen ein Signal an das Hustenzentrum im
+          Hirnstamm. Von dort wird der Hustenstoß ausgelöst: Die Atemwege werden mit hohem Druck
+          freigeblasen.
+        </p>
+        <p>
+          Bei einem Infekt wird die oberste Zellschicht der Atemwege geschädigt. Die Nervenenden
+          liegen dann freier und reagieren schon auf kleinste Reize wie kalte Luft, Sprechen oder
+          Lachen. Der Husten erfüllt dann keine Schutzaufgabe mehr, sondern wird zur Belastung.
+        </p>
+
+        <h2 id="trocken-oder-schleim">Trockener Husten oder Husten mit Schleim?</h2>
+        <p>
+          Für die Frage, was hilft, ist vor allem eines wichtig: ob beim Husten Schleim
+          entsteht.
+        </p>
+        <h3>Trockener Reizhusten (unproduktiver Husten)</h3>
+        <p>
+          Der Husten kitzelt und kratzt, es wird aber kein Schleim abgehustet. Er kommt oft
+          anfallsartig, nachts häufig stärker, und bringt keine Erleichterung. Typisch ist er zu
+          Beginn einer Erkältung und in den Wochen danach. Hier kann ein
+          <strong>Hustenstiller</strong> sinnvoll sein, der den Hustenreflex dämpft.
+        </p>
+        <h3>Husten mit Schleim (produktiver Husten)</h3>
+        <p>
+          Beim Husten löst sich Schleim, der abgehustet wird. Dieser Husten hat eine wichtige
+          Aufgabe: Er reinigt die Atemwege. Er sollte nicht unterdrückt werden. Hier kommen eher
+          <strong>Hustenlöser</strong> infrage, die den Schleim verflüssigen.
+        </p>
+        <p>
+          <strong>Wichtig:</strong> Hustenstiller und Hustenlöser sollten nicht gleichzeitig
+          eingenommen werden. Sonst wird Schleim gelöst, aber nicht abgehustet, und kann sich in
+          den Atemwegen stauen.
+        </p>
+
+        <h2 id="dropropizin">Wie wirkt Dropropizin?</h2>
+        <p>
+          Dropropizin ist der Wirkstoff in Larylin® Husten-Stiller. Es ist zugelassen bei Reiz-
+          und Krampfhusten, also trockenem, unproduktivem Husten, sowie bei Irritationen und
+          Reizungen der oberen Atemwege.
+        </p>
+        <p>
+          Laut Fachinformation ist Dropropizin ein <strong>peripher wirkendes, nicht opioides
+          Antitussivum</strong> mit teilweise zentraler Wirkung. Peripher heißt: Es setzt vor
+          allem dort an, wo der Hustenreiz entsteht, und nicht in erster Linie im Gehirn. Man
+          geht davon aus, dass Dropropizin die Nervensignale aus der Lunge abschwächt, die den
+          Hustenreflex auslösen. So wird der Kreislauf aus Reiz und Hustenstoß unterbrochen.
+        </p>
+        <p>
+          Nicht opioid bedeutet, dass Dropropizin nicht mit Codein und verwandten Wirkstoffen
+          verwandt ist. Larylin® ist für Erwachsene und Jugendliche ab 12 Jahren zugelassen.
+        </p>
+
+        <h2 id="wie-lange">Wie lange dauert Husten?</h2>
+        <p>Die ärztliche Leitlinie unterscheidet Husten nach seiner Dauer:</p>
+        <ul>
+          <li><strong>Akuter Husten:</strong> bis zu drei Wochen. Meist steckt ein Infekt dahinter.</li>
+          <li><strong>Subakuter Husten:</strong> drei bis acht Wochen. Häufig ein Reizhusten, der nach einem Infekt zurückbleibt.</li>
+          <li><strong>Chronischer Husten:</strong> länger als acht Wochen. Er sollte immer ärztlich abgeklärt werden.</li>
+        </ul>
+        <p>
+          Dass ein trockener Husten eine Erkältung um einige Wochen überdauert, ist häufig und
+          meist harmlos. Mehr dazu im Artikel
+          <a href={a.nachErkaeltung}>Husten nach der Erkältung</a>.
+        </p>
+
+        <h2 id="ursachen">Was sind häufige Ursachen?</h2>
+        <ul>
+          <li>
+            <strong>Erkältung und Grippe:</strong> die mit Abstand häufigste Ursache für akuten
+            Husten. Wie Sie beides unterscheiden, lesen Sie im Artikel
+            <a href={a.grippe}>Erkältung oder Grippe?</a> und wann Husten ansteckend ist im
+            Artikel <a href={a.ansteckend}>Ist Husten ansteckend?</a>
+          </li>
+          <li>
+            <strong>Trockene Luft:</strong> Heizungsluft trocknet die Schleimhaut aus und
+            verstärkt den Hustenreiz. Mehr im Artikel <a href={a.heizung}>Trockene Heizungsluft</a>.
+          </li>
+          <li>
+            <strong>Allergien:</strong> Pollen, Staub oder Tierhaare können Husten auslösen. Mehr
+            im Artikel <a href={a.pollen}>Husten bei Pollenallergie</a>.
+          </li>
+          <li>
+            <strong>Aufsteigende Magensäure:</strong> eine häufige Ursache für lang anhaltenden
+            trockenen Husten, oft ohne spürbares Sodbrennen. Mehr im Artikel
+            <a href={a.sodbrennen}>Husten durch Sodbrennen</a>.
+          </li>
+          <li>
+            <strong>Medikamente:</strong> Bestimmte Blutdruckmittel, die ACE-Hemmer, lösen bei
+            manchen Menschen einen trockenen Reizhusten aus. Mehr im Artikel
+            <a href={a.medikamente}>Husten durch Medikamente</a>.
+          </li>
+          <li>
+            <strong>Erkrankungen der Lunge:</strong> etwa Asthma, COPD oder Keuchhusten. Sie
+            gehören in ärztliche Behandlung.
+          </li>
+          <li>
+            <strong>Rauchen:</strong> Rauch reizt die Atemwege dauerhaft und ist eine häufige
+            Ursache für chronischen Husten.
+          </li>
+        </ul>
+
+        <h2 id="was-hilft">Was hilft bei trockenem Reizhusten?</h2>
+        <p>
+          Ein akuter Husten im Rahmen eines Infekts klingt in der Regel auch ohne Medikamente ab.
+          Bis dahin können einfache Maßnahmen die gereizte Schleimhaut entlasten: viel trinken,
+          regelmäßig lüften, Honig, Lutschen und Rauch meiden. Was davon belegt ist, lesen Sie im
+          Artikel <a href={a.hausmittel}>Hausmittel bei Reizhusten</a>, Tipps für erholsamen
+          Schlaf im Artikel <a href={a.nachts}>Reizhusten in der Nacht</a>.
+        </p>
+        <p>
+          Raubt ein trockener Reizhusten den Schlaf oder belastet er den Alltag stark, kann ein
+          Hustenstiller für kurze Zeit infrage kommen. Er ist nur für Husten ohne Schleim gedacht.
+          Lassen Sie sich in Ihrer Apotheke beraten und beachten Sie die Packungsbeilage.
+        </p>
+
+        <h2 id="wann-zum-arzt">Wann sollte ich zum Arzt gehen?</h2>
+        <p>Vereinbaren Sie einen Termin, wenn einer dieser Punkte zutrifft:</p>
+        <ul>
+          <li>der Husten hält länger als drei Wochen an oder wird wieder schlimmer</li>
+          <li>Sie haben Fieber über mehrere Tage</li>
+          <li>Ihre Atmung pfeift oder Sie sind schnell außer Atem</li>
+          <li>der Husten kommt in heftigen Anfällen, teils mit ziehendem Einatmen oder Erbrechen</li>
+          <li>Sie verlieren ungewollt Gewicht oder fühlen sich dauerhaft erschöpft</li>
+          <li>Sie rauchen oder haben geraucht und Ihr Husten verändert sich</li>
+        </ul>
+        <p>
+          Sofort ärztliche Hilfe brauchen Sie bei starker Atemnot, Schmerzen in der Brust,
+          pfeifenden Geräuschen beim Einatmen oder wenn Sie Blut abhusten.
+        </p>
+        <p>
+          Diese Seite dient der allgemeinen Information und ersetzt keine ärztliche Diagnose oder
+          Beratung.
+        </p>
+      </ArticleProse>
+    </Container>
+  </section>
+
+  {/* ─── PRODUKTE (Anwendungsgebiet trockener Reizhusten, passt zum Seiteninhalt) ─── */}
+  <ProductHighlight heading="Larylin® bei trockenem Reizhusten" />
+
+  {/* ─── MAGAZIN ─────────────────────────────────────────────────────── */}
+  <ArticleSlider heading="Wissenswertes rund um Husten" />
+
+  {/* ─── QUELLEN ─────────────────────────────────────────────────────── */}
+  <SourcesSection items={sources} />
+</Layout>

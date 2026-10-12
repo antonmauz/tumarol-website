@@ -10,7 +10,8 @@ import { readingTimeLabel } from '../data/readingTime';
 
 // Globaler Artikel-Slider: Bild-Kacheln aller Ratgeber-Artikel, seitenweise
 // blätterbar, responsiv 1–3 Kacheln. Kachel-Optik zentral in ArticleTile
-// (hellgraue Karte, Farbbalken in der Folge Gelb/Orange/Rot, Hover: Bild zoomt).
+// (surface="none": Bild mit eigenen Ecken, Text ohne Kartenfläche darunter; Hover: Bild
+// zoomt).
 
 interface Props {
   heading: string;
@@ -70,6 +71,7 @@ const items = ratgeber.filter((item) => item.href !== excludeHref);
               imageAlt={item.headerImageAlt}
               badge={item.badge}
               readingTime={item.readingTime}
+              surface="none"
             />
           </div>
         ))}
