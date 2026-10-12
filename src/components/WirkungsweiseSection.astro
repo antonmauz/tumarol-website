@@ -2,7 +2,8 @@
 // WirkungsweiseSection.astro - „So wirkt Dropropizin“: links eine schematische Figur (Kopf bis
 // Bauch) mit Gehirn, Atemwegen und Lunge, rechts drei Erklärungen.
 // Fachinformation 5.1: „peripher wirkendes, nicht opioides Antitussivum mit teilweise zentraler
-// Wirkung“ – das Gehirn ist deshalb als „wirkt teilweise“ markiert, nicht als „wirkt nicht“.
+// Wirkung“ – das Gehirn ist deshalb grau mit gestricheltem Pfeil
+// markiert („wirkt teilweise“), nicht als „wirkt nicht“.
 // Ab lg: feste Bühne im Seitenverhältnis 5:3 (viewBox 1000 × 600). Die Figur belegt die
 // linken 40 % (eigene viewBox 400 × 600, also deckungsgleich), die Pfeile liegen als
 // zweites SVG über der ganzen Bühne, die Texte sitzen absolut auf denselben Höhen (--y).
@@ -10,7 +11,7 @@
 // TODO (LARYLIN): Wortlaut fachlich freigeben lassen (HWG: Aussagen zum Wirkmechanismus
 // brauchen einen Beleg in der Fachinformation).
 import Container from './Container.astro';
-import ArrowLink from './ArrowLink.astro';
+import Button from './ui/Button.astro';
 
 interface Point {
   /** Nummer in Figur und Liste. */
@@ -57,7 +58,12 @@ const LINE_END_X = 465;
 
 <section id="wirkungsweise" class="px-6 py-16 md:py-20 scroll-mt-24" aria-labelledby="wirkungsweise-title">
   <Container size="content">
-    <h2 id="wirkungsweise-title" class="mb-4">So wirkt Dropropizin</h2>
+    {/* Kopfzeile: H2 links, rechts der Einstieg zur Wissensseite /husten (Grundlagen,
+        Ursachen, wann zum Arzt) als Outline-Button; mobil bricht er unter die H2. */}
+    <div class="mb-4 flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
+      <h2 id="wirkungsweise-title">So wirkt Dropropizin</h2>
+      <Button href="/husten" variant="outline">Mehr über Husten und seine Ursachen</Button>
+    </div>
     <p class="max-w-2xl text-lg text-neutral-700 leading-relaxed mb-10 lg:mb-6">
       Dropropizin wirkt vor allem peripher, also dort, wo der Hustenreiz entsteht: in den
       Atemwegen. Im Gehirn wirkt es nur zum Teil.
@@ -195,25 +201,12 @@ const LINE_END_X = 465;
                 {p.n}
               </span>
               <h3 class="text-lg">{p.title}</h3>
-              <span
-                class:list={[
-                  'rounded-pill px-3 py-0.5 text-xs font-bold',
-                  p.acts ? 'bg-yellow text-ink' : 'bg-surface text-neutral-700 border border-divider',
-                ]}
-              >
-                {p.acts ? 'Wirkt hier' : 'Wirkt teilweise'}
-              </span>
             </div>
             <p class="text-neutral-700 leading-relaxed">{p.text}</p>
           </li>
         ))}
       </ol>
     </div>
-
-    {/* Einstieg zur Wissensseite /husten (Grundlagen, Ursachen, wann zum Arzt). */}
-    <p class="mt-12 lg:mt-8">
-      <ArrowLink href="/husten">Mehr über Husten und seine Ursachen</ArrowLink>
-    </p>
   </Container>
 </section>
 
