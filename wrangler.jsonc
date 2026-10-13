@@ -1,7 +1,7 @@
 {
-  "name": "kamillin-website",
-  // Worker-Projekt "kamillin-website", per Git-Anbindung aus GitHub (main) deployt. Die Seite
-  // läuft nur unter der Custom Domain kamillin.de (im Cloudflare-Dashboard verbunden);
+  "name": "larylin-website",
+  // Worker-Projekt "larylin-website", per Git-Anbindung aus GitHub (main) deployt. Die Seite
+  // läuft nur unter der Custom Domain larylin.de (im Cloudflare-Dashboard verbunden);
   // *.workers.dev-URL und Preview-URLs sind aus, damit keine indexierbaren Duplikate entstehen.
   "workers_dev": false,
   "preview_urls": false,

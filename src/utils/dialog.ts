@@ -32,12 +32,23 @@ export function trapFocus(container: HTMLElement, e: KeyboardEvent): void {
   }
 }
 
-/** Alle Body-Kinder außer den angegebenen Wurzeln inert schalten (oder zurücknehmen). */
+/** Markiert Elemente, die der Dialog inert geschaltet hat — nur diese gibt er wieder frei. */
+const DIALOG_INERT = 'data-dialog-inert';
+
+/** Alle Body-Kinder außer den angegebenen Wurzeln inert schalten (oder zurücknehmen).
+ *  Elemente, die schon vorher inert waren (z. B. die versteckte StickyBuyBar), bleiben
+ *  unangetastet und behalten ihr inert auch nach dem Schließen. */
 export function setBackgroundInert(roots: Element[], inert: boolean): void {
   for (const child of Array.from(document.body.children)) {
     if (roots.some((root) => root === child || root.contains(child) || child.contains(root))) continue;
-    if (inert) child.setAttribute('inert', '');
-    else child.removeAttribute('inert');
+    if (inert) {
+      if (child.hasAttribute('inert')) continue;
+      child.setAttribute('inert', '');
+      child.setAttribute(DIALOG_INERT, '');
+    } else if (child.hasAttribute(DIALOG_INERT)) {
+      child.removeAttribute('inert');
+      child.removeAttribute(DIALOG_INERT);
+    }
   }
 }
 

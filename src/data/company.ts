@@ -12,7 +12,7 @@ export const COMPANY_CITY = '73730 Esslingen';
 export const COMPANY_URL = 'https://robugen.de';
 
 /** Redaktion als Autorin der Ratgeber-Artikel. */
-export const EDITORIAL_NAME = 'KAMILLIN® Redaktion';
+export const EDITORIAL_NAME = 'Larylin® Redaktion';
 
 /** Prüfende Stelle der Ratgeber-Artikel (reviewedBy). */
 export const REVIEW_NAME = 'Robugen Gesundheitsredaktion';

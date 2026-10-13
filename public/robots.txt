@@ -4,4 +4,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://kamillin.de/sitemap-index.xml
+Sitemap: https://larylin.de/sitemap-index.xml

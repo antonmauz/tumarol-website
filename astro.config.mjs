@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   // Kanonische Produktions-URL – Basis für Canonicals, Sitemap und JSON-LD.
-  site: 'https://kamillin.de',
+  site: 'https://larylin.de',
   // Kanonische URL-Form ist slash-los (Auslieferung via wrangler.jsonc "drop-trailing-slash").
   trailingSlash: 'never',
   integrations: [
