@@ -4,7 +4,18 @@
 
 const READY = 'data-snap-slider-ready';
 
-export function initSnapSlider(root: HTMLElement): void {
+/** Wird der fokussierte Pfeil am Anfang/Ende deaktiviert, wandert der Fokus auf den
+ *  Gegenpfeil — sonst fiele er auf <body> und Tastaturnutzer verlören ihre Position. */
+export function keepFocus(
+  focused: Element | null,
+  prev: HTMLButtonElement | null,
+  next: HTMLButtonElement | null,
+): void {
+  if (focused === prev && prev?.disabled && next && !next.disabled) next.focus();
+  else if (focused === next && next?.disabled && prev && !prev.disabled) prev.focus();
+}
+
+function initSnapSlider(root: HTMLElement): void {
   if (root.hasAttribute(READY)) return;
   const track = root.querySelector<HTMLElement>('[data-slider-track]');
   if (!track) return;
@@ -19,8 +30,10 @@ export function initSnapSlider(root: HTMLElement): void {
 
   const updateButtons = () => {
     const maxScroll = track.scrollWidth - track.clientWidth - 1;
+    const focused = document.activeElement;
     if (prev) prev.disabled = track.scrollLeft <= 0;
     if (next) next.disabled = track.scrollLeft >= maxScroll;
+    keepFocus(focused, prev, next);
   };
 
   // Pfeile nur, wenn es etwas zu scrollen gibt — entscheidet sich erst im

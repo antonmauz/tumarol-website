@@ -12,7 +12,7 @@ export interface FaqItem {
 // Fachinformationen (Pastillen: Stand März 2026, Saft: Stand Mai 2024), Abschnittsnummern
 // jeweils am Eintrag; vor Livegang mit der Gebrauchsinformation abgleichen.
 // ── Larylin® Husten-Stiller Pastillen ────────────────────────────────────
-export const pastillenFaqs: FaqItem[] = [
+const pastillenFaqs: FaqItem[] = [
   {
     // FI 4.1
     question: 'Bei welcher Art von Husten helfen Larylin® Husten-Stiller Pastillen?',
@@ -64,7 +64,7 @@ export const pastillenFaqs: FaqItem[] = [
 ];
 
 // ── Larylin® Husten-Stiller Saft ─────────────────────────────────────────
-export const saftFaqs: FaqItem[] = [
+const saftFaqs: FaqItem[] = [
   {
     // FI 4.1
     question: 'Bei welcher Art von Husten hilft Larylin® Husten-Stiller Saft?',

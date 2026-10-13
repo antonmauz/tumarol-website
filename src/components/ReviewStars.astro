@@ -19,7 +19,7 @@ const cls = ['group flex items-center gap-2 cursor-pointer', extra].filter(Boole
 
 {/* Ohne Bewertungen (leere Dateien in src/data/reviews/) wird nichts gerendert. */}
 {count > 0 && (
-  <button type="button" data-open-reviews-modal class={cls}>
+  <button type="button" data-open-reviews-modal aria-haspopup="dialog" class={cls}>
     <span class="sr-only">Bewertungen ansehen: </span>
     <span class="flex gap-0.5 text-xl leading-none transition-opacity group-hover:opacity-80" aria-hidden="true" set:html={starDisplay(average)} />
     {/* whitespace-nowrap: die Klammer-Angabe darf mobil nicht mitten in der

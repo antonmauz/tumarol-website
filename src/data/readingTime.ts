@@ -3,7 +3,7 @@
 
 const WORDS_PER_MINUTE = 200;
 
-export function readingTimeMinutes(text: string, wpm = WORDS_PER_MINUTE): number {
+function readingTimeMinutes(text: string, wpm = WORDS_PER_MINUTE): number {
   const words = text.trim().split(/\s+/).filter(Boolean).length;
   return Math.max(1, Math.round(words / wpm));
 }

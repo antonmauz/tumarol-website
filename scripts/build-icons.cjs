@@ -20,7 +20,7 @@ function clean(svg) {
     /\s(id|xml:space|enable-background|version|xmlns:xlink|xmlns:svg|stroke-miterlimit|stroke-dasharray|stroke-opacity|clip-path|clipPathUnits)="[^"]*"/g,
     '',
   );
-  s = s.replace(/\sstyle="([^"]*)"/g, (m, css) => {
+  s = s.replace(/\sstyle="([^"]*)"/g, (_m, css) => {
     const attrs = [];
     for (const decl of css.split(';')) {
       const [k, v] = decl.split(':').map((x) => x && x.trim());
@@ -36,7 +36,7 @@ function clean(svg) {
     .replace(/\sfill="#[0-9a-fA-F]{3,6}"/g, ' fill="currentColor"')
     .replace(/\sstroke="#[0-9a-fA-F]{3,6}"/g, ' stroke="currentColor"');
   // Root: nur viewBox behalten; Klasse/aria setzt iconSvg() beim Einbau.
-  s = s.replace(/<svg[^>]*viewBox="([^"]+)"[^>]*>/, (m, vb) => `<svg viewBox="${vb}" fill="none">`);
+  s = s.replace(/<svg[^>]*viewBox="([^"]+)"[^>]*>/, (_m, vb) => `<svg viewBox="${vb}" fill="none">`);
   s = s.replace(/\s+/g, ' ').replace(/>\s+</g, '><').replace(/<g>\s*<\/g>/g, '').trim();
   // Formen ohne explizite Füllung sind gefüllte Flächen (Root hat fill="none").
   s = s.replace(/<(path|circle|ellipse|rect|polygon)(?![^>]*\sfill=)([^>]*)\/>/g, '<$1 fill="currentColor"$2/>');

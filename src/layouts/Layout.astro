@@ -16,6 +16,10 @@ import { GA4_MEASUREMENT_ID } from '../data/analytics';
 import { robugenProductUrls } from '../data/robugenProductUrls';
 import robugenLogo from '../assets/images/logo/Robugen_Logo_noBg.png';
 import '../styles/global.css';
+// Hausschrift (selbst gehostet über @fontsource-variable, eingebunden in global.css): die
+// lateinische Normal-Datei vorladen, damit der Text nicht erst nach dem CSS umspringt.
+// Vite liefert dieselbe gehashte Datei aus, die auch die @font-face-Regel nutzt.
+import fontLatinUrl from '@fontsource-variable/schibsted-grotesk/files/schibsted-grotesk-latin-wght-normal.woff2?url';
 
 interface Props {
   title: string;
@@ -99,6 +103,7 @@ const websiteSchema = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preload" href={fontLatinUrl} as="font" type="font/woff2" crossorigin />
     {/* Google Consent Mode v2 (Standard: alles denied, security_storage granted). Muss
         VOR Cookiebot stehen, damit die Standardwerte gesetzt sind, bevor Cookiebot sie
         nach der Einwilligung aktualisiert; data-cookieconsent="ignore" nimmt das Script

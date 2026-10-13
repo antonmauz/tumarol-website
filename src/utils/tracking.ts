@@ -10,7 +10,7 @@ export function pharmacySlug(name: string): string {
 }
 
 /** AWIN-Affiliate-Link (awin1.com-Weiterleitung, siehe awinDeeplinks in data/pharmacies.ts)? */
-export function isAffiliateLink(url: string): boolean {
+function isAffiliateLink(url: string): boolean {
   return url.includes('awin1.com');
 }
 
@@ -31,7 +31,7 @@ export function pharmacyLinkRel(url: string): string {
 }
 
 /** Feuert das GA4-Event, sofern gtag verfügbar ist — die Navigation wird nie blockiert. */
-export function trackPharmacyClick(pharmacy: string, placement: string): void {
+function trackPharmacyClick(pharmacy: string, placement: string): void {
   const gtag = (window as { gtag?: (...args: unknown[]) => void }).gtag;
   if (typeof gtag !== 'function') return;
   try {

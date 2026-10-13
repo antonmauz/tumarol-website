@@ -140,6 +140,7 @@ const linkActive = 'underline decoration-yellow decoration-[3px] underline-offse
         <button
           type="button"
           data-open-pharmacy-drawer
+          aria-haspopup="dialog"
           class="inline-flex items-center gap-2 px-5 py-2.5 rounded-pill bg-red text-white text-base font-bold hover:bg-red-dark transition-colors cursor-pointer"
         >
           Jetzt kaufen
@@ -151,6 +152,7 @@ const linkActive = 'underline decoration-yellow decoration-[3px] underline-offse
         <button
           type="button"
           data-open-pharmacy-drawer
+          aria-haspopup="dialog"
           class="p-2.5 rounded-pill bg-red text-white hover:bg-red-dark transition-colors cursor-pointer"
           aria-label="Jetzt kaufen"
         >
@@ -234,7 +236,7 @@ const linkActive = 'underline decoration-yellow decoration-[3px] underline-offse
 
         {/* CTA Button */}
         <div class="py-4">
-          <button type="button" data-open-pharmacy-drawer class="w-full text-center py-3 rounded-pill bg-red text-white text-base font-bold hover:bg-red-dark transition-colors cursor-pointer">
+          <button type="button" data-open-pharmacy-drawer aria-haspopup="dialog" class="w-full text-center py-3 rounded-pill bg-red text-white text-base font-bold hover:bg-red-dark transition-colors cursor-pointer">
             Jetzt kaufen
           </button>
         </div>

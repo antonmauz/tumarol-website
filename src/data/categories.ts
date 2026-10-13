@@ -11,7 +11,7 @@ export type RatgeberCategory = (typeof ratgeberCategories)[number];
  *  Nur Präparate mit passendem zugelassenem Anwendungsgebiet (§ 3a HWG). Alle Cluster zeigen
  *  beide Präparate (Entscheidung 13.10.2026). TODO (LARYLIN): CTA in „woher-der-husten-kommt“
  *  (Ursachen wie Sodbrennen, Allergie, Medikamente) fachlich freigeben lassen. */
-export const ctaProductsByCluster: Record<RatgeberCategory, PharmacyProduct[]> = {
+const ctaProductsByCluster: Record<RatgeberCategory, PharmacyProduct[]> = {
   'reizhusten-im-alltag': ['pastillen', 'saft'],
   'erkaeltungszeit': ['pastillen', 'saft'],
   'woher-der-husten-kommt': ['pastillen', 'saft'],
@@ -45,7 +45,7 @@ export const categoryClusters: { category: RatgeberCategory; heading: string; ma
 
 // URL-Slug je Cluster (Artikel-Pfad /wissenswertes/<slug>/<artikel>); kann bei
 // Bedarf pro Cluster vom Key abweichen.
-export const categorySlugs: Record<RatgeberCategory, string> = {
+const categorySlugs: Record<RatgeberCategory, string> = {
   'reizhusten-im-alltag': 'reizhusten-im-alltag',
   'erkaeltungszeit': 'erkaeltungszeit',
   'woher-der-husten-kommt': 'woher-der-husten-kommt',

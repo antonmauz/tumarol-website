@@ -1,12 +1,14 @@
 ---
-// StickyBuyBar.astro – nur mobil (< md): fester Balken am unteren Bildschirmrand mit
+// StickyBuyBar.astro – nur mobil (unter md): fester Balken am unteren Bildschirmrand mit
 // „Jetzt kaufen“ (öffnet den Apotheken-Drawer). Fährt hoch, sobald der Seitenkopf
 // ([data-sticky-buy-trigger], z. B. der Hero) nach oben aus dem Bild gescrollt ist, und
 // wieder herunter, wenn man zurück nach oben scrollt. Eingebunden über die Layout-Prop
 // `stickyBuy` (Startseite, Produktseiten).
+import type { PharmacyProduct } from '../data/pharmacies';
+
 interface Props {
   /** Vorgewählter Produkt-Tab im Drawer (Produktseiten). */
-  product?: string;
+  product?: PharmacyProduct;
 }
 
 const { product } = Astro.props;
@@ -21,6 +23,7 @@ const { product } = Astro.props;
   <button
     type="button"
     data-open-pharmacy-drawer
+    aria-haspopup="dialog"
     data-drawer-product={product}
     class="w-full rounded-pill bg-red py-3 text-center text-base font-bold text-white transition-colors hover:bg-red-dark cursor-pointer"
   >

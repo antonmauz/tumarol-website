@@ -6,7 +6,7 @@ const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 /** Sichtbare fokussierbare Elemente im Container (display:none-Zweige ausgenommen). */
-export function getFocusable(container: HTMLElement): HTMLElement[] {
+function getFocusable(container: HTMLElement): HTMLElement[] {
   return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
     (el) => el.getClientRects().length > 0,
   );

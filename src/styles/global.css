@@ -91,7 +91,7 @@
 }
 
 /* Kurzer Farbbalken (36 × 8 px, eckig) oben auf Karten und vor Fakten; Farbe per
-   bg-yellow / bg-orange / bg-red, Folge auf Karten über accentCycle (src/data/brand.ts). */
+   bg-yellow / bg-orange / bg-red (Folge Gelb, Orange, Rot). */
 @utility accent-bar {
   display: block;
   width: 36px;
@@ -118,7 +118,7 @@
   /* Weißer Grund ohne Seitenverlauf; Überschriften erben die Textfarbe #111111. */
   body {
     @apply bg-white text-ink antialiased;
-    font-size: 17px;
+    font-size: 1.0625rem; /* 17px bei Standard-Schriftgröße; skaliert mit der Browser-Einstellung */
     line-height: 1.6;
   }
 

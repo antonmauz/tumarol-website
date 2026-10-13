@@ -61,7 +61,7 @@ const averageLabel = average.toFixed(1).replace('.', ',');
       {/* Pfeil-Navigation (vor allem für Desktop) */}
       <button
         type="button"
-        class="reviews-prev cursor-pointer absolute left-2 top-1/2 -translate-y-1/2 hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md border border-neutral-200 text-neutral-700 hover:text-primary transition-colors"
+        class="reviews-prev cursor-pointer disabled:cursor-default disabled:opacity-40 disabled:hover:text-neutral-700 absolute left-2 top-1/2 -translate-y-1/2 hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md border border-neutral-200 text-neutral-700 hover:text-primary transition-colors"
         aria-label="Vorherige Bewertungen"
       >
         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -70,7 +70,7 @@ const averageLabel = average.toFixed(1).replace('.', ',');
       </button>
       <button
         type="button"
-        class="reviews-next cursor-pointer absolute right-2 top-1/2 -translate-y-1/2 hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md border border-neutral-200 text-neutral-700 hover:text-primary transition-colors"
+        class="reviews-next cursor-pointer disabled:cursor-default disabled:opacity-40 disabled:hover:text-neutral-700 absolute right-2 top-1/2 -translate-y-1/2 hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md border border-neutral-200 text-neutral-700 hover:text-primary transition-colors"
         aria-label="Weitere Bewertungen"
       >
         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -91,13 +91,14 @@ const averageLabel = average.toFixed(1).replace('.', ',');
 
 <script>
   import { trapFocus, setBackgroundInert, lockScroll, unlockScroll } from '../utils/dialog';
+  import { keepFocus } from '../scripts/snapSlider';
 
   class ReviewsModal {
     modal: HTMLElement;
     closeBtn: HTMLElement | null;
     slider: HTMLElement | null;
-    prevBtn: HTMLElement | null;
-    nextBtn: HTMLElement | null;
+    prevBtn: HTMLButtonElement | null;
+    nextBtn: HTMLButtonElement | null;
     isOpen = false;
     previousFocus: Element | null = null;
 
@@ -126,11 +127,22 @@ const averageLabel = average.toFixed(1).replace('.', ',');
       });
       this.prevBtn?.addEventListener('click', () => this.scrollByCard(-1));
       this.nextBtn?.addEventListener('click', () => this.scrollByCard(1));
+      // Pfeile am Anfang/Ende deaktivieren (wie die Snap-Slider der Seite).
+      this.slider?.addEventListener('scroll', () => this.updateButtons(), { passive: true });
       // Fokusfalle (utils/dialog.ts): nur sichtbare Elemente — die Pfeile sind
       // unter md per display:none ausgeblendet, bleiben aber im DOM.
       this.modal.addEventListener('keydown', (e) => {
         if (this.isOpen) trapFocus(this.modal, e);
       });
+    }
+
+    updateButtons() {
+      if (!this.slider) return;
+      const maxScroll = this.slider.scrollWidth - this.slider.clientWidth - 1;
+      const focused = document.activeElement;
+      if (this.prevBtn) this.prevBtn.disabled = this.slider.scrollLeft <= 0;
+      if (this.nextBtn) this.nextBtn.disabled = this.slider.scrollLeft >= maxScroll;
+      keepFocus(focused, this.prevBtn, this.nextBtn);
     }
 
     scrollByCard(direction: number) {
@@ -154,6 +166,7 @@ const averageLabel = average.toFixed(1).replace('.', ',');
       lockScroll();
       setBackgroundInert([this.modal], true);
       if (this.slider) this.slider.scrollLeft = 0;
+      this.updateButtons();
       this.closeBtn?.focus();
     }
 

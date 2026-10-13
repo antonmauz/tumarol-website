@@ -9,10 +9,10 @@ export function starDisplay(rating: number): string {
   let stars = '';
   for (let i = 0; i < 5; i++) {
     if (i < fullStars) {
-      stars += '<span class="text-yellow-400">★</span>';
+      stars += '<span class="text-yellow">★</span>';
     } else if (i === fullStars && hasHalfStar) {
       stars +=
-        '<span class="relative inline-block text-neutral-300">★<span class="absolute inset-0 w-1/2 overflow-hidden text-yellow-400" aria-hidden="true">★</span></span>';
+        '<span class="relative inline-block text-neutral-300">★<span class="absolute inset-0 w-1/2 overflow-hidden text-yellow" aria-hidden="true">★</span></span>';
     } else {
       stars += '<span class="text-neutral-300">★</span>';
     }

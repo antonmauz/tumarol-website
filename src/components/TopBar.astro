@@ -3,7 +3,8 @@
 // normalen Fluss ganz oben: beim Scrollen läuft er aus dem Bild, die sticky Navbar rückt
 // an den oberen Rand. Hintergrund = Verlauf des „Nach oben“-Bands (BackToTop.astro).
 // Die Botschaften wechseln alle 10 s; Pfeile links/rechts wechseln manuell. Hover oder
-// Fokus im Balken pausiert den Wechsel (WCAG 2.2.2).
+// Fokus im Balken pausiert den Wechsel, der Pause-Button stoppt ihn dauerhaft (WCAG 2.2.2).
+// Bei „Bewegung reduzieren“ (prefers-reduced-motion) startet der Balken angehalten.
 // TODO (LARYLIN): Wortlaut fachlich freigeben lassen (HWG).
 const messages = ['Gegen Reizhusten', 'Gegen Krampfhusten', 'Hergestellt in Deutschland'];
 
@@ -37,6 +38,16 @@ const arrowBtn =
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
       </svg>
     </button>
+
+    {/* Pause/Abspielen: Icon und Beschriftung setzt das Skript je nach Zustand. */}
+    <button type="button" class={arrowBtn} data-top-bar-toggle aria-label="Wechsel anhalten">
+      <svg class="h-3.5 w-3.5" data-icon-pause viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <rect x="6" y="5" width="4" height="14" rx="1" /><rect x="14" y="5" width="4" height="14" rx="1" />
+      </svg>
+      <svg class="hidden h-3.5 w-3.5" data-icon-play viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" />
+      </svg>
+    </button>
   </div>
 </div>
 
@@ -54,7 +65,10 @@ const arrowBtn =
     if (items.length < 2) return;
     let index = 0;
     let timer: number | undefined;
+    // paused: kurzzeitig (Hover/Fokus); stopped: dauerhaft (Pause-Button oder reduzierte Bewegung).
     let paused = false;
+    let stopped = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const toggle = bar.querySelector<HTMLButtonElement>('[data-top-bar-toggle]');
 
     const show = (next: number) => {
       index = (next + items.length) % items.length;
@@ -70,8 +84,16 @@ const arrowBtn =
     // Timer nach jedem manuellen Wechsel neu starten, damit der nächste Text volle 10 s steht.
     const restart = () => {
       window.clearInterval(timer);
-      if (!paused) timer = window.setInterval(() => show(index + 1), INTERVAL_MS);
+      if (!paused && !stopped) timer = window.setInterval(() => show(index + 1), INTERVAL_MS);
     };
+
+    const renderToggle = () => {
+      if (!toggle) return;
+      toggle.setAttribute('aria-label', stopped ? 'Wechsel fortsetzen' : 'Wechsel anhalten');
+      toggle.querySelector('[data-icon-pause]')?.classList.toggle('hidden', stopped);
+      toggle.querySelector('[data-icon-play]')?.classList.toggle('hidden', !stopped);
+    };
+    toggle?.addEventListener('click', () => { stopped = !stopped; renderToggle(); restart(); });
 
     bar.querySelector('[data-top-bar-prev]')?.addEventListener('click', () => { show(index - 1); restart(); });
     bar.querySelector('[data-top-bar-next]')?.addEventListener('click', () => { show(index + 1); restart(); });
@@ -87,6 +109,7 @@ const arrowBtn =
     bar.addEventListener('focusin', pause);
     bar.addEventListener('focusout', () => setTimeout(resume, 0));
 
+    renderToggle();
     restart();
   });
 </script>

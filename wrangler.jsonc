@@ -5,7 +5,8 @@
   // *.workers.dev-URL und Preview-URLs sind aus, damit keine indexierbaren Duplikate entstehen.
   "workers_dev": false,
   "preview_urls": false,
-  "compatibility_date": "2025-06-01",
+  // Höchstens das Datum der installierten workerd-Version (node_modules/workerd), sonst warnt der Dev-Server.
+  "compatibility_date": "2026-06-16",
   "assets": {
     "directory": "./dist/client",
     // Kanonische URL-Form der Site ist slash-los (siehe astro.config.mjs):

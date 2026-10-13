@@ -15,7 +15,7 @@ import { readingTimeLabel } from '../data/readingTime';
 import { produktSources } from '../data/produktSources';
 import { normalizePathname } from '../utils/urls';
 import { jsonLd } from '../utils/jsonLd';
-import { COMPANY_NAME, EDITORIAL_NAME, REVIEW_NAME } from '../data/company';
+import { EDITORIAL_NAME, REVIEW_NAME } from '../data/company';
 
 // Geteilter Renderer aller Wissenswertes-Artikel: Headerbild in Balkenbreite,
 // Kategorie-Badge + Lesezeit (lastUpdated), einspaltiger Text; kein Inhaltsverzeichnis,
@@ -63,18 +63,19 @@ const articleSchema = {
   headline: data.h1,
   description: data.metaDescription,
   inLanguage: 'de-DE',
-  mainEntityOfPage: canonical,
+  // reviewedBy ist eine Eigenschaft von WebPage, nicht von Article: deshalb an der Seite.
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': canonical,
+    reviewedBy: { '@type': 'Organization', name: REVIEW_NAME },
+  },
   url: canonical,
   ...(data.headerImage ? { image: new URL(data.headerImage.src, siteUrl).href } : {}),
   ...(data.publishDate ? { datePublished: data.publishDate.toISOString().slice(0, 10) } : {}),
   ...(updatedAt ? { dateModified: updatedAt.toISOString().slice(0, 10) } : {}),
   author: { '@type': 'Organization', name: EDITORIAL_NAME },
-  reviewedBy: { '@type': 'Organization', name: REVIEW_NAME },
-  publisher: {
-    '@type': 'Organization',
-    name: COMPANY_NAME,
-    logo: { '@type': 'ImageObject', url: new URL('/larylin-logo.png', siteUrl).href },
-  },
+  // Herausgeber = Organization-Knoten aus Layout.astro (Robugen, mit Robugen-Logo).
+  publisher: { '@id': `${siteUrl.origin}/#organization` },
 };
 ---
 

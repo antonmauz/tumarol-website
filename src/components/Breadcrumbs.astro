@@ -17,25 +17,23 @@ const { items } = Astro.props;
     (BreadcrumbSection bzw. RatgeberArticle), sonst stapeln sich drei Abstände. */}
 <nav aria-label="Breadcrumb">
   <ol class="flex flex-wrap items-center gap-2 text-sm text-neutral-600">
+    {/* Trennpfeil im jeweiligen Listeneintrag (aria-hidden), damit Screenreader
+        genau so viele Einträge zählen, wie es Stufen gibt. */}
     {items.map((item, index) => (
-      <>
+      <li class="flex items-center gap-2">
         {index > 0 && (
-          <li aria-hidden="true" class="text-neutral-400">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </li>
+          <svg class="w-4 h-4 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
         )}
-        <li>
-          {item.href ? (
-            <a href={item.href} class="text-neutral-600 hover:text-primary transition-colors font-medium">
-              {item.label}
-            </a>
-          ) : (
-            <span class="text-neutral-800 font-semibold" aria-current="page">{item.label}</span>
-          )}
-        </li>
-      </>
+        {item.href ? (
+          <a href={item.href} class="text-neutral-600 hover:text-primary transition-colors font-medium">
+            {item.label}
+          </a>
+        ) : (
+          <span class="text-neutral-800 font-semibold" aria-current="page">{item.label}</span>
+        )}
+      </li>
     ))}
   </ol>
 </nav>

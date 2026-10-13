@@ -54,5 +54,6 @@ const relAttr = rest.target === '_blank' ? (rest.rel ?? 'noopener noreferrer') :
   type={href ? undefined : 'button'}
   rel={relAttr}
   data-open-pharmacy-drawer={openDrawer ? true : undefined}
+  aria-haspopup={openDrawer ? "dialog" : undefined}
   class={cls}
 ><slot /></Tag>
