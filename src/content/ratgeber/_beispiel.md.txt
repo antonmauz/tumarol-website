@@ -14,8 +14,10 @@ publishDate: 2026-09-14
 lastUpdated: 2026-09-14
 # Produkt-CTA nur mit zugelassenem Produktbezug (HWG); ohne ctaProducts greift die Cluster-Vorgabe.
 showProductHighlight: false
-headerImage: ./_images/beispielthema-header.png
-headerImageAlt: "Kurze Bildbeschreibung für Screenreader"
+# Optional: Bild nach src/content/ratgeber/_images/<slug>-header.jpg legen und die
+# beiden Zeilen einkommentieren; ohne headerImage entfällt der Bildbereich.
+# headerImage: ./_images/<slug>-header.jpg
+# headerImageAlt: "Kurze Bildbeschreibung für Screenreader"
 intro:
   - "Erster Einleitungsabsatz: Worum geht es, wen betrifft es? Kurze Absätze, keine Fachsprache ohne Erklärung."
   - "Zweiter Einleitungsabsatz: Was erfährt die Leserin/der Leser auf dieser Seite?"
@@ -26,9 +28,6 @@ faq:
   - question: "Beispielfrage 2?"
     answer: "Kurze Antwort. Markdown-Inline ist erlaubt, z. B. **fett**."
 
-review:
-  reviewer: "Vor- und Nachname der prüfenden Person"
-  date: "17. Juni 2026"
 sources:
   - "Institution/Autor: Titel der Quelle. Fundstelle/Domain"
 ---
@@ -37,7 +36,7 @@ sources:
 
 Fließtext des Artikels. Kurze Absätze, laienverständlich formuliert. Interne
 Verweise als normale Markdown-Links, z. B. auf
-[einen verwandten Artikel](/wissenswertes/heile-haut/beispiel-artikel).
+[einen verwandten Artikel](/wissenswertes/reizhusten-im-alltag/kitzeln-im-hals).
 
 ### Unterpunkt (H3)
 

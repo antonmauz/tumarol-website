@@ -34,7 +34,7 @@ export interface ProductImageSet {
   /** Produktkarte beim Überfahren (Crossfade): Faltschachtel + Inhalt. */
   cardHover: ProductImage;
   /** Bild-Slider der Produktseite (Marketing-Slides, Reihenfolge = Slider);
-   *  leer = galleryFallback. */
+   *  leer = der Slider zeigt cardFront. */
   gallery: ProductImage[];
 }
 
@@ -75,6 +75,3 @@ export const productImages: Record<PharmacyProduct, ProductImageSet> = {
     gallery: saft.gallery,
   },
 };
-
-/** Slides für Präparate ohne Galerie (derzeit haben alle mindestens den Packshot). */
-export const galleryFallback: ProductImage[] = [];

@@ -12,7 +12,7 @@ breadcrumbLabel: "Husten durch Sodbrennen"
 intro:
   - "Ein trockener Husten, der über Wochen bleibt, hat nicht immer mit den Atemwegen zu tun. Eine häufige Ursache liegt im Magen: aufsteigende Magensäure, in der Fachsprache Reflux."
   - "Das Tückische: Nicht jeder, bei dem Reflux den Husten auslöst, spürt auch Sodbrennen. Dieser Artikel erklärt den Zusammenhang, zeigt, was im Alltag entlastet, und wann Sie den Husten abklären lassen sollten."
-showProductHighlight: false
+showProductHighlight: true
 faq:
   - question: "Kann ich Reflux haben, ohne Sodbrennen zu spüren?"
     answer: "Ja. Fachleute sprechen dann manchmal von stillem Reflux. Statt Sodbrennen stehen Beschwerden wie Husten, häufiges Räuspern, Heiserkeit oder ein Kloßgefühl im Hals im Vordergrund."

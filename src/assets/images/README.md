@@ -1,6 +1,6 @@
 # Bilder zur Website hinzufügen
 
-Konvention für **alle** Bilder der KAMILLIN®-Website. Immer die Astro-Komponente
+Konvention für **alle** Bilder der Larylin®-Website. Immer die Astro-Komponente
 `<Image />` aus `astro:assets` verwenden – **nie** rohe `<img>`-Tags. So werden
 Bilder automatisch optimiert (Komprimierung, modernes Format, Lazy-Loading) und
 das Seitenverhältnis bleibt ohne Layout-Shift korrekt.
@@ -14,10 +14,10 @@ Lege die Originaldatei in den passenden Unterordner von `src/assets/images/`:
 | Ordner       | Wofür                                                        | Standard-Ladeverhalten |
 | ------------ | ------------------------------------------------------------ | ---------------------- |
 | `hero/`      | Große Bilder im ersten sichtbaren Bereich (above the fold)   | `eager`                |
-| `products/`  | Produktfotos / Packshots (z. B. Gel-Tube/Faltschachtel)      | je nach Position       |
-| `content/`   | Bilder innerhalb von Textabschnitten weiter unten            | `lazy` (Standard)      |
+| `products/`  | Packshots und Galerie-Slides (Faltschachtel, Flasche, Blister)| je nach Position       |
+| `backgrounds/` | Hintergrundflächen (Produktkarten, Vertrauensbanner)       | `lazy` (Standard)      |
 | `social/`    | Logos verbundener Marken (Footer: Korodin, Antihydral)        | `lazy`                 |
-| `logo/`      | Kamillin- und Robugen-Logos (Navigation, Footer, Banner)     | Navigation `eager`     |
+| `logo/`      | Larylin- und Robugen-Logos (Navigation, Footer)              | Navigation `eager`     |
 | `apologos/`  | Apotheken-Logos (Drawer, Bewertungen; `src/data/pharmacies.ts`) | `lazy`              |
 | `icons/`     | SVG-Icons; `node scripts/build-icons.cjs` erzeugt `src/data/icons.ts` | inline (kein Bild) |
 

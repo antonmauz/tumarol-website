@@ -12,7 +12,7 @@ breadcrumbLabel: "Husten durch Medikamente"
 intro:
   - "Ein trockener Husten, der ohne Erkältung beginnt und einfach nicht verschwindet, hat manchmal eine überraschende Ursache: ein Medikament, das Sie regelmäßig einnehmen."
   - "Am häufigsten stecken bestimmte Blutdruckmittel dahinter. Dieser Artikel erklärt, wie Sie einen solchen Zusammenhang erkennen und was Sie tun sollten, und was Sie auf keinen Fall tun sollten."
-showProductHighlight: false
+showProductHighlight: true
 faq:
   - question: "Kann ich mein Blutdruckmittel einfach absetzen?"
     answer: "Nein. Setzen Sie Blutdruck- oder Herzmedikamente nie eigenmächtig ab. Der Blutdruck kann sonst gefährlich ansteigen. Sprechen Sie mit Ihrer Ärztin oder Ihrem Arzt; meist lässt sich ein gut verträgliches Ersatzmittel finden."

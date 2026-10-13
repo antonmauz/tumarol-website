@@ -87,7 +87,7 @@ const linkActive = 'underline decoration-yellow decoration-[3px] underline-offse
                     class={`flex items-center gap-1 py-2 ${linkBase} ${isActive(link) ? linkActive : ''}`}
                   >
                     {link.label}
-                    <svg class="w-4 h-4 transition-transform group-hover/item:rotate-180 group-focus-within/item:rotate-180 group-data-[open]/item:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <svg class="w-4 h-4 transition-transform group-hover/item:rotate-180 group-focus-within/item:rotate-180 group-data-[open]/item:rotate-180 group-data-[dismissed]/item:!rotate-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
                   </a>
@@ -102,14 +102,14 @@ const linkActive = 'underline decoration-yellow decoration-[3px] underline-offse
                     data-nav-dropdown-toggle
                   >
                     {link.label}
-                    <svg class="w-4 h-4 transition-transform group-hover/item:rotate-180 group-focus-within/item:rotate-180 group-data-[open]/item:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <svg class="w-4 h-4 transition-transform group-hover/item:rotate-180 group-focus-within/item:rotate-180 group-data-[open]/item:rotate-180 group-data-[dismissed]/item:!rotate-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
                 )}
                 <div
                   id={dropdownId(link)}
-                  class="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-64 bg-white rounded-card shadow-xl border border-divider opacity-0 invisible group-hover/item:opacity-100 group-hover/item:visible group-focus-within/item:opacity-100 group-focus-within/item:visible group-data-[open]/item:opacity-100 group-data-[open]/item:visible transition-all duration-200 origin-top scale-95 group-hover/item:scale-100 group-focus-within/item:scale-100 group-data-[open]/item:scale-100"
+                  class="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-64 bg-white rounded-card shadow-xl border border-divider opacity-0 invisible group-hover/item:opacity-100 group-hover/item:visible group-focus-within/item:opacity-100 group-focus-within/item:visible group-data-[open]/item:opacity-100 group-data-[open]/item:visible transition-all duration-200 origin-top scale-95 group-hover/item:scale-100 group-focus-within/item:scale-100 group-data-[open]/item:scale-100 group-data-[dismissed]/item:!invisible group-data-[dismissed]/item:!opacity-0"
                 >
                   <div class="py-2">
                     {link.dropdown.map((item) => (
@@ -180,8 +180,10 @@ const linkActive = 'underline decoration-yellow decoration-[3px] underline-offse
   </Container>
 
   {/* Mobile Menu: flache Liste mit zwei Akkordeons; absolut unter dem Balken, damit es
-      den Seiteninhalt der sticky Navbar nicht nach unten schiebt. */}
-  <div id="mobile-menu" class="hidden md:hidden absolute inset-x-0 top-full border-t border-b border-divider bg-white max-h-[calc(100vh-5rem)] overflow-y-auto">
+      den Seiteninhalt der sticky Navbar nicht nach unten schiebt. Die max-height setzt
+      das Script beim Öffnen exakt auf den sichtbaren Rest unter dem Kopf (TopBar je nach
+      Scrollstand); die Klasse ist nur der Fallback ohne JS. */}
+  <div id="mobile-menu" class="hidden md:hidden absolute inset-x-0 top-full border-t border-b border-divider bg-white max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain">
     <Container size="wide" class="px-6 py-2">
       <nav class="divide-y divide-divider" aria-label="Mobile Navigation">
 
@@ -244,6 +246,8 @@ const linkActive = 'underline decoration-yellow decoration-[3px] underline-offse
 </header>
 
 <script>
+  import { lockScroll, unlockScroll } from '../utils/dialog';
+
   const header = document.getElementById('site-header');
   const btn = document.getElementById('mobile-menu-btn');
   const menu = document.getElementById('mobile-menu');
@@ -259,8 +263,26 @@ const linkActive = 'underline decoration-yellow decoration-[3px] underline-offse
   const iconMenu = btn?.querySelector('[data-icon-menu]');
   const iconClose = btn?.querySelector('[data-icon-close]');
 
+  const isMenuOpen = () => (menu ? !menu.classList.contains('hidden') : false);
+
+  // Menühöhe = sichtbarer Bereich unter dem Kopf (dvh-Äquivalent über innerHeight);
+  // so bleibt auch der Kauf-Button unten im Menü erreichbar.
+  const fitMenuHeight = () => {
+    if (!menu || !header) return;
+    const top = header.getBoundingClientRect().bottom;
+    menu.style.maxHeight = `${Math.max(0, window.innerHeight - top)}px`;
+  };
+
   const setMenuOpen = (isOpen: boolean) => {
+    if (isOpen === isMenuOpen()) return;
     menu?.classList.toggle('hidden', !isOpen);
+    // Hintergrund steht still, solange das Menü offen ist.
+    if (isOpen) {
+      fitMenuHeight();
+      lockScroll();
+    } else {
+      unlockScroll();
+    }
     btn?.setAttribute('aria-expanded', String(isOpen));
     btn?.setAttribute('aria-label', isOpen ? 'Menü schließen' : 'Menü öffnen');
     // Hamburger ↔ Kreuz: signalisiert, dass derselbe Button wieder schließt
@@ -270,7 +292,27 @@ const linkActive = 'underline decoration-yellow decoration-[3px] underline-offse
   };
 
   btn?.addEventListener('click', () => {
-    setMenuOpen(menu?.classList.contains('hidden') ?? false);
+    setMenuOpen(!isMenuOpen());
+  });
+
+  // Schließen per Escape (Fokus zurück auf den Menü-Button) und per Tap außerhalb des Kopfs.
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || !isMenuOpen()) return;
+    setMenuOpen(false);
+    btn?.focus();
+  });
+  document.addEventListener('click', (e) => {
+    if (isMenuOpen() && !header?.contains(e.target as Node)) setMenuOpen(false);
+  });
+
+  // Ab md gibt es kein Mobile-Menü mehr: beim Wechsel (Drehen, Fenster breiter) schließen,
+  // sonst blieben Scroll-Sperre und aria-expanded hängen.
+  const desktopQuery = window.matchMedia('(min-width: 48rem)');
+  desktopQuery.addEventListener('change', (e) => {
+    if (e.matches) setMenuOpen(false);
+  });
+  window.addEventListener('resize', () => {
+    if (isMenuOpen()) fitMenuHeight();
   });
 
   // Menü bei jedem Klick auf Link oder Kauf-Button schließen (Same-Page-Anker navigieren
@@ -289,7 +331,15 @@ const linkActive = 'underline decoration-yellow decoration-[3px] underline-offse
 
   // Desktop-Dropdown ohne eigene Seite („Produkte“): Klick/Tap toggelt, Escape
   // und Klick außerhalb schließen; Hover/Fokus bleiben rein per CSS.
+  // Escape schließt auch per Hover/Fokus geöffnete Panels (WCAG 1.4.13): `data-dismissed`
+  // unterdrückt das Panel per CSS, bis Maus bzw. Fokus den Eintrag verlassen haben.
   const dropdownItems = Array.from(document.querySelectorAll<HTMLElement>('[data-nav-dropdown]'));
+  dropdownItems.forEach((item) => {
+    item.addEventListener('mouseleave', () => item.removeAttribute('data-dismissed'));
+    item.addEventListener('focusout', (e) => {
+      if (!item.contains(e.relatedTarget as Node | null)) item.removeAttribute('data-dismissed');
+    });
+  });
   const setDropdownOpen = (item: HTMLElement, open: boolean) => {
     item.toggleAttribute('data-open', open);
     item.querySelector('[data-nav-dropdown-toggle]')?.setAttribute('aria-expanded', String(open));
@@ -308,10 +358,14 @@ const linkActive = 'underline decoration-yellow decoration-[3px] underline-offse
   });
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
-    const openItem = dropdownItems.find((item) => item.hasAttribute('data-open'));
+    const openItem = dropdownItems.find(
+      (item) => item.hasAttribute('data-open') || item.matches(':hover') || item.matches(':focus-within'),
+    );
     if (!openItem) return;
     closeAllDropdowns();
-    openItem.querySelector<HTMLElement>('[data-nav-dropdown-toggle]')?.focus();
+    openItem.setAttribute('data-dismissed', '');
+    // Fokus aus dem Panel zurück auf den Auslöser (Link oder Button im selben Eintrag).
+    if (openItem.matches(':focus-within')) openItem.querySelector<HTMLElement>(':scope > a, :scope > button')?.focus();
   });
 
   window.addEventListener('scroll', updateHeader, { passive: true });

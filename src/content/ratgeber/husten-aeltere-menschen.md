@@ -12,7 +12,7 @@ breadcrumbLabel: "Husten im Alter"
 intro:
   - "Ein Husten im Rahmen einer Erkältung ist auch im Alter meist harmlos. Mit den Jahren verändert sich aber das Immunsystem, und Infekte können schwerer oder untypisch verlaufen."
   - "Dieser Artikel richtet sich an ältere Menschen und ihre Angehörigen. Er zeigt, worauf Sie achten sollten, welche Vorsorge sinnvoll ist und wann ein Husten schnell ärztlich abgeklärt gehört."
-showProductHighlight: false
+showProductHighlight: true
 faq:
   - question: "Warum haben ältere Menschen bei Infekten manchmal kein Fieber?"
     answer: "Mit dem Alter reagiert das Immunsystem oft weniger stark. Auch eine ernste Infektion wie eine Lungenentzündung kann deshalb ohne hohes Fieber verlaufen. Achten Sie auf andere Zeichen wie Schwäche, Verwirrtheit oder Appetitlosigkeit."

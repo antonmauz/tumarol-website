@@ -26,7 +26,8 @@ const activeKey: PharmacyProduct = initialProduct ?? pharmacyProducts[0].key;
 {/* Drawer: z-60, liegt über der Navbar (z-50) */}
 <div
   id="pharmacy-drawer"
-  class="fixed inset-y-0 right-0 z-60 w-full max-h-screen md:w-1/2 lg:max-w-lg bg-white transform translate-x-full transition-transform duration-300 ease-in-out shadow-lg overflow-y-auto hidden"
+  class="fixed inset-y-0 right-0 z-60 w-full max-h-screen md:w-1/2 lg:max-w-lg bg-white transform translate-x-full transition-transform duration-300 ease-in-out motion-reduce:transition-none shadow-lg overflow-y-auto hidden"
+  data-initial-product={activeKey}
   role="dialog"
   aria-modal="true"
   aria-labelledby="pharmacy-drawer-title"
@@ -237,12 +238,14 @@ const activeKey: PharmacyProduct = initialProduct ?? pharmacyProducts[0].key;
         }
       });
 
-      // Öffnen-Buttons (Navbar, Mobile-Menü, Produktseiten-CTA, Produktkarten); ein
-      // data-drawer-product am Button (z. B. "saft") wählt vorher den passenden Tab.
+      // Öffnen-Buttons (Navbar, Mobile-Menü, Produktseiten-CTA, Produktkarten). Ein
+      // data-drawer-product am Button (z. B. "saft") wählt den passenden Tab; Buttons ohne
+      // Produkt (Navbar) öffnen den Tab der Seite (data-initial-product), nicht den zuletzt
+      // im Drawer gewählten.
       document.querySelectorAll('[data-open-pharmacy-drawer]').forEach((btn) => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
-          setDrawerProduct(btn.getAttribute('data-drawer-product'));
+          setDrawerProduct(btn.getAttribute('data-drawer-product') ?? this.drawer.dataset.initialProduct ?? null);
           this.open();
         });
       });
@@ -270,10 +273,11 @@ const activeKey: PharmacyProduct = initialProduct ?? pharmacyProducts[0].key;
       this.overlay.classList.remove('hidden');
       this.drawer.classList.remove('hidden');
 
-      // rAF, damit die Slide-in-Transition nach dem Einblenden greift
-      requestAnimationFrame(() => {
-        this.drawer.classList.remove('translate-x-full');
-      });
+      // Reflow erzwingen, damit der Browser die Startposition (translate-x-full) übernimmt
+      // und die Slide-in-Transition greift. Bei reduzierter Bewegung gibt es keine
+      // Transition (motion-reduce:transition-none), der Drawer steht sofort.
+      void this.drawer.offsetWidth;
+      this.drawer.classList.remove('translate-x-full');
 
       lockScroll();
       setBackgroundInert([this.drawer, this.overlay], true);

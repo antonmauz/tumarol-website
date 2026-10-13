@@ -1,0 +1,10 @@
+# Sicherheits-Header für alle Antworten (Cloudflare Workers Static Assets).
+# Der Cloudflare-Adapter stellt beim Build den Cache-Control-Block für /_astro/* davor;
+# hier deshalb kein Cache-Control für /_astro/* setzen, sonst entfällt dieser Block.
+# Keine Content-Security-Policy: hängt an Cookiebot/gtag und wird mit diesen geprüft.
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=()

@@ -1,0 +1,73 @@
+---
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import Layout from '../../../layouts/Layout.astro';
+import BreadcrumbSection from '../../../components/BreadcrumbSection.astro';
+import ArticleTile from '../../../components/ArticleTile.astro';
+import Container from '../../../components/Container.astro';
+import TrustBanner from '../../../components/TrustBanner.astro';
+import ProductHighlight from '../../../components/ProductHighlight.astro';
+import SourcesSection from '../../../components/SourcesSection.astro';
+import { categoryClusters, categorySlug, ctaProductsFor, ratgeberArticleUrl } from '../../../data/categories';
+import { readingTimeLabel } from '../../../data/readingTime';
+import { produktSources } from '../../../data/produktSources';
+import { sortRatgeberArticles } from '../../../utils/articleSort';
+
+// Cluster-Seite /wissenswertes/<cluster>: Ziel des Cluster-Breadcrumbs der Artikel, damit
+// jede Stufe des Artikel-Pfads eine echte Seite ist. Nur Cluster mit Artikeln werden erzeugt.
+export const getStaticPaths = (async () => {
+  const artikel = sortRatgeberArticles(await getCollection('ratgeber'));
+  return categoryClusters
+    .map((c) => ({ ...c, artikel: artikel.filter((entry) => entry.data.category === c.category) }))
+    .filter((c) => c.artikel.length > 0)
+    .map((c) => ({ params: { cluster: categorySlug(c.category) }, props: { cluster: c } }));
+}) satisfies GetStaticPaths;
+
+const { cluster } = Astro.props;
+const { heading, mark, description, artikel } = cluster;
+
+const breadcrumbItems = [
+  { label: 'Startseite', href: '/' },
+  { label: 'Wissenswertes', href: '/wissenswertes' },
+  { label: heading },
+];
+---
+
+<Layout title={heading} description={description}>
+
+  {/* ─── NAVIGATION BREADCRUMBS ──────────────────────────────────────── */}
+  <BreadcrumbSection items={breadcrumbItems} />
+
+  {/* ─── ARTIKEL DES CLUSTERS (Kacheln wie auf /wissenswertes) ────────── */}
+  <section class="px-6 pt-6 pb-14 md:pt-8 md:pb-20">
+    <Container size="content">
+      <h1 class="mb-8 md:mb-10">
+        {mark && heading.includes(mark) ? (
+          <>{heading.slice(0, heading.indexOf(mark))}<span class="mark">{mark}</span>{heading.slice(heading.indexOf(mark) + mark.length)}</>
+        ) : heading}
+      </h1>
+
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {artikel.map((entry) => (
+          <ArticleTile
+            href={ratgeberArticleUrl(entry.data.category, entry.id)}
+            title={entry.data.h1}
+            image={entry.data.headerImage}
+            imageAlt={entry.data.headerImageAlt ?? entry.data.title}
+            readingTime={readingTimeLabel(entry.body ?? '')}
+          />
+        ))}
+      </div>
+    </Container>
+  </section>
+
+  {/* ─── VERTRAUEN-BANNER ──────────────────────────────────────────── */}
+  <TrustBanner />
+
+  {/* ─── PRODUKT-HIGHLIGHT (CTA, Cluster-Vorgabe) ───────────────────── */}
+  <ProductHighlight only={ctaProductsFor(cluster.category)} />
+
+  {/* ─── QUELLEN (Belege zu den CTA-Kernaussagen) ────────────────────── */}
+  <SourcesSection items={produktSources} />
+
+</Layout>

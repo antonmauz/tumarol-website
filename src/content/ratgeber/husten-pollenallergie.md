@@ -12,7 +12,7 @@ breadcrumbLabel: "Husten bei Pollenallergie"
 intro:
   - "Die Nase läuft, die Augen jucken, und dazu ein trockener Husten: Im Frühjahr ist nicht immer eine Erkältung schuld. Auch Pollen können die Atemwege reizen."
   - "Dieser Artikel zeigt, woran Sie eine Pollenallergie von einer Erkältung unterscheiden, wann ein Husten auf Asthma hindeuten kann und wie Sie die Belastung im Alltag senken."
-showProductHighlight: false
+showProductHighlight: true
 faq:
   - question: "Wie unterscheide ich Heuschnupfen von einer Erkältung?"
     answer: "Heuschnupfen kommt jedes Jahr zur gleichen Zeit wieder, verursacht juckende Augen und klaren, wässrigen Schnupfen und hält so lange an, wie die Pollen fliegen. Eine Erkältung dauert etwa eine Woche und bringt oft Halsschmerzen und Abgeschlagenheit mit sich, juckende Augen sind selten."

@@ -59,7 +59,7 @@ function awinDeeplinks(
 // (Stand: 09.10.2026). Datenschutzerklärung: Abschnitt „Affiliate-Links (AWIN)“.
 // Ziel-URLs zeigen auf die Einzelpackung (Pastillen 24 Stück, PZN 04960257; Saft 200 ml,
 // PZN 04759897), bei Shop Apotheke bewusst nicht auf die Doppelpackung (PZN 08141024).
-// Healthii führt Larylin nicht (Logo liegt weiter unter apologos/).
+// Healthii führt Larylin nicht (kein Eintrag, kein Logo).
 export const pharmacies: Pharmacy[] = [
   {
     name: 'Shop Apotheke',

@@ -2,7 +2,7 @@
 // Zentriertes Modal mit Bewertungs-Slider; öffnet über data-open-reviews-modal (ReviewStars
 // im ProductHero). Global im Layout eingebunden, gerendert nur auf Produktseiten.
 import ReviewCard from './ReviewCard.astro';
-import { reviewsFor, latestReviewDate } from '../data/reviews';
+import { reviewsFor, latestReviewDate, overallRatingFor } from '../data/reviews';
 import type { PharmacyProduct } from '../data/pharmacies';
 
 interface Props {
@@ -13,6 +13,9 @@ interface Props {
 const { product } = Astro.props;
 const displayReviews = reviewsFor(product);
 const stand = latestReviewDate(product);
+// Gesamtwert in der Überschrift: derselbe gewichtete Durchschnitt wie bei den Sternen im ProductHero.
+const { average } = overallRatingFor(product);
+const averageLabel = average.toFixed(1).replace('.', ',');
 ---
 
 {/* Nur auf Produktseiten (dort sitzt der Auslöser) und nur mit Bewertungen;
@@ -30,7 +33,7 @@ const stand = latestReviewDate(product);
     {/* Header */}
     <div class="flex items-center justify-between px-6 py-4">
       <h2 id="reviews-modal-title" class="text-xl text-neutral-900">
-        Bewertungen aus Online-Apotheken
+        {averageLabel} von 5 Sternen: Bewertungen aus den Online-Apotheken
       </h2>
       <button
         id="reviews-modal-close"
@@ -50,7 +53,7 @@ const stand = latestReviewDate(product);
       <div class="reviews-slider flex gap-4 -mx-1 px-1 scroll-px-1 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2">
         {displayReviews.map((review) => (
           <div class="snap-start shrink-0 w-[80%] sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-2rem)/3)]">
-            <ReviewCard review={review} showDate={false} showProduct={!product} placement="reviews-modal" />
+            <ReviewCard review={review} showDate={false} showProduct={false} placement="reviews-modal" />
           </div>
         ))}
       </div>

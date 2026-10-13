@@ -1,5 +1,5 @@
 // Anwendung und Dosierung je Präparat (ApplicationSlider): je Anwendungsart Bild, Titel und Text.
-// Dosierungen im Wortlaut der Fachinformation. Bilder: src/assets/images/content/anwendung/.
+// Dosierungen im Wortlaut der Fachinformation. Bilder: neuen Ordner src/assets/images/content/anwendung/ anlegen.
 import type { ImageMetadata } from 'astro';
 import type { PharmacyProduct } from './pharmacies';
 

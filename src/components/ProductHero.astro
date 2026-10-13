@@ -99,7 +99,7 @@ const infos = produktInfoFor(product);
 
         {/* Primärer CTA: öffnet den Apotheken-Drawer. */}
         <div class="flex flex-col sm:flex-row gap-3 pt-2">
-          <Button openDrawer transition="transition-all">
+          <Button openDrawer data-drawer-product={product} transition="transition-all">
             Jetzt kaufen
           </Button>
         </div>

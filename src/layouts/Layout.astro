@@ -14,6 +14,7 @@ import { COMPANY_NAME, COMPANY_URL, COMPANY_LINKEDIN_URL } from '../data/company
 import { COOKIEBOT_ID } from '../data/cookiebot';
 import { GA4_MEASUREMENT_ID } from '../data/analytics';
 import { robugenProductUrls } from '../data/robugenProductUrls';
+import robugenLogo from '../assets/images/logo/Robugen_Logo_noBg.png';
 import '../styles/global.css';
 
 interface Props {
@@ -74,10 +75,11 @@ const orgSchema = {
   '@id': `${siteUrl.origin}/#organization`,
   name: COMPANY_NAME,
   url: COMPANY_URL,
-  // Larylin-Logo (erzeugt scripts/make-brand-images.cjs aus src/assets/images/logo/).
-  logo: new URL('/larylin-logo.png', siteUrl).href,
+  // Robugen-Logo (die Organisation ist der Hersteller, nicht die Marke Larylin).
+  logo: new URL(robugenLogo.src, siteUrl).href,
   sameAs: [COMPANY_LINKEDIN_URL],
 };
+const robugenSameAs = Object.values(robugenProductUrls);
 const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
@@ -86,9 +88,9 @@ const websiteSchema = {
   name: 'Larylin®',
   inLanguage: 'de-DE',
   publisher: { '@id': `${siteUrl.origin}/#organization` },
-  // Entitäts-Signal auf die Produktseiten der Hersteller-Domain (kein Canonical; die
-  // robugen.de-Seiten setzen ihrerseits den Canonical auf larylin.de).
-  sameAs: Object.values(robugenProductUrls),
+  // Entitäts-Signal auf die Produktseiten der Hersteller-Domain (kein Canonical);
+  // nur ausgeben, wenn Einträge vorhanden sind.
+  ...(robugenSameAs.length > 0 && { sameAs: robugenSameAs }),
 };
 ---
 
@@ -141,8 +143,9 @@ const websiteSchema = {
     </script>
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
-    {blockIndexing && <meta name="robots" content="noindex, nofollow" />}
-    <link rel="canonical" href={canonicalURL} />
+    {/* Canonical nur für indexierbare Seiten: die 404 wird für jede unbekannte URL
+        ausgeliefert und soll keinen Canonical auf /404 setzen. */}
+    {blockIndexing ? <meta name="robots" content="noindex, nofollow" /> : <link rel="canonical" href={canonicalURL} />}
     {/* Favicons aus der Larylin-Bildmarke (larylin-signet.svg, erzeugt per
         scripts/make-brand-images.cjs). */}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

@@ -21,7 +21,7 @@
   --color-divider: #D6D3CC; /* 1px-Linien */
   --color-success: #15803D; /* Verfügbarkeits-Signal (Einkaufswagen Produktseite), AA auf Hellgrau */
 
-  /* Alt-Token aus der KAMILLIN-Vorlage, auf die neue Farbwelt umgebogen: Komponenten und
+  /* Alias-Token aus der Vorlage, auf die Larylin-Farbwelt umgebogen: Komponenten und
      Unterseiten ziehen so ohne Einzeländerung mit. */
   --color-primary: var(--color-ink); /* Links, Outline-Buttons, Fokus */
   --color-primary-dark: #000000;
@@ -111,6 +111,9 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Platz der Scrollleiste immer reservieren: die Scroll-Sperre der Dialoge
+       (overflow:hidden am Body) lässt das Layout sonst um die Leistenbreite springen. */
+    scrollbar-gutter: stable;
   }
   /* Weißer Grund ohne Seitenverlauf; Überschriften erben die Textfarbe #111111. */
   body {

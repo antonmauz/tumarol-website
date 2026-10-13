@@ -9,13 +9,8 @@ const OUT = path.join(__dirname, '..', 'src', 'data', 'icons.ts');
 
 // Dateiname (ohne Nummern-Suffix) → sprechender Icon-Name.
 const NAMES = {
-  germany: 'germany',
-  group: 'people',
-  medal: 'medal',
-  ointment: 'tube',
-  plant: 'plant',
-  wait: 'clock',
-  water: 'drops',
+  pastille: 'pastille',
+  drop: 'drop',
 };
 
 function clean(svg) {
@@ -63,7 +58,7 @@ const escape = (s) => s.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
 const lines = [
   '// GENERIERT von scripts/build-icons.cjs — nicht von Hand bearbeiten.',
   '// Quelle: src/assets/images/icons/*.svg (Farben auf currentColor bereinigt).',
-  "// Einbau: <span set:html={iconSvg('plant', 'w-7 h-7')} />",
+  "// Einbau: <span set:html={iconSvg('pastille', 'w-7 h-7')} />",
   '',
   'export const icons = {',
   ...entries.map(([name, file, svg]) => `  /** ${file} */\n  ${name}:\n    '${escape(svg)}',`),

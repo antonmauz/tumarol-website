@@ -12,7 +12,7 @@ breadcrumbLabel: "Sport bei Husten"
 intro:
   - "Wer regelmäßig trainiert, will ungern pausieren, nur weil es im Hals kratzt. Doch Sport während eines Infekts kann den Körper zusätzlich belasten, im ungünstigen Fall sogar das Herz."
   - "Dieser Artikel zeigt, wann leichte Bewegung in Ordnung ist, wann Sie unbedingt pausieren sollten und wie Sie nach einer Erkältung wieder einsteigen."
-showProductHighlight: false
+showProductHighlight: true
 faq:
   - question: "Darf ich mit Reizhusten nach einer Erkältung trainieren?"
     answer: "Wenn die Erkältung abgeklungen ist, Sie fieberfrei sind und sich fit fühlen, spricht meist nichts gegen ruhiges Training. Ein leichter Reizhusten kann noch einige Wochen bleiben. Steigern Sie die Belastung langsam und achten Sie darauf, wie Ihr Körper reagiert."

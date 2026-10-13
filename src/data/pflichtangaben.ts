@@ -31,13 +31,6 @@ export const pflichtangabenSchluss =
 /** Pharmazeutischer Unternehmer (Footer-Kurzform). */
 export const pflichtangabenHersteller = `${COMPANY_NAME}, ${COMPANY_CITY}.`;
 
-/** Erster Satz der Zusammensetzung (Wirkstoff-Modul der Produktseiten), aus derselben Quelle. */
-export const zusammensetzungSatz = (key: PflichtangabenProduct['key']): string => {
-  const text = pflichtangaben.find((p) => p.key === key)?.sections.find((s) => s.heading === 'Zusammensetzung')?.text;
-  const first = Array.isArray(text) ? text[0] : text ?? '';
-  return first.split(/(?<=\.)\s/)[0];
-};
-
 // Wortlaut aus den Fachinformationen (Pastillen: Stand März 2026, Saft: Stand Mai 2024),
 // Abschnitte 2, 4.1, 4.3, 4.4, 4.8 und 11. TODO (LARYLIN): vor dem Livegang mit den
 // Gebrauchsinformationen abgleichen und fachlich freigeben lassen.

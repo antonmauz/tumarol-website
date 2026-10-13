@@ -12,7 +12,7 @@ breadcrumbLabel: "Ist Husten ansteckend?"
 intro:
   - "Husten ist kein eigener Erreger, sondern ein Beschwerdebild. Ob er ansteckend ist, hängt davon ab, was ihn auslöst und in welcher Phase der Erkrankung Sie sich befinden."
   - "Dieser Artikel erklärt, wann Husten ansteckend ist, wann nicht mehr und wie Sie Familie, Kollegen und besonders gefährdete Menschen schützen."
-showProductHighlight: false
+showProductHighlight: true
 faq:
   - question: "Bin ich mit Reizhusten nach einer Erkältung noch ansteckend?"
     answer: "Meist nicht. Bleibt nach einer abgeklungenen Erkältung ein trockener Husten zurück, kommt er in der Regel von der noch gereizten Schleimhaut, nicht von aktiven Viren. Ausnahmen wie Keuchhusten sind möglich."

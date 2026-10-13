@@ -12,7 +12,7 @@ breadcrumbLabel: "Erkältung oder Grippe"
 intro:
   - "Husten, Halsschmerzen, Schnupfen: Im Alltag wird fast jeder Atemwegsinfekt Grippe genannt. Medizinisch ist eine echte Grippe, die Influenza, aber eine eigene Erkrankung, die meist deutlich heftiger verläuft als eine Erkältung."
   - "Dieser Artikel zeigt, woran Sie die beiden unterscheiden, wie lange sie dauern und wann ärztlicher Rat wichtig ist."
-showProductHighlight: false
+showProductHighlight: true
 faq:
   - question: "Kann ich eine Grippe selbst von einer Erkältung unterscheiden?"
     answer: "Der plötzliche Beginn mit hohem Fieber und starkem Krankheitsgefühl ist ein deutlicher Hinweis auf eine Grippe. Sicher feststellen lässt sie sich nur mit einem Test. Auch Corona kann ähnliche Beschwerden verursachen."

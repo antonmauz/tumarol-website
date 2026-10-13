@@ -1,10 +1,10 @@
 ---
 // Bild-Karussell der Produktseite. Bilder je Präparat: gallery in
-// src/data/productImages.ts, leere Galerie zeigt die Platzhalter-Slides. Text ist
+// src/data/productImages.ts, bei leerer Galerie nur der Packshot (cardFront). Text ist
 // fest ins Bild gesetzt, deshalb tragen die Alt-Texte den Bildinhalt.
 import { Image } from 'astro:assets';
 import type { PharmacyProduct } from '../data/pharmacies';
-import { productImages, galleryFallback } from '../data/productImages';
+import { productImages } from '../data/productImages';
 
 interface Props {
   aspectRatio?: string;
@@ -14,19 +14,21 @@ interface Props {
 
 const { aspectRatio = '4/3', product } = Astro.props;
 
-const gallery = product ? productImages[product].gallery : [];
-const images = gallery.length > 0 ? gallery : galleryFallback;
+const set = product ? productImages[product] : undefined;
+const images = set ? (set.gallery.length > 0 ? set.gallery : [set.cardFront]) : [];
 ---
 
+{images.length > 0 && (
 <div class="product-slider-container" role="region" aria-label="Produktbilder-Galerie">
   {/* Weißer Grund: die Packshots kommen auf weißem Hintergrund. */}
   <div class="relative overflow-hidden rounded-2xl bg-white">
     <div class="slider-viewport" style={`aspect-ratio: ${aspectRatio}`}>
       {/* Kein role="img" an den Slide-Wrappern: der Alt-Text am <img> reicht,
-          sonst lesen Screenreader jedes Bild doppelt vor. */}
+          sonst lesen Screenreader jedes Bild doppelt vor. Nicht sichtbare Slides sind
+          aria-hidden + inert (setzt das Script), damit nur das aktuelle Bild vorgelesen wird. */}
       <div class="slider-track">
         {images.map((image, index) => (
-          <div class="slider-slide" data-slide-index={index}>
+          <div class="slider-slide" aria-hidden={index === 0 ? undefined : 'true'}>
             <Image
               src={image.src}
               alt={image.alt}
@@ -42,7 +44,9 @@ const images = gallery.length > 0 ? gallery : galleryFallback;
       {/* Vor/Zurück nur bei mehreren Bildern (Einzelbild braucht keine Navigation) */}
       {images.length > 1 && (
         <button
+          type="button"
           class="slider-nav slider-prev"
+          disabled
           aria-label="Vorheriges Bild"
           title="Zurück (Pfeiltaste links)"
         >
@@ -64,6 +68,7 @@ const images = gallery.length > 0 ? gallery : galleryFallback;
       )}
       {images.length > 1 && (
         <button
+          type="button"
           class="slider-nav slider-next"
           aria-label="Nächstes Bild"
           title="Weiter (Pfeiltaste rechts)"
@@ -96,10 +101,10 @@ const images = gallery.length > 0 ? gallery : galleryFallback;
     <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mt-3" role="group" aria-label="Bildauswahl">
       {images.map((image, index) => (
         <button
+          type="button"
           class={`slider-dot w-18 sm:w-24 aspect-square overflow-hidden rounded-lg border-2 bg-white cursor-pointer transition-colors ${
             index === 0 ? 'border-primary' : 'border-neutral-200 hover:border-neutral-400'
           }`}
-          data-slide-index={index}
           aria-current={index === 0 ? 'true' : undefined}
           aria-label={`Bild ${index + 1} anzeigen`}
         >
@@ -108,7 +113,12 @@ const images = gallery.length > 0 ? gallery : galleryFallback;
       ))}
     </div>
   )}
+
+  {/* Ansage für Screenreader beim Bildwechsel („Bild 2 von 4“); initial leer, damit
+      beim Laden nichts vorgelesen wird. */}
+  {images.length > 1 && <p class="slider-status sr-only" aria-live="polite" aria-atomic="true"></p>}
 </div>
+)}
 
 <style>
   .product-slider-container {
@@ -201,8 +211,8 @@ const images = gallery.length > 0 ? gallery : galleryFallback;
     }
   }
 
-  /* Mobil immer sichtbar */
-  @media (max-width: 768px) {
+  /* Touch-Geräte (jede Breite, z. B. Tablets) und schmale Fenster: Pfeile immer sichtbar */
+  @media (hover: none), (max-width: 767.98px) {
     .slider-nav {
       opacity: 1;
       pointer-events: auto;
@@ -215,6 +225,12 @@ const images = gallery.length > 0 ? gallery : galleryFallback;
     .slider-nav:hover {
       background-color: rgba(0, 0, 0, 0.7);
     }
+  }
+
+  /* Kein Endlos-Loop: am ersten/letzten Bild ist der jeweilige Pfeil deaktiviert und
+     ausgeblendet (steht nach den Sichtbarkeitsregeln, damit er sie überstimmt). */
+  .slider-nav:disabled {
+    visibility: hidden;
   }
 
   /* Nur der Fokus-Ring für Tastaturnutzer; Layout/Zustände laufen über Tailwind-Klassen im Markup. */
@@ -233,7 +249,10 @@ const images = gallery.length > 0 ? gallery : galleryFallback;
     dots: NodeListOf<HTMLElement>;
     prevBtn: HTMLButtonElement | null;
     nextBtn: HTMLButtonElement | null;
+    status: HTMLElement | null;
     currentIndex = 0;
+    // Zuletzt angesagtes Bild (Start = erstes Bild, wird nicht angesagt)
+    announcedIndex = 0;
     slideCount: number;
 
     // Drag-Zustand für Touch-Gesten
@@ -258,6 +277,7 @@ const images = gallery.length > 0 ? gallery : galleryFallback;
       this.dots = container.querySelectorAll<HTMLElement>('.slider-dot');
       this.prevBtn = container.querySelector<HTMLButtonElement>('.slider-prev');
       this.nextBtn = container.querySelector<HTMLButtonElement>('.slider-next');
+      this.status = container.querySelector<HTMLElement>('.slider-status');
       this.slideCount = this.slides.length;
 
       this.init();
@@ -397,14 +417,17 @@ const images = gallery.length > 0 ? gallery : galleryFallback;
       this.updateSlider();
     }
 
+    // Pfeile und Tastatur ohne Loop: am Rand bleibt das Bild stehen (wie beim Wischen).
     prevSlide() {
-      this.currentIndex = (this.currentIndex - 1 + this.slideCount) % this.slideCount;
+      if (this.currentIndex === 0) return;
+      this.currentIndex--;
       this.resetDuration();
       this.updateSlider();
     }
 
     nextSlide() {
-      this.currentIndex = (this.currentIndex + 1) % this.slideCount;
+      if (this.currentIndex >= this.slideCount - 1) return;
+      this.currentIndex++;
       this.resetDuration();
       this.updateSlider();
     }
@@ -412,6 +435,30 @@ const images = gallery.length > 0 ? gallery : galleryFallback;
     updateSlider() {
       const offset = -this.currentIndex * 100;
       this.track.style.transform = `translateX(${offset}%)`;
+
+      // Nur das sichtbare Bild ist für Screenreader und Tab-Reihenfolge erreichbar.
+      this.slides.forEach((slide, index) => {
+        const hidden = index !== this.currentIndex;
+        slide.toggleAttribute('inert', hidden);
+        if (hidden) slide.setAttribute('aria-hidden', 'true');
+        else slide.removeAttribute('aria-hidden');
+      });
+
+      // Pfeile am Rand deaktivieren; hatte der deaktivierte Pfeil den Fokus, wandert
+      // er auf den Gegenpfeil statt auf <body>.
+      const atStart = this.currentIndex === 0;
+      const atEnd = this.currentIndex >= this.slideCount - 1;
+      const focused = document.activeElement;
+      if (this.prevBtn) this.prevBtn.disabled = atStart;
+      if (this.nextBtn) this.nextBtn.disabled = atEnd;
+      if (atStart && focused === this.prevBtn) this.nextBtn?.focus();
+      if (atEnd && focused === this.nextBtn) this.prevBtn?.focus();
+
+      // Bildwechsel ansagen (nicht beim ersten Aufruf und nicht beim Zurückschnappen).
+      if (this.status && this.currentIndex !== this.announcedIndex) {
+        this.status.textContent = `Bild ${this.currentIndex + 1} von ${this.slideCount}`;
+        this.announcedIndex = this.currentIndex;
+      }
 
       // Kacheln aktualisieren (blau umrandet = aktiv, sonst grau)
       this.dots.forEach((dot, index) => {

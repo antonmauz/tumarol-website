@@ -154,9 +154,11 @@ const visibleProducts = only
                   loading="lazy"
                   class="product-card__img product-card__img--front"
                 />
+                {/* Hover-Motiv rein dekorativ (nur per Opacity eingeblendet): leerer Alt-Text,
+                    sonst lesen Screenreader die Karte doppelt vor. */}
                 <Image
                   src={productImages[product.key].cardHover.src}
-                  alt={productImages[product.key].cardHover.alt}
+                  alt=""
                   width={640}
                   loading="lazy"
                   class="product-card__img product-card__img--hover"

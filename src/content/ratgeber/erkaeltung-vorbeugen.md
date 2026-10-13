@@ -12,7 +12,7 @@ breadcrumbLabel: "Erkältung vorbeugen"
 intro:
   - "Erwachsene erkälten sich im Schnitt zwei- bis dreimal im Jahr, die meisten davon in der kalten Jahreszeit. Ganz verhindern lässt sich das nicht, aber das Risiko lässt sich senken."
   - "Dieser Artikel zeigt, welche Maßnahmen wirklich schützen, welche Impfungen sinnvoll sind und was Sie sich bei Vitaminpräparaten sparen können."
-showProductHighlight: false
+showProductHighlight: true
 faq:
   - question: "Schützt Vitamin C vor Erkältungen?"
     answer: "Für die meisten Menschen nicht. Studien zeigen, dass regelmäßig eingenommenes Vitamin C die Zahl der Erkältungen in der Allgemeinbevölkerung nicht senkt; die Dauer verkürzt sich höchstens geringfügig. Eine ausgewogene Ernährung mit Obst und Gemüse deckt den Bedarf in der Regel."
