@@ -9,7 +9,6 @@ import ArticleSlider from '../components/ArticleSlider.astro';
 import WirkungsweiseSection from '../components/WirkungsweiseSection.astro';
 import TrustBanner from '../components/TrustBanner.astro';
 import Container from '../components/Container.astro';
-import { hinweise } from '../data/hinweise';
 import { Image } from 'astro:assets';
 import heroImage from '../assets/images/hero/larylin-header.png';
 import PackshotGroup from '../components/PackshotGroup.astro';
@@ -86,8 +85,8 @@ import PackshotGroup from '../components/PackshotGroup.astro';
   {/* ─── 6. MAGAZIN (Karten hellgrau, Farbbalken Gelb/Orange/Rot) ───────── */}
   <ArticleSlider heading="Wissenswertes rund um Husten" mark="Husten" />
 
-  {/* ─── QUELLEN & HINWEISE ─────────────────────────────────────────────── */}
-  <SourcesSection heading="Quellen & Hinweise" items={[...produktSources, ...hinweise]} />
+  {/* ─── QUELLEN (erscheint erst, wenn produktSources belegt ist) ───────── */}
+  <SourcesSection items={produktSources} />
 
 </Layout>
 
