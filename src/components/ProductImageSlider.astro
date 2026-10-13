@@ -88,20 +88,23 @@ const images = gallery.length > 0 ? gallery : galleryFallback;
 
   </div>
 
-  {/* Punkt-Indikatoren: schlichte Buttons statt Tab-Pattern — es gibt keine
-      zugehörigen tabpanels, aria-current markiert das aktive Bild.
-      Nur bei mehreren Bildern (Einzelbild braucht keine Auswahl). */}
+  {/* Vorschau-Kacheln: schlichte Buttons statt Tab-Pattern — es gibt keine
+      zugehörigen tabpanels, aria-current markiert das aktive Bild (blau umrandet).
+      Feste Kachelgröße, mittig unter dem Bild (mehr Bilder brechen um); nur bei mehreren Bildern. Die Kachelbilder
+      sind dekorativ (alt=""), das aria-label nennt das Bild. */}
   {images.length > 1 && (
-    <div class="flex justify-center gap-2 mt-3" role="group" aria-label="Bildauswahl">
-      {images.map((_, index) => (
+    <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mt-3" role="group" aria-label="Bildauswahl">
+      {images.map((image, index) => (
         <button
-          class={`slider-dot w-2.5 h-2.5 rounded-full cursor-pointer transition-colors ${
-            index === 0 ? 'bg-primary' : 'bg-neutral-300 hover:bg-neutral-400'
+          class={`slider-dot w-18 sm:w-24 aspect-square overflow-hidden rounded-lg border-2 bg-white cursor-pointer transition-colors ${
+            index === 0 ? 'border-primary' : 'border-neutral-200 hover:border-neutral-400'
           }`}
           data-slide-index={index}
           aria-current={index === 0 ? 'true' : undefined}
           aria-label={`Bild ${index + 1} anzeigen`}
-        ></button>
+        >
+          <Image src={image.src} alt="" width={160} loading="lazy" class="h-full w-full object-contain" />
+        </button>
       ))}
     </div>
   )}
@@ -410,14 +413,14 @@ const images = gallery.length > 0 ? gallery : galleryFallback;
       const offset = -this.currentIndex * 100;
       this.track.style.transform = `translateX(${offset}%)`;
 
-      // Punkte aktualisieren (blau = aktiv, sonst grau)
+      // Kacheln aktualisieren (blau umrandet = aktiv, sonst grau)
       this.dots.forEach((dot, index) => {
         const isActive = index === this.currentIndex;
         if (isActive) dot.setAttribute('aria-current', 'true');
         else dot.removeAttribute('aria-current');
-        dot.classList.toggle('bg-primary', isActive);
-        dot.classList.toggle('bg-neutral-300', !isActive);
-        dot.classList.toggle('hover:bg-neutral-400', !isActive);
+        dot.classList.toggle('border-primary', isActive);
+        dot.classList.toggle('border-neutral-200', !isActive);
+        dot.classList.toggle('hover:border-neutral-400', !isActive);
       });
     }
   }

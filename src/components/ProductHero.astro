@@ -7,6 +7,7 @@ import ProductImageSlider from './ProductImageSlider.astro';
 import ReviewStars from './ReviewStars.astro';
 import Button from './ui/Button.astro';
 import { packageSizesFor } from '../data/packageSizes';
+import { produktInfoFor } from '../data/produktInfo';
 import type { PharmacyProduct } from '../data/pharmacies';
 
 interface Props {
@@ -22,15 +23,19 @@ const { product, name, bullets } = Astro.props;
 
 // Packungsgrößen mit PZN (packageSizes.ts); leere Liste → Block entfällt.
 const sizes = packageSizesFor(product);
+
+// Kurzinfos im Akkordeon unter dem Kauf-Button (produktInfo.ts).
+const infos = produktInfoFor(product);
 ---
 
 <section data-sticky-buy-trigger class="pt-4 pb-16 md:pt-6 md:pb-20 px-6">
   <Container size="content">
     {/* auto_1fr: linke Spalte exakt Slider-Breite, sichtbarer Mittelabstand damit genau gap-12. */}
-    <div class="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-12 items-center">
+    <div class="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-12 items-start">
 
-      {/* Slider auf Desktop linksbündig an der Container-Kante, mobil zentriert. */}
-      <div class="flex items-center justify-center lg:justify-start">
+      {/* Slider auf Desktop linksbündig an der Container-Kante, mobil zentriert. Ab lg
+          sticky unter der Navbar (h-16), die längere rechte Spalte scrollt daneben durch. */}
+      <div class="flex items-center justify-center lg:justify-start lg:sticky lg:top-24">
         {/* 1/1 = Leinwand der normalisierten Packshots (kein Letterboxing). */}
         <ProductImageSlider aspectRatio="1/1" product={product} />
       </div>
@@ -98,6 +103,26 @@ const sizes = packageSizesFor(product);
             Jetzt kaufen
           </Button>
         </div>
+
+        {/* Kurzinfos als Akkordeon, gleiche Optik wie das FAQ-Modul. */}
+        {infos.length > 0 && (
+          <div class="divide-y divide-divider border-y border-divider !mt-10">
+            {infos.map((info) => (
+              <details class="group">
+                <summary class="flex items-center justify-between gap-6 cursor-pointer list-none py-4 text-lg text-blue [&::-webkit-details-marker]:hidden">
+                  <span>{info.title}</span>
+                  {/* Plus → beim Öffnen um 45° gedreht (×) */}
+                  <svg class="w-6 h-6 text-blue shrink-0 transition-transform group-open:rotate-45" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14" />
+                  </svg>
+                </summary>
+                <div class="pb-5 pr-12 space-y-3 text-neutral-700 leading-relaxed">
+                  {info.text.map((t) => <p>{t}</p>)}
+                </div>
+              </details>
+            ))}
+          </div>
+        )}
       </div>
 
     </div>
