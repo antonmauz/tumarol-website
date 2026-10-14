@@ -13,9 +13,9 @@ Zwei Bildarten liegen nebeneinander im selben Ordner:
 - **Packshots** — freigestellt mit weichem Schatten, transparent, sprechend benannt
   (`larylin-pastillen-faltschachtel.png`, `larylin-saft-faltschachtel.png`).
   Für die Produktkarten und den Apotheken-Drawer.
-- **Galerie-Slides** — fertige Marketing-Motive (Packshot, Herkunft, Wirkung,
-  Anwendung) mit weißem Grund und Text im Bild, nummeriert in Slider-Reihenfolge
-  (`larylin-pastillen-1.png` … `-4.png`, 1500×1500). Nur für den Bild-Slider der
+- **Galerie-Slides** — fertige Marketing-Motive (Packshot, Anwendung, Wirkung, Alltag,
+  Dosierung; Foto oder Grafik) mit Text im Bild, nummeriert in Slider-Reihenfolge
+  (`larylin-pastillen-1.png` … `-5.png`, 1500×1500). Nur für den Bild-Slider der
   Produktseite. Das Normalisierungs-Skript lässt sie aus (Endung `-<Zahl>.png`).
 
 **Dateinamen:** Produkt-Präfix, klein, Bindestriche, keine Umlaute; Packshots

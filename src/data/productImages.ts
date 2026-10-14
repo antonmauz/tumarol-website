@@ -1,8 +1,7 @@
 // Zentrale Produktbilder: Packshots (freigestellt, normalisiert; Karten und Drawer) und
-// Galerie-Slides (larylin-<produkt>-1…4.png, fertige Motive, nicht normalisieren) aus
+// Galerie-Slides (larylin-<produkt>-1…5.png, fertige Motive, nicht normalisieren) aus
 // src/assets/images/products/<produkt>/. Neues Bild: Import ergänzen und mit Alt-Text eintragen.
-// TODO (LARYLIN): Galerie-Slides 1–4 sind Platzhalter (Alt-Texte beim Austausch anpassen);
-// das Hover-Motiv (Packung mit Inhalt) fehlt noch, bis
+// TODO (LARYLIN): das Hover-Motiv (Packung mit Inhalt) fehlt noch, bis
 // dahin zeigt der Hover die Faltschachtel.
 import type { ImageMetadata } from 'astro';
 import type { PharmacyProduct } from './pharmacies';
@@ -13,6 +12,7 @@ import pastillen1 from '../assets/images/products/pastillen/larylin-pastillen-1.
 import pastillen2 from '../assets/images/products/pastillen/larylin-pastillen-2.png';
 import pastillen3 from '../assets/images/products/pastillen/larylin-pastillen-3.png';
 import pastillen4 from '../assets/images/products/pastillen/larylin-pastillen-4.png';
+import pastillen5 from '../assets/images/products/pastillen/larylin-pastillen-5.png';
 
 // ── Larylin® Husten-Stiller Saft ─────────────────────────────────────────
 import saftFaltschachtel from '../assets/images/products/saft/larylin-saft-faltschachtel.png';
@@ -20,6 +20,7 @@ import saft1 from '../assets/images/products/saft/larylin-saft-1.png';
 import saft2 from '../assets/images/products/saft/larylin-saft-2.png';
 import saft3 from '../assets/images/products/saft/larylin-saft-3.png';
 import saft4 from '../assets/images/products/saft/larylin-saft-4.png';
+import saft5 from '../assets/images/products/saft/larylin-saft-5.png';
 
 export interface ProductImage {
   src: ImageMetadata;
@@ -44,10 +45,11 @@ const pastillen = {
     alt: 'Larylin® Husten-Stiller Pastillen – Faltschachtel, Wirkstoff Dropropizin, 20 mg pro Lutschpastille, 24 Lutschpastillen',
   },
   gallery: [
-    { src: pastillen1, alt: 'Larylin® Husten-Stiller Pastillen – Faltschachtel mit Blisterpackung, Wirkstoff Dropropizin, 20 mg pro Lutschpastille' },
-    { src: pastillen2, alt: 'Grafik von Gehirn, Luftröhre und Lunge: Gegen Reiz- und Krampfhusten, löst den Hustenreiz direkt in den Atemwegen und der Lunge, gut verträglich' },
-    { src: pastillen3, alt: 'Grafik der Lunge: Gegen Reiz- und Krampfhusten, löst den Hustenreiz direkt in den Atemwegen und der Lunge, gut verträglich' },
-    { src: pastillen4, alt: 'Platzhalter-Grafik von Gehirn und Lunge mit Hinweisen zur Anwendung' },
+    { src: pastillen1, alt: 'Larylin® Husten-Stiller Pastillen – Faltschachtel mit Blisterpackung, Wirkstoff Dropropizin, 20 mg pro Lutschpastille, Blisterpackung mit 24 Lutschpastillen' },
+    { src: pastillen2, alt: 'Frau mit Tasse am Tisch, daneben Faltschachtel und Blister der Larylin® Husten-Stiller Pastillen: Einfache Anwendung als Lutschpastille' },
+    { src: pastillen3, alt: 'Grafik eines Oberkörpers mit Gehirn, Luftröhre und Lunge: Wirkstoff Dropropizin – hemmt den Hustenreiz direkt in den Atemwegen und der Lunge, anstatt im Gehirn, ist dadurch gut verträglich' },
+    { src: pastillen4, alt: 'Bildcollage: Paar im herbstlichen Park, Mann mit Smartphone, lachende Kollegen im Büro – Für einen unbeschwerten Alltag' },
+    { src: pastillen5, alt: 'Hände halten die Faltschachtel der Larylin® Husten-Stiller Pastillen auf einer herbstlichen Straße – Dosierung: 1–2 Pastillen bis zu 3-mal am Tag' },
   ],
 };
 const saft = {
@@ -56,10 +58,11 @@ const saft = {
     alt: 'Larylin® Husten-Stiller Saft – Faltschachtel, Wirkstoff Dropropizin, 300 mg in 100 g Sirup, 200 ml Sirup',
   },
   gallery: [
-    { src: saft1, alt: 'Larylin® Husten-Stiller Saft – Faltschachtel und Flasche, Wirkstoff Dropropizin, 300 mg in 100 g Sirup, Packung mit 200 ml Sirup' },
-    { src: saft2, alt: 'Platzhalter-Grafik mit Herkunftsangaben' },
-    { src: saft3, alt: 'Platzhalter-Bildcollage zur Anwendung' },
-    { src: saft4, alt: 'Platzhalter-Grafik mit fallenden Tropfen und Hinweisen zur Dosierung' },
+    { src: saft1, alt: 'Larylin® Husten-Stiller Saft – Faltschachtel und Flasche, Wirkstoff Dropropizin, 300 mg in 100 g Sirup, Antitussivum zum Einnehmen, Packung mit 200 ml Sirup' },
+    { src: saft2, alt: 'Schlafende Frau im Bett, darüber Faltschachtel und Flasche des Larylin® Husten-Stiller Saft: Ideal für längere Anwendung und die abendliche Einnahme' },
+    { src: saft3, alt: 'Grafik eines Oberkörpers mit Gehirn, Luftröhre und Lunge: Wirkstoff Dropropizin – hemmt den Hustenreiz direkt in den Atemwegen und der Lunge, anstatt im Gehirn, ist dadurch gut verträglich' },
+    { src: saft4, alt: 'Bildcollage: lachendes Paar in der Küche, Mann mit Smartphone, Frau mit Decke auf dem Sofa – Für einen unbeschwerten Alltag' },
+    { src: saft5, alt: 'Flasche Larylin® Husten-Stiller Saft auf einem Nachttisch – Dosierung: bis zu 3-mal täglich 10 ml (1 Messlöffel)' },
   ],
 };
 

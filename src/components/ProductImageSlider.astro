@@ -95,14 +95,15 @@ const images = set ? (set.gallery.length > 0 ? set.gallery : [set.cardFront]) : 
 
   {/* Vorschau-Kacheln: schlichte Buttons statt Tab-Pattern — es gibt keine
       zugehörigen tabpanels, aria-current markiert das aktive Bild (blau umrandet).
-      Feste Kachelgröße, mittig unter dem Bild (mehr Bilder brechen um); nur bei mehreren Bildern. Die Kachelbilder
+      Mobil teilen sich die Kacheln eine Reihe (je max. 72 px), ab sm feste Größe (mehr Bilder
+      brechen um); mittig unter dem Bild, nur bei mehreren Bildern. Die Kachelbilder
       sind dekorativ (alt=""), das aria-label nennt das Bild. */}
   {images.length > 1 && (
-    <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mt-3" role="group" aria-label="Bildauswahl">
+    <div class="flex sm:flex-wrap justify-center gap-2 sm:gap-3 mt-3" role="group" aria-label="Bildauswahl">
       {images.map((image, index) => (
         <button
           type="button"
-          class={`slider-dot w-18 sm:w-24 aspect-square overflow-hidden rounded-lg border-2 bg-white cursor-pointer transition-colors ${
+          class={`slider-dot flex-1 min-w-0 max-w-18 sm:flex-none sm:w-24 sm:max-w-none aspect-square overflow-hidden rounded-lg border-2 bg-white cursor-pointer transition-colors ${
             index === 0 ? 'border-primary' : 'border-neutral-200 hover:border-neutral-400'
           }`}
           aria-current={index === 0 ? 'true' : undefined}
