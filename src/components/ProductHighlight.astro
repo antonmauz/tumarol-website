@@ -15,7 +15,8 @@ interface Props {
   /** Hintergrund/zusätzliche Klassen der <section> (Standard: transparent, also weiß). */
   class?: string;
   /** Sichtbare H2 über den Karten (z. B. „Pastillen oder Saft?“); ohne Angabe nur
-   *  eine Screenreader-Überschrift. */
+   *  eine Screenreader-Überschrift. HTML erlaubt, z. B. <br class="sm:hidden"> für
+   *  feste Zeilenumbrüche nur mobil (die H2 trennt bewusst nicht per hyphens). */
   heading?: string;
   /** Optionale Anker-ID der Sektion (z. B. "produkte" auf der Startseite). */
   id?: string;
@@ -94,7 +95,7 @@ const visibleProducts = only
           einen Ebenensprung h1 → h3. */}
       {heading ? (
         <div class="flex items-end justify-between gap-4 mb-8">
-          <h2 class="min-w-0 hyphens-auto">{heading}</h2>
+          <h2 class="min-w-0" set:html={heading} />
           <SliderControls prevLabel="Vorherige Produkte" nextLabel="Weitere Produkte" />
         </div>
       ) : (
@@ -400,6 +401,20 @@ const visibleProducts = only
   .product-card__cta:hover,
   .product-card:has(.product-card__overlay:hover) .product-card__cta {
     background: var(--color-surface);
+  }
+  /* Mobil: beide Buttons gleich breit nebeneinander, Beschriftung einzeilig (sonst bricht
+     sie um, die Buttons werden zu hoch und ragen aus der Zone in den Kurztext). */
+  .product-card__buy,
+  .product-card__cta { white-space: nowrap; }
+  @media (max-width: 639px) {
+    .product-card__buy,
+    .product-card__cta {
+      flex: 1 1 0;
+      min-width: 0;
+      font-size: 0.8125rem;
+    }
+    .product-card__buy { padding: 0.5rem 0.5rem; }
+    .product-card__cta { padding: calc(0.5rem - 2px) calc(0.5rem - 2px); }
   }
 </style>
 

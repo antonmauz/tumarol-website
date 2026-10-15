@@ -78,10 +78,11 @@ const rows = bounds.slice(1).map((b, i) => `${b - bounds[i]}fr`).join(' ');
 <section id="wirkungsweise" class="px-6 py-16 md:py-20 scroll-mt-24" aria-labelledby="wirkungsweise-title">
   <Container size="content">
     {/* Kopfzeile: H2 links, rechts der Einstieg zur Wissensseite /husten (Grundlagen,
-        Ursachen, wann zum Arzt) als Outline-Button; mobil bricht er unter die H2. */}
+        Ursachen, wann zum Arzt) als Outline-Button; mobil steht er stattdessen unter
+        dem ganzen Abschnitt (siehe Ende der Sektion). */}
     <div class="mb-4 flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
       <h2 id="wirkungsweise-title">So wirkt Dropropizin</h2>
-      <Button href="/husten" variant="outline">Mehr über Husten und seine Ursachen</Button>
+      <Button href="/husten" variant="outline" class="max-sm:hidden">Mehr über Husten</Button>
     </div>
     <p class="max-w-2xl text-lg text-neutral-700 leading-relaxed mb-10 lg:mb-6">
       Dropropizin wirkt vor allem peripher, also dort, wo der Hustenreiz entsteht: in der
@@ -229,6 +230,8 @@ const rows = bounds.slice(1).map((b, i) => `${b - bounds[i]}fr`).join(' ');
         ))}
       </ol>
     </div>
+
+    <Button href="/husten" variant="outline" class="mt-10 sm:hidden">Mehr über Husten</Button>
   </Container>
 </section>
 

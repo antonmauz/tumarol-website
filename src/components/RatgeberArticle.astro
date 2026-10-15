@@ -142,7 +142,12 @@ const articleSchema = {
 </section>
 
 {/* ─── PRODUKT-HIGHLIGHT (nur bei freigegebenem Produktbezug, HWG) ──── */}
-{data.showProductHighlight && <ProductHighlight only={ctaProducts} />}
+{data.showProductHighlight && (
+  <ProductHighlight
+    only={ctaProducts}
+    heading={'Larylin® bei<br class="sm:hidden"> trockenem<br class="sm:hidden"> Reizhusten'}
+  />
+)}
 
 {/* ─── VERTRAUEN-BANNER ──────────────────────────────────────────── */}
 <TrustBanner />
