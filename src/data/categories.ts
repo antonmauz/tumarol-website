@@ -1,5 +1,5 @@
 // Themen-Cluster der Ratgeber-Collection: zentrale Quelle für Reihenfolge, Labels und
-// Zod-Enum (Übersicht /wissenswertes, Cluster-Seiten, Breadcrumbs, Links); der interne
+// Zod-Enum (Übersicht /wissenswertes, Breadcrumbs, Links); der interne
 // Collection-Name bleibt „ratgeber“.
 
 import type { PharmacyProduct } from './pharmacies';
@@ -22,24 +22,20 @@ export const ctaProductsFor = (category: RatgeberCategory): PharmacyProduct[] =>
   ctaProductsByCluster[category];
 
 // mark: Wort der Überschrift, das auf /wissenswertes gelb unterstrichen wird (mark-Utility).
-// description: Meta-Description der Cluster-Seite /wissenswertes/<cluster>.
-export const categoryClusters: { category: RatgeberCategory; heading: string; mark?: string; description: string }[] = [
+export const categoryClusters: { category: RatgeberCategory; heading: string; mark?: string }[] = [
   {
     category: 'reizhusten-im-alltag',
     heading: 'Reizhusten im Alltag',
     mark: 'Reizhusten',
-    description: 'Reizhusten im Alltag: was bei trockenem Husten nachts, bei Heizungsluft, beim Sport oder unterwegs hilft. Verständliche Ratgeber rund um den Hustenreiz.',
   },
   {
     category: 'erkaeltungszeit',
     heading: 'Erkältungszeit',
-    description: 'Husten in der Erkältungszeit: Erkältung oder Grippe, wie ansteckend Husten ist, wie lange er nach einer Erkältung bleibt und wie man vorbeugt.',
   },
   {
     category: 'woher-der-husten-kommt',
     heading: 'Woher der Husten kommt',
     mark: 'Husten',
-    description: 'Woher der Husten kommt: Husten durch Sodbrennen, Pollenallergie oder Medikamente – Ursachen verständlich erklärt und wann ein Arztbesuch ratsam ist.',
   },
 ];
 
@@ -60,6 +56,10 @@ export const ratgeberArticleUrl = (
   category: RatgeberCategory,
   id: string,
 ): string => `/wissenswertes/${categorySlug(category)}/${id}`;
+
+/** Ziel eines Clusters: sein Abschnitt auf /wissenswertes (Anker-ID = Kategorie-Key).
+ *  Bewusst keine eigene Cluster-Seite, sie wäre ein Duplikat dieses Abschnitts. */
+export const categoryAnchorUrl = (category: RatgeberCategory): string => `/wissenswertes#${category}`;
 
 /** Anzeige-Label eines Clusters (für Breadcrumb & Überschriften). */
 export const categoryLabel = (category: RatgeberCategory): string =>

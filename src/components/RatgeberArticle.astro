@@ -10,7 +10,7 @@ import Container from './Container.astro';
 import SourcesSection from './SourcesSection.astro';
 import ProductHighlight from './ProductHighlight.astro';
 import Faq from './sections/Faq.astro';
-import { categoryLabel, categorySlug, ratgeberArticleUrl, ctaProductsFor } from '../data/categories';
+import { categoryAnchorUrl, categoryLabel, ratgeberArticleUrl, ctaProductsFor } from '../data/categories';
 import { readingTimeLabel } from '../data/readingTime';
 import { produktSources } from '../data/produktSources';
 import { normalizePathname } from '../utils/urls';
@@ -47,7 +47,7 @@ const ctaProducts = data.ctaProducts ?? ctaProductsFor(data.category);
 const breadcrumbItems = [
   { label: 'Startseite', href: '/' },
   { label: 'Wissenswertes', href: '/wissenswertes' },
-  { label: categoryLabel(data.category), href: `/wissenswertes/${categorySlug(data.category)}` },
+  { label: categoryLabel(data.category), href: categoryAnchorUrl(data.category) },
   { label: data.breadcrumbLabel },
 ];
 

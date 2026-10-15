@@ -11,6 +11,11 @@ interface Props {
 }
 
 const { items } = Astro.props;
+
+// Strukturierte Daten nur mit echten Seiten: Stufen, die auf einen Anker zeigen
+// (z. B. Cluster-Abschnitt auf /wissenswertes), wären für Google dieselbe URL wie ihre
+// Elternseite und bleiben deshalb nur in der sichtbaren Navigation.
+const schemaItems = items.filter((item) => !item.href?.includes('#'));
 ---
 
 {/* Kein eigener Außenabstand: den Abstand zum Seitenkopf setzt die umgebende Sektion
@@ -41,7 +46,7 @@ const { items } = Astro.props;
 <script is:inline type="application/ld+json" set:html={jsonLd({
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
-  "itemListElement": items.map((item, index) => ({
+  "itemListElement": schemaItems.map((item, index) => ({
     "@type": "ListItem",
     "position": index + 1,
     "name": item.label,

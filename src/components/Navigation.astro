@@ -1,7 +1,7 @@
 ---
 import LarylinLogo from './LarylinLogo.astro';
 import Container from './Container.astro';
-import { categoryClusters } from '../data/categories';
+import { categoryAnchorUrl, categoryClusters } from '../data/categories';
 import { normalizePathname } from '../utils/urls';
 
 interface NavLink {
@@ -24,7 +24,7 @@ const productLinks: NavLink[] = [
 // Themen-Cluster als Dropdown; Anker-IDs auf /wissenswertes = Kategorie-Slug.
 const wissenswertesLinks: NavLink[] = categoryClusters.map((c) => ({
   label: c.heading,
-  href: `/wissenswertes#${c.category}`,
+  href: categoryAnchorUrl(c.category),
 }));
 
 // Reihenfolge: Produkte, die Wissensseite /husten (Grundlagen und Ursachen), dann
