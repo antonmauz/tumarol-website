@@ -4,16 +4,17 @@ Diese Datei führt die offenen Launch-Punkte der Larylin®-Website. Detailstelle
 tragen den Marker `TODO (LARYLIN)` — Übersicht per:
 
 ```
-grep -rn "TODO (LARYLIN)" src astro.config.mjs wrangler.jsonc public
+grep -rn "TODO (LARYLIN)" src astro.config.mjs public
 ```
 
 ## Technik
 
-- **Cloudflare:** Worker-Projekt `larylin-website` anlegen (Git-Anbindung an `main`) und
-  die Custom Domain larylin.de verbinden, bevor der erste Deploy läuft (`wrangler.jsonc`).
+- **Hosting (Cloudflare):** Adapter `@astrojs/cloudflare` und `wrangler.jsonc` wurden
+  entfernt; bei der Anbindung neu einrichten.
 - **Search Console:** Property für larylin.de anlegen, `/sitemap-index.xml` einreichen.
-- **Tracking/Consent:** prüfen, dass die GA4-Mess-ID in `src/data/analytics.ts` zur
-  Property für larylin.de gehört; Cookiebot-Domain-Gruppe um larylin.de ergänzen.
+- **Tracking/Consent:** GA4-Mess-ID (`src/data/analytics.ts`) und Cookiebot-ID
+  (`src/data/cookiebot.ts`) der Tumarol-Konten eintragen. Solange sie leer sind, werden
+  die Skripte nicht eingebunden.
 
 ## Inhalte und Freigaben
 

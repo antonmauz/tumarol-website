@@ -170,7 +170,7 @@ const linkClass = 'text-primary font-bold hover:text-primary-dark break-words';
           </p>
           {/* Cookie-Deklaration von Cookiebot (Inhalt kommt aus dem Scan der Domain-Gruppe). */}
           <div class="text-sm">
-            <script is:inline id="CookieDeclaration" src={`https://consent.cookiebot.com/${COOKIEBOT_ID}/cd.js`} type="text/javascript" async></script>
+            {COOKIEBOT_ID && <script is:inline id="CookieDeclaration" src={`https://consent.cookiebot.com/${COOKIEBOT_ID}/cd.js`} type="text/javascript" async></script>}
           </div>
         </div>
 

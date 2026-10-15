@@ -10,11 +10,9 @@ Marker `TODO (LARYLIN)`.
 
 ## Stack
 
-- [Astro 6](https://astro.build) — statischer Build (`output` via Adapter)
+- [Astro 6](https://astro.build) — statischer Build nach `./dist/`
 - [Tailwind CSS v4](https://tailwindcss.com) (`@tailwindcss/vite`, Theme-Tokens
   in `src/styles/global.css`)
-- Cloudflare Worker als Hosting (`@astrojs/cloudflare`, `wrangler.jsonc`,
-  Assets aus `dist/client`)
 - Content Collection `ratgeber` für die Wissenswertes-Artikel
   (`src/content.config.ts`; Vorlage: `src/content/ratgeber/_beispiel.md.txt`)
 
@@ -31,6 +29,4 @@ Marker `TODO (LARYLIN)`.
 
 ## Deployment
 
-Das Cloudflare-Worker-Projekt `larylin-website` deployt per Git-Anbindung aus
-GitHub (Branch `main`), siehe `wrangler.jsonc`. Ausgeliefert wird nur unter der Custom
-Domain larylin.de; workers.dev- und Preview-URLs sind abgeschaltet.
+Noch kein Hosting angebunden (Cloudflare folgt).

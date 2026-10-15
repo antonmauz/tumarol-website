@@ -1,12 +1,11 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
-import cloudflare from '@astrojs/cloudflare';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   // Kanonische Produktions-URL – Basis für Canonicals, Sitemap und JSON-LD.
   site: 'https://larylin.de',
-  // Kanonische URL-Form ist slash-los (Auslieferung via wrangler.jsonc "drop-trailing-slash").
+  // Kanonische URL-Form ist slash-los.
   trailingSlash: 'never',
   integrations: [
     sitemap({
@@ -18,10 +17,6 @@ export default defineConfig({
       },
     }),
   ],
-  // Bilder beim Build mit Sharp optimieren — die Seite ist statisch, kein Worker für /_image.
-  adapter: cloudflare({
-    imageService: 'compile',
-  }),
   vite: {
     plugins: [tailwindcss()],
     server: {

@@ -135,22 +135,28 @@ const websiteSchema = {
     {/* Cookiebot direkt nach dem Consent-Mode-Script und vor allen anderen Scripts: im
         Auto-Blocking-Modus hält es nachfolgende einwilligungspflichtige Scripts zurück.
         Scripts, die nicht blockiert werden dürfen, erhalten data-cookieconsent="ignore". */}
-    <script
-      is:inline
-      id="Cookiebot"
-      src="https://consent.cookiebot.com/uc.js"
-      data-cbid={COOKIEBOT_ID}
-      data-blockingmode="auto"
-      type="text/javascript"
-    ></script>
+    {COOKIEBOT_ID && (
+      <script
+        is:inline
+        id="Cookiebot"
+        src="https://consent.cookiebot.com/uc.js"
+        data-cbid={COOKIEBOT_ID}
+        data-blockingmode="auto"
+        type="text/javascript"
+      ></script>
+    )}
     {/* GA4 (gtag.js): per data-cookieconsent="ignore" vom Cookiebot-Auto-Blocking
         ausgenommen, denn die Cookie-Kontrolle übernimmt der Consent Mode (Standard denied,
         Update durch Cookiebot). dataLayer und gtag() sind oben bereits definiert. */}
-    <script is:inline data-cookieconsent="ignore" async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`}></script>
-    <script is:inline data-cookieconsent="ignore" define:vars={{ GA4_MEASUREMENT_ID }}>
-      gtag('js', new Date());
-      gtag('config', GA4_MEASUREMENT_ID);
-    </script>
+    {GA4_MEASUREMENT_ID && (
+      <>
+        <script is:inline data-cookieconsent="ignore" async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`}></script>
+        <script is:inline data-cookieconsent="ignore" define:vars={{ GA4_MEASUREMENT_ID }}>
+          gtag('js', new Date());
+          gtag('config', GA4_MEASUREMENT_ID);
+        </script>
+      </>
+    )}
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     {/* Canonical nur für indexierbare Seiten: die 404 wird für jede unbekannte URL
