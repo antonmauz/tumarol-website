@@ -56,9 +56,14 @@ const {
   pharmacyProduct,
 } = Astro.props;
 
-// noindex nur für Test-Umgebungen (PUBLIC_IS_TEST=true) und Seiten mit Prop `noindex`.
+// TODO vor Livegang: auf true setzen (zusammen mit public/robots.txt und public/_headers).
+// Solange false, bekommt jede Seite noindex, nofollow.
+const SITE_INDEXABLE = false;
+
+// noindex für die gesamte Seite vor dem Livegang, Test-Umgebungen (PUBLIC_IS_TEST=true)
+// und Seiten mit Prop `noindex`.
 const isTestEnvironment = import.meta.env.PUBLIC_IS_TEST === 'true';
-const blockIndexing = isTestEnvironment || noindex;
+const blockIndexing = !SITE_INDEXABLE || isTestEnvironment || noindex;
 
 // `site` ist in astro.config.mjs gesetzt.
 const siteUrl = Astro.site!;

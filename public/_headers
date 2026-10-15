@@ -2,9 +2,12 @@
 # Der Cloudflare-Adapter stellt beim Build den Cache-Control-Block für /_astro/* davor;
 # hier deshalb kein Cache-Control für /_astro/* setzen, sonst entfällt dieser Block.
 # Keine Content-Security-Policy: hängt an Cookiebot/gtag und wird mit diesen geprüft.
+# TODO vor Livegang: Zeile "X-Robots-Tag" entfernen — sie sperrt die Indexierung
+# aller Antworten (auch PDFs/Bilder).
 /*
   Strict-Transport-Security: max-age=31536000; includeSubDomains
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
   Permissions-Policy: camera=(), microphone=(), geolocation=()
+  X-Robots-Tag: noindex, nofollow

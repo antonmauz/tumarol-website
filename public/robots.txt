@@ -1,7 +1,11 @@
-# robots.txt — Crawling freigegeben; einzelne Seiten sperrt das Layout per noindex
-# (Prop `noindex`, z. B. 404). Test-Umgebungen: PUBLIC_IS_TEST=true setzt noindex global.
+# robots.txt — VOR DEM LIVEGANG: Crawling für alle gesperrt.
+# TODO vor Livegang: durch die freigebende Fassung ersetzen (zusammen mit
+# SITE_INDEXABLE in src/layouts/Layout.astro und X-Robots-Tag in public/_headers):
+#
+#   User-agent: *
+#   Allow: /
+#
+#   Sitemap: https://larylin.de/sitemap-index.xml
 
 User-agent: *
-Allow: /
-
-Sitemap: https://larylin.de/sitemap-index.xml
+Disallow: /
