@@ -3,7 +3,8 @@
 // normalen Fluss ganz oben: beim Scrollen läuft er aus dem Bild, die sticky Navbar rückt
 // an den oberen Rand. Hintergrund = Verlauf des „Nach oben“-Bands (BackToTop.astro).
 // Die Botschaften wechseln alle 10 s; Pfeile links/rechts wechseln manuell. Hover oder
-// Fokus im Balken pausiert den Wechsel, der Pause-Button stoppt ihn dauerhaft (WCAG 2.2.2).
+// Fokus im Balken pausiert den Wechsel, der Pause-Button stoppt ihn dauerhaft (WCAG 2.2.2);
+// er erscheint auf Geräten mit Maus erst bei Hover/Fokus.
 // Bei „Bewegung reduzieren“ (prefers-reduced-motion) startet der Balken angehalten.
 // TODO (LARYLIN): Wortlaut fachlich freigeben lassen (HWG).
 const messages = ['Gegen Reizhusten', 'Gegen Krampfhusten', 'Hergestellt in Deutschland'];
@@ -55,6 +56,20 @@ const arrowBtn =
   .top-bar {
     background: linear-gradient(90deg, #fde79a 0%, #fff4d8 45%, #fde3c0 70%, #fdcb98 100%);
   }
+  /* Pause-Button nur bei Hover/Tastaturfokus im Balken einblenden (per opacity, damit
+     nichts springt). Angehalten bleibt er sichtbar, damit „Fortsetzen“ auffindbar ist.
+     Touch-Geräte ohne Hover sehen ihn immer, sonst wäre er dort nicht erreichbar. */
+  @media (hover: hover) {
+    [data-top-bar-toggle] {
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .top-bar:hover [data-top-bar-toggle],
+    .top-bar:focus-within [data-top-bar-toggle],
+    [data-top-bar-toggle][data-stopped] {
+      opacity: 1;
+    }
+  }
 </style>
 
 <script>
@@ -90,6 +105,7 @@ const arrowBtn =
     const renderToggle = () => {
       if (!toggle) return;
       toggle.setAttribute('aria-label', stopped ? 'Wechsel fortsetzen' : 'Wechsel anhalten');
+      toggle.toggleAttribute('data-stopped', stopped);
       toggle.querySelector('[data-icon-pause]')?.classList.toggle('hidden', stopped);
       toggle.querySelector('[data-icon-play]')?.classList.toggle('hidden', !stopped);
     };
