@@ -90,4 +90,35 @@ const { class: className = '' } = Astro.props;
     border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
   }
   .article-prose blockquote p { color: var(--color-neutral-800); margin-bottom: 0; }
+
+  /* Markdown-Tabellen (GFM): volle Textbreite, Kopfzeile auf Hellgrau,
+     1px-Trennlinien zwischen den Zeilen; erste Spalte als Zeilenbeschriftung. */
+  .article-prose table {
+    width: 100%;
+    margin: 2rem 0;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+  .article-prose th,
+  .article-prose td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--color-divider);
+  }
+  .article-prose thead th {
+    background: var(--color-surface);
+    color: var(--color-ink);
+    font-weight: 700;
+    border-bottom: 2px solid var(--color-ink);
+  }
+  .article-prose td { color: var(--color-neutral-700); }
+  .article-prose td:first-child { color: var(--color-ink); white-space: nowrap; }
+  @media (max-width: 639px) {
+    .article-prose table { font-size: 0.875rem; }
+    .article-prose th,
+    .article-prose td { padding: 0.625rem 0.5rem; }
+    .article-prose td:first-child { white-space: normal; hyphens: auto; }
+  }
 </style>
