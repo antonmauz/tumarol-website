@@ -1,9 +1,8 @@
 ---
-// Larylin-Logo (Wort-Bild-Marke „Larylin® Husten-Stiller“) als Bild aus
-// src/assets/images/logo/larylin-logo.png (transparent, 599 × 173). Nur für hellen Grund;
-// eine weiße Variante gibt es noch nicht. Höhe über `class` anpassbar (Standard h-12).
+// Markenlogo als Bild aus src/assets/images/logo/TUMAROL600x300.png (transparent, 601 × 300).
+// TODO (TUMAROL): Übergangslösung — Komponente noch unter altem Namen, Alt-Text prüfen. Höhe über `class` anpassbar (Standard h-12).
 import { Image } from 'astro:assets';
-import logo from '../assets/images/logo/larylin-logo.png';
+import logo from '../assets/images/logo/TUMAROL600x300.png';
 
 interface Props {
   class?: string;
@@ -14,7 +13,7 @@ const { class: extra = 'h-12' } = Astro.props;
 
 <Image
   src={logo}
-  alt="Larylin® Husten-Stiller"
+  alt="Tumarol®"
   densities={[1, 2, 3]}
   height={48}
   loading="eager"
