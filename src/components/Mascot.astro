@@ -1,0 +1,28 @@
+---
+// Tumarol-Koala in einer Pose aus src/data/mascot.ts, als WebP. Nur Darstellung:
+// Größe und Position bestimmt der Aufrufer über `class` und `sizes`.
+import { Image } from 'astro:assets';
+import { mascot, type MascotPose } from '../data/mascot';
+
+interface Props {
+  pose: MascotPose;
+  class?: string;
+  sizes: string;
+  loading?: 'eager' | 'lazy';
+  fetchpriority?: 'high' | 'low' | 'auto';
+}
+
+const { pose, class: extra = '', sizes, loading = 'lazy', fetchpriority } = Astro.props;
+const { src, alt, widths } = mascot[pose];
+---
+
+<Image
+  src={src}
+  alt={alt}
+  widths={widths}
+  sizes={sizes}
+  format="webp"
+  loading={loading}
+  fetchpriority={fetchpriority}
+  class:list={['h-auto', extra]}
+/>

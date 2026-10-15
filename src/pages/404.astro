@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Container from '../components/Container.astro';
 import Button from '../components/ui/Button.astro';
 import ArrowLink from '../components/ArrowLink.astro';
+import Mascot from '../components/Mascot.astro';
 
 // 404-Seite: Astro/Cloudflare liefern sie automatisch bei unbekannten Pfaden
 // aus. noindex, da Fehlerseiten nicht in den Suchindex gehören.
@@ -13,8 +14,10 @@ import ArrowLink from '../components/ArrowLink.astro';
   description="Die aufgerufene Seite existiert nicht. Zurück zur Startseite oder zu den Ratgebern."
   noindex
 >
-  <section class="py-20 md:py-28 px-6">
+  <section class="py-12 md:py-20 px-6">
     <Container size="content" class="text-center">
+      {/* Winkender Koala, dekorativ (alt=""). */}
+      <Mascot pose="winkend" sizes="(min-width: 768px) 200px, 160px" class="mx-auto mb-6 w-[160px] md:w-[200px]" />
       <p class="text-6xl md:text-7xl font-bold text-primary mb-4">404</p>
       <h1 class="text-neutral-900 mb-4">Diese Seite haben wir nicht gefunden</h1>
       <p class="text-neutral-700 leading-relaxed max-w-xl mx-auto mb-8">

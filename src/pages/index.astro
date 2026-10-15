@@ -9,8 +9,7 @@ import ArticleSlider from '../components/ArticleSlider.astro';
 import WirkungsweiseSection from '../components/WirkungsweiseSection.astro';
 import TrustBanner from '../components/TrustBanner.astro';
 import Container from '../components/Container.astro';
-import { Image } from 'astro:assets';
-import heroImage from '../assets/images/hero/larylin-header.png';
+import Mascot from '../components/Mascot.astro';
 import PackshotGroup from '../components/PackshotGroup.astro';
 ---
 
@@ -22,35 +21,30 @@ import PackshotGroup from '../components/PackshotGroup.astro';
   description="Larylin® Husten-Stiller von ROBUGEN mit dem Wirkstoff Dropropizin, als Pastillen oder Saft. Wo Sie Larylin® kaufen können und Wissenswertes rund um Husten."
 >
 
-  {/* ─── 1. HERO: Headermotiv über die volle Breite, H1 + Buttons rechts ──── */}
-  {/* Motiv: Frau links (ca. 6–38 % der Bildbreite), rechts freie Wandfläche für den Text.
-      Ab lg liegt der Text über dem Bild: Mindesthöhe = Seitenverhältnis des Motivs (max.
-      820px), wächst mit dem Inhalt; object-cover beschneidet dann rechts bzw. unten.
-      Darunter steht das Bild als Ausschnitt (Frau links, rechts freie Wand), die Packshots
-      liegen dort unten rechts über dem Bild, der Text folgt darunter. */}
-  <section data-sticky-buy-trigger class="relative lg:flex lg:min-h-[min(calc(100vw*821/1916),820px)] lg:items-center lg:py-14">
-    <Image
-      src={heroImage}
-      alt="Frau atmet mit geschlossenen Augen tief ein; eingezeichnet sind Gehirn (grau), Atemwege (orange) und Lunge (gelb)."
-      widths={[800, 1280, 1916]}
-      sizes="100vw"
-      loading="eager"
-      fetchpriority="high"
-      class="aspect-[3/2] w-full object-cover object-left sm:aspect-[16/9] lg:absolute lg:inset-0 lg:aspect-auto lg:h-full lg:object-[0%_15%]"
-    />
-    <Container size="content" class="relative w-full px-6 pt-10 pb-16 lg:py-0">
-      <div class="lg:ml-auto lg:w-[48%]">
+  {/* ─── 1. HERO: gelbes Markenband (Mockup B), Text links, Koala rechts ─── */}
+  {/* Der Koala steht in einer eigenen Spalte auf der Unterkante des Bands (Bild ist unten
+      bündig getrimmt) und überlappt weder Text noch Buttons; mobil steht er unter den
+      Buttons. HWG: keine Sprechblase, nicht neben einem Kinderbalsam-CTA. */}
+  <section data-sticky-buy-trigger class="bg-yellow">
+    <Container size="content" class="grid items-end gap-x-10 px-6 pt-10 lg:grid-cols-[1fr_auto] lg:pt-14">
+      <div class="lg:self-center lg:pb-14">
         <h1 class="hero-title mb-8 lg:mb-6">Larylin<sup class="hero-reg">®</sup> gegen <span class="mark">Reizhusten</span></h1>
 
-        {/* Packshots: unter lg absolut über dem Bild (Bezug: Container, der direkt unter
-            dem Bild beginnt), ab lg im Fluss zwischen H1 und Buttons (CSS unten). */}
-        <PackshotGroup class="hero-packs" sizes="(min-width: 1024px) 260px, 36vw" loading="eager" />
+        <PackshotGroup class="hero-packs" sizes="(min-width: 1024px) 260px, 220px" loading="eager" />
 
         <div class="flex flex-col gap-3 sm:flex-row">
           <Button openDrawer>Jetzt kaufen</Button>
           <Button href="#produkte" variant="outline">Pastillen oder Saft?</Button>
         </div>
       </div>
+
+      <Mascot
+        pose="stehend"
+        sizes="(min-width: 1280px) 400px, (min-width: 1024px) 340px, 200px"
+        loading="eager"
+        fetchpriority="high"
+        class="mx-auto mt-10 w-[200px] lg:mt-0 lg:w-[340px] xl:w-[400px]"
+      />
     </Container>
   </section>
 
@@ -96,33 +90,19 @@ import PackshotGroup from '../components/PackshotGroup.astro';
     font-size: clamp(3rem, 6.5vw, 5.5rem);
     line-height: 0.98;
   }
-  /* PackshotGroup im Hero (global, weil die Klasse am Komponenten-Root sitzt).
-     Mobil (3:2-Ausschnitt, Frau endet bei ~59 % der Breite) und Tablet (16:9, ~50 %):
-     Gruppe unten rechts über dem Bild. Ab lg im Fluss. */
-  :global(.hero-packs) {
-    position: absolute;
-    right: 4.5vw;
-    bottom: calc(100% + 5vw);
-    width: 36vw;
+  /* Gelber Unterstrich verschwindet auf dem gelben Band: im Hero in Tumarol-Grün
+     (reine Dekoration, kein Text). */
+  .hero-title :global(.mark) {
+    text-decoration-color: var(--color-green);
   }
-  @media (min-width: 40rem) {
-    :global(.hero-packs) {
-      right: 8vw;
-      bottom: calc(100% + 4vw);
-      width: min(30vw, 280px);
-    }
+  /* PackshotGroup im Hero (global, weil die Klasse am Komponenten-Root sitzt): im Fluss
+     zwischen H1 und Buttons. */
+  :global(.hero-packs) {
+    width: 220px;
+    margin-bottom: 2rem;
   }
   @media (min-width: 64rem) {
-    :global(.hero-packs) {
-      position: relative;
-      right: auto;
-      bottom: auto;
-      width: 260px;
-      margin-bottom: 2rem;
-    }
-  }
-  @media (min-width: 80rem) {
-    :global(.hero-packs) { width: 280px; }
+    :global(.hero-packs) { width: 260px; }
   }
   .hero-reg {
     font-size: 0.35em;

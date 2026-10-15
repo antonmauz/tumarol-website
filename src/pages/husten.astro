@@ -9,6 +9,7 @@ import Layout from '../layouts/Layout.astro';
 import BreadcrumbSection from '../components/BreadcrumbSection.astro';
 import Container from '../components/Container.astro';
 import ArticleProse from '../components/ArticleProse.astro';
+import Mascot from '../components/Mascot.astro';
 import ProductHighlight from '../components/ProductHighlight.astro';
 import ArticleSlider from '../components/ArticleSlider.astro';
 import SourcesSection from '../components/SourcesSection.astro';
@@ -82,7 +83,9 @@ const sources = [
   </section>
 
   {/* ─── INHALT ─────────────────────────────────────────────────────── */}
-  <section class="pt-4 pb-16 md:pb-20 px-6">
+  {/* Unten so viel Abstand, dass der Koala der Arzt-Sektion (ragt nach oben heraus) den
+      Text darüber nicht verdeckt. */}
+  <section class="pt-4 pb-28 md:pb-44 px-6">
     <Container size="text">
       <ArticleProse>
         <h2 id="wie-entsteht-husten">Wie entsteht Husten?</h2>
@@ -204,6 +207,21 @@ const sources = [
           Lassen Sie sich in Ihrer Apotheke beraten und beachten Sie die Packungsbeilage.
         </p>
 
+      </ArticleProse>
+    </Container>
+  </section>
+
+  {/* ─── WANN ZUM ARZT: abgesetzte Sektion, Koala „kopf“ sitzt mit den Pfoten auf der
+      Oberkante (absolut, negativer margin-top = Bildhöhe minus Pfotenüberlappung; Bild
+      unten bündig getrimmt). Dekorativ, rechts neben der Überschrift. ─── */}
+  <section class="relative bg-surface px-6 pt-12 pb-16 md:pt-16 md:pb-20">
+    <Mascot
+      pose="kopf"
+      sizes="(min-width: 768px) 240px, 140px"
+      class="koala-kopf absolute top-0 right-6"
+    />
+    <Container size="text">
+      <ArticleProse>
         <h2 id="wann-zum-arzt">Wann sollte ich zum Arzt gehen?</h2>
         <p>Vereinbaren Sie einen Termin, wenn einer dieser Punkte zutrifft:</p>
         <ul>
@@ -235,3 +253,19 @@ const sources = [
   {/* ─── QUELLEN ─────────────────────────────────────────────────────── */}
   <SourcesSection items={sources} />
 </Layout>
+
+<style>
+  /* Koala-Breite; Höhe = Breite / 1.541 (Seitenverhältnis koala-3d-kopf-trim.png). Die
+     Pfoten überlappen die Sektionskante um 0.6rem. Ab md bündig zum Textcontainer (max-w-4xl). */
+  :global(.koala-kopf) {
+    --koala-w: 140px;
+    width: var(--koala-w);
+    margin-top: calc(var(--koala-w) / -1.541 + 0.6rem);
+  }
+  @media (min-width: 48rem) {
+    :global(.koala-kopf) {
+      --koala-w: 240px;
+      right: max(1.5rem, calc((100% - 56rem) / 2));
+    }
+  }
+</style>
