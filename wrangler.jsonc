@@ -1,9 +1,9 @@
 {
   "name": "larylin-website",
-  // Worker-Projekt "larylin-website", per Git-Anbindung aus GitHub (main) deployt. Die Seite
-  // läuft nur unter der Custom Domain larylin.de (im Cloudflare-Dashboard verbunden);
-  // *.workers.dev-URL und Preview-URLs sind aus, damit keine indexierbaren Duplikate entstehen.
-  "workers_dev": false,
+  // Worker-Projekt "larylin-website", per Git-Anbindung aus GitHub (main) deployt.
+  // Vorerst über die *.workers.dev-URL erreichbar. TODO vor Livegang: Custom Domain
+  // larylin.de verbinden und workers_dev wieder auf false setzen (keine indexierbaren Duplikate).
+  "workers_dev": true,
   "preview_urls": false,
   // Höchstens das Datum der installierten workerd-Version (node_modules/workerd), sonst warnt der Dev-Server.
   "compatibility_date": "2026-06-16",
